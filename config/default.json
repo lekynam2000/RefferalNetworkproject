@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb+srv://nam:181100@firstmern-9idht.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "referralnetwork"
+}
