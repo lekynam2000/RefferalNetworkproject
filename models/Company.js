@@ -8,15 +8,7 @@ const CompanySchema = new mongoose.Schema({
     type: String
   },
   contact: {
-    facebook: {
-      type: String
-    },
-    linkedin: {
-      type: String
-    },
-    web: {
-      type: String
-    }
+    type: String
   },
   description: {
     type: String

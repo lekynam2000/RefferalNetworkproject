@@ -27,16 +27,16 @@ router.post(
       if (user.type !== 'admin') {
         res.status(401).json({ errors: [{ msg: 'User is not permitted' }] });
       }
+
       var newCompany = new Company({
         name: req.body.name,
-        avatar: req.avatar,
-        contact: JSON.stringify(req.contact),
-        description: req.description,
-        benefit: req.benefit,
-        culture: req.culture,
-        photo: req.photo
+        avatar: req.body.avatar,
+        contact: JSON.stringify(req.body.contact),
+        description: req.body.description,
+        benefit: req.body.benefit,
+        culture: req.body.culture,
+        photo: req.body.photo
       });
-
       var company = await newCompany.save();
       res.send(company);
     } catch (error) {

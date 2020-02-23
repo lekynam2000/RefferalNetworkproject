@@ -37,18 +37,20 @@ function CreateCompany({ createCompany, history }) {
     ) {
       setFormData({
         ...formData,
-        contact: { ...contact, [e.target.name]: [e.target.value] }
+        contact: { ...contact, [e.target.name]: e.target.value }
       });
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   };
   const onSubmit = e => {
+    console.log(formData);
+    e.preventDefault();
     createCompany(formData, history);
   };
   return (
     <Fragment>
-      <h1 className='large text-primary'> Create A Job </h1>{' '}
+      <h1 className='large text-primary'> Create A Company </h1>{' '}
       <p className='lead'>
         <i className='fas fa-user' /> Let 's get some information to make your
         company stand out{' '}
@@ -74,7 +76,7 @@ function CreateCompany({ createCompany, history }) {
             value={avatar}
             onChange={e => onChange(e)}
           />{' '}
-          <img src={avatar}></img>
+          <img src={avatar} width='200' height='200'></img>
         </div>{' '}
         <div className='form-group'>
           <input
@@ -91,21 +93,9 @@ function CreateCompany({ createCompany, history }) {
         <div className='form-group'>
           <input
             type='text'
-            placeholder='Facebook'
-            name='facebook'
-            value={contact.facebook}
-            onChange={e => onChange(e)}
-          />{' '}
-          <small className='form-text'>
-            Could be your own or a company website{' '}
-          </small>{' '}
-        </div>
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Facebook'
-            name='facebook'
-            value={contact.facebook}
+            placeholder='Linkedin'
+            name='linkedin'
+            value={contact.linkedin}
             onChange={e => onChange(e)}
           />{' '}
           <small className='form-text'>
@@ -115,15 +105,15 @@ function CreateCompany({ createCompany, history }) {
         <div className='form-group'>
           <input
             type='text'
-            placeholder='Job type'
-            name='type'
-            value={type}
+            placeholder='Website'
+            name='web'
+            value={contact.web}
             onChange={e => onChange(e)}
           />{' '}
           <small className='form-text'>
-            Eg: Full-time, Part-time, Intern, ...{' '}
+            Could be your own or a company website{' '}
           </small>{' '}
-        </div>{' '}
+        </div>
         <div className='form-group'>
           <textarea
             placeholder='Company description'

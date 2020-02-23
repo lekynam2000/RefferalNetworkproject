@@ -589,3 +589,11 @@ button {
   margin: 20px 0;
   border: 1px solid black;
 }
+.form-group img {
+  width: 200px;
+}
+.company-item-photo img,
+.company-item-avatar img {
+  width: 100px;
+  height: 100px;
+}

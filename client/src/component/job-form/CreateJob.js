@@ -48,7 +48,7 @@ function CreateJob({ createJob, history, setAlert }) {
     if (e.target.name == 'value' || e.target.name == 'unit') {
       setFormData({
         ...formData,
-        salary: { ...salary, [e.target.name]: [e.target.value] }
+        salary: { ...salary, [e.target.name]: e.target.value }
       });
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });

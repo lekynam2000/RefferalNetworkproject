@@ -4,20 +4,19 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
 const AdminRoute = ({
+  path: path,
   component: Component,
-  auth: { isAuthen, loading, user },
+  auth: { isAuthen, loading, type },
   ...rest
 }) => {
   return (
     <Route
       {...rest}
       render={props => {
-        return !loading && isAuthen && user.type === 'admin' ? (
+        return isAuthen && !loading && type === 'admin' ? (
           <Component {...props} />
-        ) : isAuthen ? (
-          <Redirect to='/dashboard' />
         ) : (
-          <Redirect to='/login' />
+          <Redirect to={`redirection${path}`} />
         );
       }}
     />
