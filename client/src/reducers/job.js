@@ -20,7 +20,7 @@ export default function(state = initialState, action) {
         errors: payload
       };
     case JOB_DELETED: {
-      return { ...state, job: null, jobs: [], loading: false };
+      return { ...state, job: null, jobs: [], loading: true };
     }
     default:
       return state;

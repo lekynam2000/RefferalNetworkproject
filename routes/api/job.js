@@ -110,14 +110,16 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
   try {
     var job = await Job.findById(req.params.id);
+    var user = await User.findById(req.user.id);
     if (!job) {
       return res.status(400).json({ msg: 'Job not found' });
     }
-    if (job.user.type !== 'admin') {
+    if (user.type !== 'admin') {
       return res.status(401).json({ msg: 'User is not authorized' });
     }
     await job.remove();
-    res.send('Deleted');
+    var jobs = await Job.find();
+    res.json(jobs);
   } catch (error) {
     console.error(error);
     if (error.kind === 'ObjectId') {

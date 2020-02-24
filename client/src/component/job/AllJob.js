@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getAllJob } from '../../actions/job';
-function AllJob({ jobs, loading, getAllJob }) {
+import { getAllJob, deleteJob } from '../../actions/job';
+function AllJob({ auth, jobs, loading, getAllJob, deleteJob }) {
   useEffect(() => {
     getAllJob();
   }, [getAllJob]);
@@ -11,6 +11,7 @@ function AllJob({ jobs, loading, getAllJob }) {
         jobs.length > 0 &&
         jobs.map((job, index) => {
           let {
+            _id,
             title,
             company_id,
             company_name,
@@ -43,6 +44,16 @@ function AllJob({ jobs, loading, getAllJob }) {
               {description && (
                 <div className='job-item-description'>{description}</div>
               )}
+              {!auth.loading && auth.type == 'admin' && (
+                <button
+                  className='btn btn-danger'
+                  onClick={() => {
+                    deleteJob(_id);
+                  }}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           );
         })}
@@ -50,7 +61,8 @@ function AllJob({ jobs, loading, getAllJob }) {
   );
 }
 const mapStatetoProps = state => ({
+  auth: state.auth,
   jobs: state.job.jobs,
   loading: state.job.loading
 });
-export default connect(mapStatetoProps, { getAllJob })(AllJob);
+export default connect(mapStatetoProps, { getAllJob, deleteJob })(AllJob);

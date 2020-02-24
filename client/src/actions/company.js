@@ -38,10 +38,10 @@ export const deleteCompany = id => async dispatch => {
     dispatch({
       type: COMPANY_DELETED
     });
-    const companies = await axios.get('/api/companies');
+
     dispatch({
       type: GET_ALLCOMPANY,
-      payload: companies
+      payload: res.data
     });
   } catch (err) {
     const errors = err.response.data.errors;

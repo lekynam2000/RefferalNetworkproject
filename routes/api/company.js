@@ -91,7 +91,8 @@ router.delete('/:id', auth, async (req, res) => {
       return res.status(401).json({ msg: 'User is not authorized' });
     }
     await company.remove();
-    res.send('Deleted');
+    var companies = await Company.find();
+    res.json(companies);
   } catch (error) {
     console.error(error);
     if (error.kind === 'ObjectId') {

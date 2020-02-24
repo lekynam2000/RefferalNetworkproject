@@ -25,7 +25,7 @@ export default function(state = initialState, action) {
         errors: payload
       };
     case COMPANY_DELETED: {
-      return { ...state, company: null, companies: [], loading: false };
+      return { ...state, company: null, companies: [], loading: true };
     }
     default:
       return state;

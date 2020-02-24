@@ -26,6 +26,7 @@ import CreateJob from './component/job-form/CreateJob';
 import CreateCompany from './component/company-form/CreateCompany';
 import Redirection from './component/auth/Redirection';
 import AllCompany from './component/company/AllCompany';
+import Sidebar from './component/layout/Sidebar';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -39,6 +40,7 @@ const App = () => {
       <Router>
         <Fragment>
           <Navbar></Navbar>
+          <Sidebar />
           <Route exact path='/' component={Landing} />
           <section className='container'>
             <Alert />

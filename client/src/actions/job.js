@@ -33,10 +33,10 @@ export const deleteJob = id => async dispatch => {
     dispatch({
       type: JOB_DELETED
     });
-    const jobs = await axios.get('/api/job');
+
     dispatch({
       type: GET_ALLJOB,
-      payload: jobs
+      payload: res.data
     });
   } catch (err) {
     const errors = err.response.data.errors;
