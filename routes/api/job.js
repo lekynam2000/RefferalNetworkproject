@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Company = require('../../models/Company');
+
 const User = require('../../models/User');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
@@ -17,9 +17,7 @@ router.post(
     check('title', 'Job title is required')
       .not()
       .isEmpty(),
-    check('company_id', 'Company is required')
-      .not()
-      .isEmpty(),
+
     check('role', 'Role is required')
       .not()
       .isEmpty(),
@@ -43,16 +41,9 @@ router.post(
       if (user.type !== 'admin') {
         res.status(401).json({ errors: [{ msg: 'User is not permitted' }] });
       }
-      var company = await Company.findById(req.body.company_id);
-      if (!company) {
-        return res
-          .status(401)
-          .json({ errors: [{ msg: 'Company does not exist' }] });
-      }
+
       var newJob = new Job({
         title: req.body.title,
-        company_id: req.body.company_id,
-        company_name: company.name,
         role: req.body.role,
         salary: JSON.stringify(req.body.salary),
         location: req.body.location,
@@ -139,9 +130,7 @@ router.put(
     check('title', 'Job title is required')
       .not()
       .isEmpty(),
-    check('company_id', 'Company is required')
-      .not()
-      .isEmpty(),
+
     check('role', 'Role is required')
       .not()
       .isEmpty(),
@@ -165,20 +154,13 @@ router.put(
       if (user.type !== 'admin') {
         res.status(401).json({ errors: [{ msg: 'User is not permitted' }] });
       }
-      var company = await Company.findById(req.body.company_id);
-      if (!company) {
-        return res
-          .status(401)
-          .json({ errors: [{ msg: 'Company does not exist' }] });
-      }
+
       var job = await Job.findById(req.params.id);
       if (!job) {
         return res.status(401).json({ errors: [{ msg: 'Job not found' }] });
       }
       var newJob = new Job({
         title: req.body.title,
-        company_id: req.body.company_id,
-        company_name: company.name,
         role: req.body.role,
         salary: JSON.stringify(req.body.salary),
         location: req.body.location,

@@ -14,8 +14,6 @@ function AllJob({ auth, jobs, loading, getAllJob, deleteJob }) {
           let {
             _id,
             title,
-            company_id,
-            company_name,
             role,
             salary,
             location,
@@ -26,10 +24,6 @@ function AllJob({ auth, jobs, loading, getAllJob, deleteJob }) {
           let { unit, value } = JSON.parse(salary);
           return (
             <div key={index} className='job-item'>
-              <div className='job-item-title'>
-                {title} at {company_name}
-              </div>
-
               {role && <div className='job-item-role'>{role}</div>}
               {salary && (
                 <div className='job-item-salary'>

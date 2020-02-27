@@ -22,11 +22,6 @@ function Sidebar({ auth: { isAuthen, loading } }) {
               <i className='fas fa-business-time'></i>
             </Link>
           </li>
-          <li>
-            <Link to='/companies'>
-              <i className='fas fa-building'></i>{' '}
-            </Link>
-          </li>
         </ul>
       </nav>
     )

@@ -9,9 +9,7 @@ function Navbar({ auth: { isAuthen, loading, type }, logout }) {
       <li>
         <Link to='/jobs'>Jobs</Link>
       </li>
-      <li>
-        <Link to='/companies'>Companies</Link>
-      </li>
+
       <li>
         <Link to='/profiles'>Referers</Link>
       </li>
@@ -34,12 +32,7 @@ function Navbar({ auth: { isAuthen, loading, type }, logout }) {
               <span className='hide-sm'>Add Job</span>
             </Link>
           </li>
-          <li>
-            <Link to='/create-company'>
-              <i className='fas fa-building'></i>{' '}
-              <span className='hide-sm'>Add Company</span>
-            </Link>
-          </li>
+          <li></li>
         </Fragment>
       )}
 

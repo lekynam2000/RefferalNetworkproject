@@ -4,13 +4,10 @@ import { connect } from 'react-redux';
 import { createJob } from '../../actions/job';
 import PropTypes from 'prop-types';
 import { setAlert } from '../../actions/alert';
-import CompanySelection from './CompanySelection';
 
 function CreateJob({ createJob, history, setAlert }) {
   const [formData, setFormData] = useState({
     title: '',
-    company_id: '',
-    company_name: '',
     role: '',
     salary: {
       value: '',
@@ -26,8 +23,6 @@ function CreateJob({ createJob, history, setAlert }) {
 
   const {
     title,
-    company_id,
-    company_name,
     role,
     salary,
     location,
@@ -37,13 +32,7 @@ function CreateJob({ createJob, history, setAlert }) {
     description,
     requirements
   } = formData;
-  const onCompanyChange = (companyId, companyName) => {
-    setFormData({
-      ...formData,
-      company_id: companyId,
-      company_name: companyName
-    });
-  };
+
   const onChange = e => {
     if (e.target.name == 'value' || e.target.name == 'unit') {
       setFormData({
@@ -55,13 +44,8 @@ function CreateJob({ createJob, history, setAlert }) {
     }
   };
   const onSubmit = e => {
-    if (formData.company_id) {
-      createJob(formData, history);
-      e.preventDefault();
-    } else {
-      e.preventDefault();
-      setAlert('Please enter valid company');
-    }
+    createJob(formData, history);
+    e.preventDefault();
   };
   return (
     <Fragment>
@@ -84,9 +68,6 @@ function CreateJob({ createJob, history, setAlert }) {
           <small className='form-text'>Provide job title </small>
         </div>{' '}
         <div className='form-group'>
-          <CompanySelection onChangeParent={onCompanyChange} />
-        </div>{' '}
-        <div className='form-group'>
           <input
             type='text'
             placeholder='Role'
@@ -94,9 +75,7 @@ function CreateJob({ createJob, history, setAlert }) {
             value={role}
             onChange={e => onChange(e)}
           />{' '}
-          <small className='form-text'>
-            Could be your own or a company website{' '}
-          </small>{' '}
+          <small className='form-text'></small>{' '}
         </div>{' '}
         <div className='form-group'>
           <input
@@ -106,9 +85,7 @@ function CreateJob({ createJob, history, setAlert }) {
             value={salary.value}
             onChange={e => onChange(e)}
           />{' '}
-          <small className='form-text'>
-            Could be your own or a company website{' '}
-          </small>{' '}
+          <small className='form-text'>Enter salary value</small>{' '}
         </div>{' '}
         <div className='form-group'>
           <input
@@ -118,9 +95,7 @@ function CreateJob({ createJob, history, setAlert }) {
             value={salary.unit}
             onChange={e => onChange(e)}
           />{' '}
-          <small className='form-text'>
-            Could be your own or a company website{' '}
-          </small>{' '}
+          <small className='form-text'>Enter salary unit </small>{' '}
         </div>{' '}
         <div className='form-group'>
           <input
