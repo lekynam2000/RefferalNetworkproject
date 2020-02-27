@@ -18,8 +18,3 @@ export const JOB_ERROR = 'JOB_ERROR';
 export const JOB_DELETED = 'JOB_DELETED';
 export const GET_ALLJOB = 'GET_ALLJOB';
 export const RESET_JOB = 'RESET_JOB';
-
-export const GET_ALLCOMPANY = 'GET_ALLCOMPANY';
-export const GET_COMPANY = 'GET_COMPANY';
-export const COMPANY_ERROR = 'COMPANY_ERROR';
-export const COMPANY_DELETED = 'COMPANY_DELETED';
