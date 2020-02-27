@@ -1,4 +1,10 @@
-import { GET_JOB, JOB_ERROR, JOB_DELETED, GET_ALLJOB } from '../actions/types';
+import {
+  GET_JOB,
+  JOB_ERROR,
+  JOB_DELETED,
+  GET_ALLJOB,
+  RESET_JOB
+} from '../actions/types';
 
 const initialState = {
   job: null,
@@ -21,6 +27,9 @@ export default function(state = initialState, action) {
       };
     case JOB_DELETED: {
       return { ...state, job: null, jobs: [], loading: true };
+    }
+    case RESET_JOB: {
+      return { ...state, loading: true };
     }
     default:
       return state;

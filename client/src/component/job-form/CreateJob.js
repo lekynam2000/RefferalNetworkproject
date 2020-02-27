@@ -56,11 +56,9 @@ function CreateJob({ createJob, history, setAlert }) {
   };
   const onSubmit = e => {
     if (formData.company_id) {
-      console.log(formData);
       createJob(formData, history);
       e.preventDefault();
     } else {
-      console.log(2);
       e.preventDefault();
       setAlert('Please enter valid company');
     }

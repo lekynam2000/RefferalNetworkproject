@@ -7,12 +7,14 @@ import Spinner from '../layout/Spinner';
 const CompanySelection = ({
   company: { companies, loading },
   onChangeParent,
+  defaultValue = '',
   getAllCompanies
 }) => {
   const [CompanyValid, SetCompanyValid] = useState('');
   useEffect(() => {
     getAllCompanies();
   }, [getAllCompanies]);
+
   const validateCompany = name => {
     var flag = false;
     companies.forEach(company => {
@@ -24,6 +26,7 @@ const CompanySelection = ({
   };
   const onChange = e => {
     var value = e.target.value;
+    console.log(value);
     if (validateCompany(value) != false) {
       SetCompanyValid(
         <span>
@@ -48,6 +51,7 @@ const CompanySelection = ({
             type='text'
             list='companies'
             name='company'
+            value={defaultValue}
             onChange={e => {
               onChange(e);
             }}

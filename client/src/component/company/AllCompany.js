@@ -17,16 +17,7 @@ function AllCompany({
       {!loading &&
         companies.length > 0 &&
         companies.map((company, index) => {
-          let {
-            _id,
-            name,
-            avatar,
-            contact,
-            description,
-            benefit,
-            culture,
-            photo
-          } = company;
+          let { _id, name, avatar, contact, description } = company;
           if (contact) {
             var { facebook, linkedin, web } = JSON.parse(contact);
           }
@@ -40,25 +31,14 @@ function AllCompany({
                 {description && (
                   <div className='company-item-description'>{description}</div>
                 )}
-                {benefit && (
-                  <div className='company-item-benefit'>{benefit}</div>
-                )}
-                {culture && (
-                  <div className='company-item-culture'>{culture}</div>
-                )}
-                {photo && (
-                  <div className='company-item-photo'>
-                    <img src={photo} alt='' width='100' height='100' />
-                  </div>
-                )}
+
                 <Fragment>
                   {contact && (
                     <ul className='company-item-contact'>
-                      (
                       <Fragment>
                         {facebook && (
                           <li key='facebook'>
-                            <a href={facebook}>
+                            <a target='_blank' href={facebook}>
                               <i class='fab fa-facebook-f'></i>
                             </a>
                           </li>
@@ -66,7 +46,7 @@ function AllCompany({
 
                         {linkedin && (
                           <li key='linkedin'>
-                            <a href={linkedin}>
+                            <a target='_blank' href={linkedin}>
                               <i class='fab fa-linkedin-in'></i>
                             </a>
                           </li>
@@ -74,13 +54,12 @@ function AllCompany({
 
                         {web && (
                           <li key='web'>
-                            <a href={web}>
+                            <a target='_blank' href={web}>
                               <i class='fa fa-globe' aria-hidden='true'></i>
                             </a>
                           </li>
                         )}
                       </Fragment>
-                      )
                     </ul>
                   )}
                 </Fragment>
