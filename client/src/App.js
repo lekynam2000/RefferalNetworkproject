@@ -58,7 +58,7 @@ const App = () => {
                 component={Redirection}
               />
               <AdminRoute exact path='/create-job' component={CreateJob} />
-              <AdminRoute exact path='/edit-job/:id' component={UpdateJob} />
+              <AdminRoute exact path='/edit-job/:id/' component={UpdateJob} />
               <AdminRoute
                 exact
                 path='/create-company'

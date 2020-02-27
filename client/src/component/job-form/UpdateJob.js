@@ -8,7 +8,7 @@ import CompanySelection from './CompanySelection';
 
 function UpdateJob({
   updateJob,
-  getJobById,
+
   history,
   setAlert,
   job: { jobs, loading },
