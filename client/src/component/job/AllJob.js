@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { getAllJob, deleteJob } from '../../actions/job';
+import { Link } from 'react-router-dom';
 function AllJob({ auth, jobs, loading, getAllJob, deleteJob }) {
   useEffect(() => {
     getAllJob();
@@ -45,14 +46,20 @@ function AllJob({ auth, jobs, loading, getAllJob, deleteJob }) {
                 <div className='job-item-description'>{description}</div>
               )}
               {!auth.loading && auth.type == 'admin' && (
-                <button
-                  className='btn btn-danger'
-                  onClick={() => {
-                    deleteJob(_id);
-                  }}
-                >
-                  Delete
-                </button>
+                <Fragment>
+                  <Link to={`edit-job/${_id}`} className='btn btn-primary'>
+                    Update
+                  </Link>
+
+                  <button
+                    className='btn btn-danger'
+                    onClick={() => {
+                      deleteJob(_id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </Fragment>
               )}
             </div>
           );

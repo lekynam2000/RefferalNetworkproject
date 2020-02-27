@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
 
-function Navbar({ auth: { isAuthen, loading }, logout }) {
+function Navbar({ auth: { isAuthen, loading, type }, logout }) {
   const guestLinks = (
     <ul>
+      <li>
+        <Link to='/jobs'>Jobs</Link>
+      </li>
+      <li>
+        <Link to='/companies'>Companies</Link>
+      </li>
       <li>
         <Link to='/profiles'>Referers</Link>
       </li>
@@ -20,9 +26,23 @@ function Navbar({ auth: { isAuthen, loading }, logout }) {
   );
   const authLinks = (
     <ul>
-      <li>
-        <Link to='/profiles'>Referrers</Link>
-      </li>
+      {type === 'admin' && (
+        <Fragment>
+          <li>
+            <Link to='/create-job'>
+              <i className='fas fa-business-time'></i>{' '}
+              <span className='hide-sm'>Add Job</span>
+            </Link>
+          </li>
+          <li>
+            <Link to='/create-company'>
+              <i className='fas fa-building'></i>{' '}
+              <span className='hide-sm'>Add Company</span>
+            </Link>
+          </li>
+        </Fragment>
+      )}
+
       <li>
         <Link to='/dashboard'>
           <i className='fas fa-user'></i>{' '}

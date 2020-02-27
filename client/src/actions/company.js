@@ -71,3 +71,28 @@ export const getAllCompanies = () => async dispatch => {
     });
   }
 };
+
+export const updateCompany = (formData, history, id) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const res = await axios.put(`/api/company/${id}`, formData, config);
+    dispatch({
+      type: GET_COMPANY,
+      payload: res.data
+    });
+    history.push('/companies');
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach(err => dispatch(setAlert(err.msg, 'danger')));
+    }
+    dispatch({
+      type: COMPANY_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};

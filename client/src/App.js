@@ -23,6 +23,7 @@ import AddExperience from './component/profile-form/AddExperience';
 import AddEducation from './component/profile-form/AddEducation';
 import AllJob from './component/job/AllJob';
 import CreateJob from './component/job-form/CreateJob';
+import UpdateJob from './component/job-form/UpdateJob';
 import CreateCompany from './component/company-form/CreateCompany';
 import Redirection from './component/auth/Redirection';
 import AllCompany from './component/company/AllCompany';
@@ -57,6 +58,7 @@ const App = () => {
                 component={Redirection}
               />
               <AdminRoute exact path='/create-job' component={CreateJob} />
+              <AdminRoute exact path='/edit-job/:id' component={UpdateJob} />
               <AdminRoute
                 exact
                 path='/create-company'
