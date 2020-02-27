@@ -24,9 +24,9 @@ import AddEducation from './component/profile-form/AddEducation';
 import AllJob from './component/job/AllJob';
 import CreateJob from './component/job-form/CreateJob';
 import UpdateJob from './component/job-form/UpdateJob';
-import CreateCompany from './component/company-form/CreateCompany';
+
 import Redirection from './component/auth/Redirection';
-import AllCompany from './component/company/AllCompany';
+
 import Sidebar from './component/layout/Sidebar';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -51,7 +51,7 @@ const App = () => {
               <Route exact path='/profiles' component={Profiles} />
               <Route exact path='/profile/:id' component={Profile} />
               <Route exact path='/jobs' component={AllJob} />
-              <Route exact path='/companies' component={AllCompany} />
+
               <Route
                 exact
                 path='/redirection/:endpoint'
@@ -59,11 +59,7 @@ const App = () => {
               />
               <AdminRoute exact path='/create-job' component={CreateJob} />
               <AdminRoute exact path='/edit-job/:id/' component={UpdateJob} />
-              <AdminRoute
-                exact
-                path='/create-company'
-                component={CreateCompany}
-              />
+
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute
                 exact
