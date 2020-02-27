@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { getJobById, updateJob, resetJob } from '../../actions/job';
 import PropTypes from 'prop-types';
 import { setAlert } from '../../actions/alert';
-import CompanySelection from './CompanySelection';
 
 function UpdateJob({
   updateJob,
@@ -19,8 +18,6 @@ function UpdateJob({
 
   var {
     title,
-    company_id,
-    company_name,
     role,
     salary,
     location,
@@ -31,13 +28,7 @@ function UpdateJob({
     requirements
   } = formData;
   salary = JSON.parse(salary);
-  const onCompanyChange = (companyId, companyName) => {
-    setFormData({
-      ...formData,
-      company_id: companyId,
-      company_name: companyName
-    });
-  };
+
   const onChange = e => {
     if (e.target.name == 'value' || e.target.name == 'unit') {
       setFormData({
@@ -49,13 +40,8 @@ function UpdateJob({
     }
   };
   const onSubmit = e => {
-    if (formData.company_id) {
-      updateJob(formData, history, match.params.id);
-      e.preventDefault();
-    } else {
-      e.preventDefault();
-      setAlert('Please enter valid company');
-    }
+    updateJob(formData, history, match.params.id);
+    e.preventDefault();
   };
   return (
     !loading && (
@@ -79,12 +65,6 @@ function UpdateJob({
             <small className='form-text'>Provide job title </small>
           </div>{' '}
           <div className='form-group'>
-            <CompanySelection
-              onChangeParent={onCompanyChange}
-              defaultValue={company_name}
-            />
-          </div>{' '}
-          <div className='form-group'>
             <input
               type='text'
               placeholder='Role'
@@ -92,9 +72,6 @@ function UpdateJob({
               value={role}
               onChange={e => onChange(e)}
             />{' '}
-            <small className='form-text'>
-              Could be your own or a company website{' '}
-            </small>{' '}
           </div>{' '}
           <div className='form-group'>
             <input
@@ -104,9 +81,6 @@ function UpdateJob({
               value={salary.value}
               onChange={e => onChange(e)}
             />{' '}
-            <small className='form-text'>
-              Could be your own or a company website{' '}
-            </small>{' '}
           </div>{' '}
           <div className='form-group'>
             <input
@@ -116,9 +90,6 @@ function UpdateJob({
               value={salary.unit}
               onChange={e => onChange(e)}
             />{' '}
-            <small className='form-text'>
-              Could be your own or a company website{' '}
-            </small>{' '}
           </div>{' '}
           <div className='form-group'>
             <input
