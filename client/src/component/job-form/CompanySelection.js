@@ -11,6 +11,7 @@ const CompanySelection = ({
   getAllCompanies
 }) => {
   const [CompanyValid, SetCompanyValid] = useState('');
+  const [companyName, setCompanyName] = useState(defaultValue);
   useEffect(() => {
     getAllCompanies();
   }, [getAllCompanies]);
@@ -26,7 +27,9 @@ const CompanySelection = ({
   };
   const onChange = e => {
     var value = e.target.value;
+    setCompanyName(value);
     console.log(value);
+    console.log(defaultValue);
     if (validateCompany(value) != false) {
       SetCompanyValid(
         <span>
@@ -51,7 +54,7 @@ const CompanySelection = ({
             type='text'
             list='companies'
             name='company'
-            value={defaultValue}
+            value={companyName}
             onChange={e => {
               onChange(e);
             }}

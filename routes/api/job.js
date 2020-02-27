@@ -188,8 +188,10 @@ router.put(
         description: req.body.description,
         requirements: req.body.requirements
       });
-
-      job = await newJob.save();
+      for (let property in job) {
+        job[property] = newJob[property];
+      }
+      await job.save();
       res.json(job);
     } catch (error) {
       console.error(error);
