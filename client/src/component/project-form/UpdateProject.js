@@ -1,19 +1,24 @@
 import React, { Fragment, useState, useRef } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateProject,getProjectById } from '../../actions/project';
+import { updateProject } from '../../actions/project';
 import PropTypes from 'prop-types';
-
-
-function UpdateProject({ updateProject, history,project:{projects} }) {
-  const projectField = projects.filter(project=>project.id === match.params.id);
+function UpdateProject({
+  updateProject,
+  history,
+  project: { projects },
+  match
+}) {
+  const projectField = projects.filter(
+    project => project._id.toString() === match.params.id
+  )[0];
   const [formData, setFormData] = useState({
     title: projectField.title,
     fieldofexpert: projectField.fieldofexpert,
     skills: [...projectField.skills],
     location: projectField.location,
     experienceRequired: projectField.experienceRequired,
-    description: projectField.description,
+    description: projectField.description
   });
   const inputSkill = useRef(null);
   const {
@@ -31,7 +36,7 @@ function UpdateProject({ updateProject, history,project:{projects} }) {
     }
   };
   const onSubmit = e => {
-    updateProject(formData, history);
+    updateProject(formData, history, match.params.id);
     e.preventDefault();
   };
   const deleteSkill = index => {
@@ -140,6 +145,12 @@ function UpdateProject({ updateProject, history,project:{projects} }) {
 }
 UpdateProject.propTypes = {
   updateProject: PropTypes.func.isRequired,
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired
 };
-export default connect(null, { updateProject })(withRouter(UpdateProject));
+const mapStatetoProps = state => ({
+  project: state.project
+});
+export default connect(mapStatetoProps, { updateProject })(
+  withRouter(UpdateProject)
+);
