@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
+const ClientSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -17,14 +17,13 @@ const UserSchema = new mongoose.Schema({
   avatar: {
     type: String
   },
-  type: {
-    type: String,
-    default: 'expert',
-    enum: ['expert', 'admin']
-  },
   date: {
     type: Date,
     default: Date.now
+  },
+  projects: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'projects'
   }
 });
-module.exports = User = mongoose.model('users', UserSchema);
+module.exports = Client = mongoose.model('clients', ClientSchema);
