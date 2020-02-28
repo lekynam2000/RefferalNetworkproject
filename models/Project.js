@@ -23,7 +23,8 @@ const ProjectSchema = new mongoose.Schema({
     type: String
   },
   experienceRequired: {
-    type: Number
+    type: Number,
+    default: 0
   },
   description: {
     type: String,
@@ -37,6 +38,19 @@ const ProjectSchema = new mongoose.Schema({
       time: {
         type: Date,
         default: Date.now
+      }
+    }
+  ],
+  invitation: {
+    type: Number
+  },
+  acceptance: [
+    {
+      lastPosition: {
+        type: String
+      },
+      yearOfExperience: {
+        type: Number
       }
     }
   ]

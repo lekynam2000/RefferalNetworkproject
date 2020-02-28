@@ -21,9 +21,9 @@ import Dashboard from './component/dashboard/Dashboard';
 import EditProfile from './component/profile-form/EditProfile';
 import AddExperience from './component/profile-form/AddExperience';
 import AddEducation from './component/profile-form/AddEducation';
-import AllJob from './component/job/AllJob';
-import CreateJob from './component/job-form/CreateJob';
-import UpdateJob from './component/job-form/UpdateJob';
+import AllProjects from './component/project/AllProjects';
+import CreateProject from './component/project-form/CreateProject';
+import UpdateProject from './component/project-form/UpdateProject';
 
 import Redirection from './component/auth/Redirection';
 
@@ -50,15 +50,23 @@ const App = () => {
               <Route exact path='/login' component={Login} />
               <Route exact path='/profiles' component={Profiles} />
               <Route exact path='/profile/:id' component={Profile} />
-              <Route exact path='/jobs' component={AllJob} />
+              <Route exact path='/projects' component={AllProjects} />
 
               <Route
                 exact
                 path='/redirection/:endpoint'
                 component={Redirection}
               />
-              <AdminRoute exact path='/create-job' component={CreateJob} />
-              <AdminRoute exact path='/edit-job/:id/' component={UpdateJob} />
+              <AdminRoute
+                exact
+                path='/create-project'
+                component={CreateProject}
+              />
+              <AdminRoute
+                exact
+                path='/edit-project/:id/'
+                component={UpdateProject}
+              />
 
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute

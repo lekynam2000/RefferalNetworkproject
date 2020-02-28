@@ -115,7 +115,7 @@ router.delete('/:id', auth, async (req, res) => {
 // @desc update project by Id
 // @access Private Client
 router.put(
-  '/',
+  '/:id',
   [
     auth,
     check('title', 'Project title is required')
@@ -135,7 +135,7 @@ router.put(
     }
     try {
       const user = await User.findById(req.user.id).select('-password');
-      const project = await Project.findOne({ _id: req.body.id });
+      const project = await Project.findOne({ _id: req.params.id });
       if (user.type == 'expert' || project.client.toString() !== req.user.id) {
         res.status(401).json({ errors: [{ msg: 'User is not permitted' }] });
       }
