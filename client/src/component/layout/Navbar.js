@@ -7,7 +7,7 @@ function Navbar({ auth: { isAuthen, loading, type }, logout }) {
   const guestLinks = (
     <ul>
       <li>
-        <Link to='/jobs'>Jobs</Link>
+        <Link to='/projects'>Projects</Link>
       </li>
 
       <li>
@@ -27,9 +27,9 @@ function Navbar({ auth: { isAuthen, loading, type }, logout }) {
       {type === 'admin' && (
         <Fragment>
           <li>
-            <Link to='/create-job'>
+            <Link to='/create-project'>
               <i className='fas fa-business-time'></i>{' '}
-              <span className='hide-sm'>Add Job</span>
+              <span className='hide-sm'>Add Project</span>
             </Link>
           </li>
           <li></li>
