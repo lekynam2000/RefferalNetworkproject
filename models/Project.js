@@ -8,6 +8,10 @@ const ProjectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'clients'
   },
+  posted_day: {
+    type: Date,
+    default: Date.now
+  },
   fieldofexpert: {
     type: String,
     required: true
@@ -24,6 +28,17 @@ const ProjectSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true
-  }
+  },
+  history: [
+    {
+      status: {
+        type: String
+      },
+      time: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ]
 });
 module.exports = Project = mongoose.model('projects', ProjectSchema);
