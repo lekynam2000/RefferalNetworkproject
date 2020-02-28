@@ -15,8 +15,6 @@ app.use('/api/profile', require('./routes/api/profile'));
 
 app.use('/api/auth', require('./routes/api/auth'));
 
-app.use('/api/job', require('./routes/api/job'));
-
-app.use('/api/company', require('./routes/api/company'));
+app.use('/api/project', require('./routes/api/project'));
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

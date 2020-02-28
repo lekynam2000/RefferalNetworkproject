@@ -1,4 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://nam:181100@firstmern-9idht.mongodb.net/test?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://nam:181120@cluster0-qxy71.mongodb.net/test?retryWrites=true&w=majority",
   "jwtSecret": "referralnetwork"
 }

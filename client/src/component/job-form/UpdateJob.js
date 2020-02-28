@@ -16,7 +16,7 @@ function UpdateJob({
   var job = jobs.filter(job => job._id.toString() === match.params.id)[0];
   const [formData, setFormData] = useState(job);
 
-  var {
+  let {
     title,
     role,
     salary,
