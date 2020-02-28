@@ -37,6 +37,7 @@ router.post(
 
       var newProject = new Project({
         title: req.body.title,
+        client: req.user.id,
         fieldofexpert: req.body.fieldofexpert,
         skills: req.body.skills,
         location: req.body.location,
@@ -110,9 +111,9 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
-// @route PUT api/project/:id
+// @route PUT api/project
 // @desc update project by Id
-// @access Private Admin
+// @access Private Client
 router.put(
   '/',
   [
@@ -133,25 +134,32 @@ router.put(
       return res.status(400).json({ error: errors.array() });
     }
     try {
-      var user = await User.findById(req.user.id).select('-password');
-      if (user.type == 'expert') {
+      const user = await User.findById(req.user.id).select('-password');
+      const project = await Project.findOne({ _id: req.body.id });
+      if (user.type == 'expert' || project.client.toString() !== req.user.id) {
         res.status(401).json({ errors: [{ msg: 'User is not permitted' }] });
       }
 
-      var newProject = new Project({
+      var newProject = {
         title: req.body.title,
         fieldofexpert: req.body.fieldofexpert,
         skills: req.body.skills,
         location: req.body.location,
         experienceRequired: req.body.experienceRequired,
         description: req.body.description
+      };
+      var copy = JSON.parse(JSON.stringify(project));
+      copy.history = null;
+      for (let property in newProject) {
+        project[property] = newProject[property];
+        project['posted_day'] = Date.now();
+      }
+
+      project.history.unshift({
+        status: JSON.stringify(copy),
+        time: project.posted_day
       });
-
-      const project = await Project.findOndAndUpdate(
-        { _id: req.body.id },
-        { $set: newProject }
-      );
-
+      await project.save();
       res.send(project);
     } catch (error) {
       console.error(error);
@@ -159,18 +167,5 @@ router.put(
     }
   }
 );
-// @route GET api/project
-// @desc get all projects
-// @access Public
-router.get('/', async (req, res) => {
-  try {
-    var projects = await Project.find().sort({ posted_day: -1 });
-
-    res.json(projects);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Server Error');
-  }
-});
 
 module.exports = router;

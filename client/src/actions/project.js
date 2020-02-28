@@ -1,47 +1,47 @@
 import axios from 'axios';
 import {
-  GET_JOB,
-  JOB_ERROR,
-  JOB_DELETED,
-  GET_ALLJOB,
-  RESET_JOB
+  GET_PROJECT,
+  PROJECT_ERROR,
+  PROJECT_DELETED,
+  GET_ALLPROJECT,
+  RESET_PROJECT
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { setAlert } from './alert';
-export const createJob = (formData, history) => async dispatch => {
+export const createProject = (formData, history) => async dispatch => {
   try {
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     };
-    const res = await axios.post('/api/job', formData, config);
+    const res = await axios.post('/api/project', formData, config);
     dispatch({
-      type: GET_JOB,
+      type: GET_PROJECT,
       payload: res.data
     });
-    history.push('/jobs');
+    history.push('/projects');
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach(err => dispatch(setAlert(err.msg, 'danger')));
     }
     dispatch({
-      type: JOB_ERROR,
+      type: PROJECT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
-export const deleteJob = id => async dispatch => {
+export const deleteProject = id => async dispatch => {
   try {
-    const res = await axios.delete(`/api/job/${id}`);
+    const res = await axios.delete(`/api/project/${id}`);
 
     dispatch({
-      type: JOB_DELETED
+      type: PROJECT_DELETED
     });
 
     dispatch({
-      type: GET_ALLJOB,
+      type: GET_ALLPROJECT,
       payload: res.data
     });
   } catch (err) {
@@ -52,66 +52,66 @@ export const deleteJob = id => async dispatch => {
     }
 
     dispatch({
-      type: JOB_ERROR,
+      type: PROJECT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
-export const getAllJob = () => async dispatch => {
+export const getAllProject = () => async dispatch => {
   try {
-    const res = await axios.get('api/job');
+    const res = await axios.get('api/project');
     dispatch({
-      type: GET_ALLJOB,
+      type: GET_ALLPROJECT,
       payload: res.data
     });
   } catch (err) {
     dispatch({
-      type: JOB_ERROR,
+      type: PROJECT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
-export const getJobById = id => async dispatch => {
+export const getProjectById = id => async dispatch => {
   try {
-    const res = await axios.get(`api/job/${id}`);
+    const res = await axios.get(`api/project/${id}`);
     dispatch({
-      type: GET_JOB,
+      type: GET_PROJECT,
       payload: res.data
     });
   } catch (err) {
     dispatch({
-      type: JOB_ERROR,
+      type: PROJECT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
 
-export const updateJob = (formData, history, id) => async dispatch => {
+export const updateProject = (formData, history, id) => async dispatch => {
   try {
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     };
-    const res = await axios.put(`/api/job/${id}`, formData, config);
+    const res = await axios.put(`/api/project/${id}`, formData, config);
     dispatch({
-      type: GET_JOB,
+      type: GET_PROJECT,
       payload: res.data
     });
-    history.push('/jobs');
+    history.push('/projects');
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach(err => dispatch(setAlert(err.msg, 'danger')));
     }
     dispatch({
-      type: JOB_ERROR,
+      type: PROJECT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
 };
-export const resetJob = () => dispatch => {
+export const resetProject = () => dispatch => {
   dispatch({
-    type: RESET_JOB
+    type: RESET_PROJECT
   });
 };
