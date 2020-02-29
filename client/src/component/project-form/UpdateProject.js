@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 function UpdateProject({
   updateProject,
   history,
-  project: { projects },
-  match
+  match,
+  project: { projects }
 }) {
   const projectField = projects.filter(
     project => project._id.toString() === match.params.id
@@ -35,12 +35,11 @@ function UpdateProject({
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   };
-  const onSubmit = e => {
+  const onSubmit = () => {
     updateProject(formData, history, match.params.id);
-    e.preventDefault();
   };
-  const deleteSkill = index => {
-    setFormData({ ...formData, skills: skills.splice(index, 1) });
+  const deleteSkill = skill => {
+    setFormData({ ...formData, skills: skills.filter(s => s !== skill) });
   };
   const addSkill = async skill => {
     await setFormData({ ...formData, skills: [...skills, skill] });
@@ -53,7 +52,7 @@ function UpdateProject({
         project stand out{' '}
       </p>{' '}
       <small> * = required field </small>{' '}
-      <form className='form' onSubmit={e => onSubmit(e)}>
+      <form className='form' onSubmit={e => e.preventDefault()}>
         <div className='form-group'>
           {' '}
           <input
@@ -98,7 +97,7 @@ function UpdateProject({
                 <i
                   class='fas fa-times'
                   onClick={() => {
-                    deleteSkill(index);
+                    deleteSkill(skill);
                   }}
                 ></i>
               </li>
@@ -135,7 +134,14 @@ function UpdateProject({
             onChange={e => onChange(e)}
           />{' '}
         </div>{' '}
-        <input type='submit' className='btn btn-primary my-1' />
+        <button
+          className='btn btn-primary my-1'
+          onClick={() => {
+            onSubmit();
+          }}
+        >
+          Submit
+        </button>
         <Link className='btn btn-light my-1' to='/dashboard'>
           Go Back{' '}
         </Link>{' '}

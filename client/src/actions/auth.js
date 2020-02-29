@@ -11,20 +11,24 @@ import {
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { setAlert } from './alert';
-export const register = ({ name, email, password }) => async dispatch => {
+export const register = (
+  { name, email, password },
+  client = false
+) => async dispatch => {
   const config = {
     headers: {
       'Content-type': 'application/json'
     }
   };
   const body = JSON.stringify({ name, email, password });
+  const append = client ? '/client' : '';
   try {
-    const res = await axios.post('/api/user', body, config);
+    const res = await axios.post(`/api/user${append}`, body, config);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data
     });
-    dispatch(loadUser());
+    dispatch(loadUser(append));
   } catch (error) {
     const err = error.response.data.errors;
     if (err) {
@@ -35,12 +39,12 @@ export const register = ({ name, email, password }) => async dispatch => {
     });
   }
 };
-export const loadUser = () => async dispatch => {
+export const loadUser = (append = '') => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
   try {
-    const res = await axios.get('/api/auth');
+    const res = await axios.get(`/api/auth${append}`);
     dispatch({
       type: USER_LOADED,
       payload: res.data
@@ -51,20 +55,24 @@ export const loadUser = () => async dispatch => {
     });
   }
 };
-export const login = ({ email, password }) => async dispatch => {
+export const login = (
+  { email, password },
+  client = false
+) => async dispatch => {
   const config = {
     headers: {
       'Content-type': 'application/json'
     }
   };
+  const append = client ? '/client' : '';
   const body = JSON.stringify({ email, password });
   try {
-    const res = await axios.post('/api/auth', body, config);
+    const res = await axios.post(`/api/auth${append}`, body, config);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data
     });
-    dispatch(loadUser());
+    dispatch(loadUser(append));
   } catch (error) {
     const err = error.response.data.errors;
     if (err) {

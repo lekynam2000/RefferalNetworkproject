@@ -5,7 +5,7 @@ import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
-function Register({ setAlert, register, isAuthen }) {
+function RegisterClient({ setAlert, register, isAuthen }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,7 +19,7 @@ function Register({ setAlert, register, isAuthen }) {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      register({ name, email, password });
+      register({ name, email, password }, true);
     }
   };
   const { name, email, password, password2 } = formData;
@@ -89,7 +89,7 @@ function Register({ setAlert, register, isAuthen }) {
     </Fragment>
   );
 }
-Register.propTypes = {
+RegisterClient.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthen: PropTypes.bool
@@ -97,4 +97,4 @@ Register.propTypes = {
 const mapStatetoProps = state => ({
   isAuthen: state.auth.isAuthen
 });
-export default connect(mapStatetoProps, { setAlert, register })(Register);
+export default connect(mapStatetoProps, { setAlert, register })(RegisterClient);
