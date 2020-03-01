@@ -16,7 +16,7 @@ function MyProject({
   deleteProject
 }) {
   useEffect(() => {
-    resetProject();
+    // resetProject();
     getMyProject();
   }, [resetProject, getMyProject]);
   return (
@@ -46,8 +46,8 @@ function MyProject({
               {skills && (
                 <ul className='project-item-skills'>
                   <Fragment>
-                    {skills.map(skill => (
-                      <li>{skill}</li>
+                    {skills.map((skill, index) => (
+                      <li key={index}>{skill}</li>
                     ))}
                   </Fragment>
                 </ul>

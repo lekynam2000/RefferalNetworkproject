@@ -28,7 +28,7 @@ export const register = (
       type: REGISTER_SUCCESS,
       payload: res.data
     });
-    dispatch(loadUser(append));
+    // dispatch(loadUser(append));
   } catch (error) {
     const err = error.response.data.errors;
     if (err) {

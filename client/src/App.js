@@ -77,12 +77,12 @@ const App = () => {
                 path='/create-project'
                 component={CreateProject}
               />
-              <AdminRoute
+              <ClientRoute
                 exact
                 path='/edit-project/:id/'
                 component={UpdateProject}
               />
-              <ClientRoute exact path='/client-site' component={MyProject} />
+              <ClientRoute exact path='/myproject' component={MyProject} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute
                 exact

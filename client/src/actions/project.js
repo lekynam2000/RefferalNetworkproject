@@ -112,6 +112,11 @@ export const updateProject = (formData, history, id) => async dispatch => {
 };
 export const getMyProject = () => async dispatch => {
   try {
+    const res = await axios.get('api/project/me');
+    dispatch({
+      type: GET_ALLPROJECT,
+      payload: res.data
+    });
   } catch (err) {
     dispatch({
       type: PROJECT_ERROR,
