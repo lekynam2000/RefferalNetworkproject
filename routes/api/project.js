@@ -5,7 +5,7 @@ const User = require('../../models/User');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 const Project = require('../../models/Project');
-
+const ClientProject = require('../../models/ClientProject');
 // @route POST api/project
 // @desc create project
 // @access Client
@@ -46,6 +46,8 @@ router.post(
       });
 
       var project = await newProject.save();
+      const client = ClientProject.findOne({ client: req.user.id });
+      client.projects.unshift(project._id);
       res.send(project);
     } catch (error) {
       console.error(error);
@@ -93,6 +95,7 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     var project = await Project.findById(req.params.id);
     var user = await User.findById(req.user.id);
+    var clientproject = await ClientProject.findOne({ client: req.body.id });
     if (!project) {
       return res.status(400).json({ msg: 'Project not found' });
     }
@@ -101,6 +104,10 @@ router.delete('/:id', auth, async (req, res) => {
     }
     await project.remove();
     var projects = await Project.find();
+    clientproject.projects = clientproject.projects.filter(
+      project => project !== req.params.id
+    );
+    clientproject.save();
     res.json(projects);
   } catch (error) {
     console.error(error);
