@@ -35,6 +35,7 @@ import MyProject from './component/project/MyProject';
 import Redirection from './component/auth/Redirection';
 
 import Sidebar from './component/layout/Sidebar';
+import ClientRoute from './component/routing/ClientRoute';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -81,7 +82,7 @@ const App = () => {
                 path='/edit-project/:id/'
                 component={UpdateProject}
               />
-
+              <ClientRoute exact path='/client-site' component={MyProject} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute
                 exact
