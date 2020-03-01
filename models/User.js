@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
   type: {
     type: String,
     default: 'expert',
-    enum: ['expert', 'admin']
+    enum: ['expert', 'admin', 'client']
   },
   date: {
     type: Date,
