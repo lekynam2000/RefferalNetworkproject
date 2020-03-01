@@ -110,6 +110,15 @@ export const updateProject = (formData, history, id) => async dispatch => {
     });
   }
 };
+export const getMyProject = () => async dispatch => {
+  try {
+  } catch (err) {
+    dispatch({
+      type: PROJECT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
 export const resetProject = () => dispatch => {
   dispatch({
     type: RESET_PROJECT

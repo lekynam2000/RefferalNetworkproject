@@ -5,6 +5,10 @@ const ClientSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  type: {
+    type: String,
+    default: 'client'
+  },
   email: {
     type: String,
     required: true,
@@ -21,9 +25,11 @@ const ClientSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  projects: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'projects'
-  }
+  projects: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'projects'
+    }
+  ]
 });
 module.exports = Client = mongoose.model('clients', ClientSchema);

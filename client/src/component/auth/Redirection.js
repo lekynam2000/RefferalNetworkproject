@@ -2,9 +2,9 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-const Redirection = ({ type, match }) => {
+const Redirection = ({ type, match }, usertype = 'admin') => {
   return (
-    type == 'admin' && <Redirect to={`/${match.params.endpoint}`}></Redirect>
+    type == usertype && <Redirect to={`/${match.params.endpoint}`}></Redirect>
   );
 };
 

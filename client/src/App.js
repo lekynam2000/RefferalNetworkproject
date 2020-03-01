@@ -1,10 +1,17 @@
 import React, { Fragment, useEffect } from 'react';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 import Navbar from './component/layout/Navbar';
 import Landing from './component/layout/Landing';
 import Login from './component/auth/Login';
 import Register from './component/auth/Register';
+import RegisterClient from './component/auth/RegisterClient';
+
 import Alert from './component/layout/Alert';
 import './App.css';
 import { Provider } from 'react-redux';
@@ -24,7 +31,7 @@ import AddEducation from './component/profile-form/AddEducation';
 import AllProjects from './component/project/AllProjects';
 import CreateProject from './component/project-form/CreateProject';
 import UpdateProject from './component/project-form/UpdateProject';
-
+import MyProject from './component/project/MyProject';
 import Redirection from './component/auth/Redirection';
 
 import Sidebar from './component/layout/Sidebar';
@@ -48,6 +55,8 @@ const App = () => {
             <Switch>
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
+              <Route exact path='/register/client' component={RegisterClient} />
+
               <Route exact path='/profiles' component={Profiles} />
               <Route exact path='/profile/:id' component={Profile} />
               <Route exact path='/projects' component={AllProjects} />
@@ -56,6 +65,11 @@ const App = () => {
                 exact
                 path='/redirection/:endpoint'
                 component={Redirection}
+              />
+              <Route
+                exact
+                path='client/redirection/:endpoint'
+                render={() => <Redirection usertype='client' />}
               />
               <AdminRoute
                 exact

@@ -19,6 +19,19 @@ router.get('/', auth, async (req, res) => {
     res.status(500).send('server err');
   }
 });
+// @route GET api/auth/client
+// @desc Get Client
+// @access Private
+
+router.get('/client', auth, async (req, res) => {
+  try {
+    const client = await Client.findById(req.user.id).select('-password');
+    res.json(client);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('server err');
+  }
+});
 // @route POST api/auth
 // @desc Login
 // @access Public

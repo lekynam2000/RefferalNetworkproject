@@ -1,11 +1,24 @@
-import React, { useEffect, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { getAllProject, deleteProject } from '../../actions/project';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {
+  getMyProject,
+  resetProject,
+  deleteProject
+} from '../../actions/project';
 import { Link } from 'react-router-dom';
-function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
+import { Fragment } from 'react';
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
+function MyProject({
+  project: { projects, loading },
+  getMyProject,
+  resetProject,
+  deleteProject
+}) {
   useEffect(() => {
-    getAllProject();
-  }, [getAllProject]);
+    resetProject();
+    getMyProject();
+  }, [resetProject, getMyProject]);
   return (
     <div className='project-list'>
       {!loading &&
@@ -51,22 +64,21 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
               {description && (
                 <div className='project-item-description'>{description}</div>
               )}
-              {!auth.loading && auth.type == 'admin' && (
-                <Fragment>
-                  <Link to={`edit-project/${_id}`} className='btn btn-primary'>
-                    Update
-                  </Link>
 
-                  <button
-                    className='btn btn-danger'
-                    onClick={() => {
-                      deleteProject(_id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </Fragment>
-              )}
+              <Fragment>
+                <Link to={`edit-project/${_id}`} className='btn btn-primary'>
+                  Update
+                </Link>
+
+                <button
+                  className='btn btn-danger'
+                  onClick={() => {
+                    deleteProject(_id);
+                  }}
+                >
+                  Delete
+                </button>
+              </Fragment>
             </div>
           );
         })}
@@ -74,10 +86,17 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
   );
 }
 const mapStatetoProps = state => ({
-  auth: state.auth,
-  projects: state.project.projects,
-  loading: state.project.loading
+  project: state.project
 });
-export default connect(mapStatetoProps, { getAllProject, deleteProject })(
-  AllProject
-);
+MyProject.propTypes = {
+  getMyProject: PropTypes.func.isRequired,
+  resetProject: PropTypes.func.isRequired,
+  deleteProject: PropTypes.func.isRequired,
+  project: PropTypes.object.isRequired
+};
+
+export default connect(mapStatetoProps, {
+  getMyProject,
+  resetProject,
+  deleteProject
+})(MyProject);

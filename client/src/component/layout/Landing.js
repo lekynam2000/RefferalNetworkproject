@@ -12,11 +12,15 @@ function Landing({ isAuthen }) {
             A place that help you earn money and search job for your friends
           </p>
           <div className='buttons'>
-            <Link to='/profiles' className='btn btn-primary'>
-              Our Referers
+            <Link to='/register/client' className='btn btn-primary'>
+              Become a Client
             </Link>
-            <Link to='/jobs' className='btn btn-light'>
-              Jobs List
+            <Link to='/register' className='btn btn-light'>
+              Become an Expert
+            </Link>
+            <div className='question'>Already have account?</div>
+            <Link to='/login' className='btn btn-light'>
+              Login
             </Link>
           </div>
         </div>

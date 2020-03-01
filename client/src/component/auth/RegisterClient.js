@@ -23,8 +23,9 @@ function RegisterClient({ setAlert, register, isAuthen }) {
     }
   };
   const { name, email, password, password2 } = formData;
+
   if (isAuthen) {
-    return <Redirect to='/dashboard/' />;
+    return <Redirect to='/myproject' />;
   }
   return (
     <Fragment>

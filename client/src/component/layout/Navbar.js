@@ -11,11 +11,11 @@ function Navbar({ auth: { isAuthen, loading, type }, logout }) {
       </li>
 
       <li>
-        <Link to='/profiles'>Referers</Link>
+        <Link to='/profiles'>Experts</Link>
       </li>
 
       <li>
-        <Link to='/register'>Register</Link>
+        <Link to='/'>Register</Link>
       </li>
       <li>
         <Link to='/login'>Login</Link>

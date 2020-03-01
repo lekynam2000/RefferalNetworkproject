@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('../../models/User');
+const Client = require('../../models/Client');
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 const Project = require('../../models/Project');
@@ -30,7 +30,7 @@ router.post(
       return res.status(400).json({ error: errors.array() });
     }
     try {
-      var user = await User.findById(req.user.id).select('-password');
+      var user = await Client.findById(req.user.id).select('-password');
       if (user.type == 'expert') {
         res.status(401).json({ errors: [{ msg: 'User is not permitted' }] });
       }
@@ -46,6 +46,8 @@ router.post(
       });
 
       var project = await newProject.save();
+      user.projects.unshift(project._id);
+      user.save();
       res.send(project);
     } catch (error) {
       console.error(error);
@@ -66,7 +68,28 @@ router.get('/', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
+// @route GET api/project/me
+// @desc get projects by user
+// @access Private
+router.get('/me', auth, async (req, res) => {
+  try {
+    const user = await Client.findById(req.user.id);
+    const projectList = user.projects;
+    const projects = await Project.find({
+      _id: { $in: projectList }
+    });
+    if (!projects) {
+      return res.status(400).json({ msg: 'Project not found' });
+    }
+    res.json(projects);
+  } catch (error) {
+    console.error(error);
+    if (error.kind === 'ObjectId') {
+      return res.status(400).json({ msg: 'project not found' });
+    }
+    res.status(500).send('Server Error');
+  }
+});
 // @route GET api/project/:id
 // @desc get project by Id
 // @access Public
@@ -92,11 +115,11 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
   try {
     var project = await Project.findById(req.params.id);
-    var user = await User.findById(req.user.id);
+    var user = await Client.findById(req.user.id);
     if (!project) {
       return res.status(400).json({ msg: 'Project not found' });
     }
-    if (user.type !== 'admin') {
+    if (project.client.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User is not authorized' });
     }
     await project.remove();
@@ -136,7 +159,10 @@ router.put(
     try {
       const user = await User.findById(req.user.id).select('-password');
       const project = await Project.findOne({ _id: req.params.id });
-      if (user.type == 'expert' || project.client.toString() !== req.user.id) {
+      if (project.client.toString() !== req.user.id) {
+        return res.status(401).json({ msg: 'User is not authorized' });
+      }
+      {
         res.status(401).json({ errors: [{ msg: 'User is not permitted' }] });
       }
 

@@ -3,22 +3,29 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
-function Login({ login, isAuthen }) {
+function Login({ login, isAuthen, usertype }) {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-
+  const [type, setType] = useState('expert');
+  const handleType = e => {
+    setType(e.target.value);
+  };
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async e => {
     e.preventDefault();
-    login({ email, password });
+    var isClient = type === 'client';
+    login({ email, password }, isClient);
   };
   const { email, password } = formData;
 
-  if (isAuthen) {
+  if (isAuthen && usertype === 'expert') {
     return <Redirect to='/dashboard/' />;
+  }
+  if (isAuthen && usertype === 'client') {
+    return <Redirect to='/myproject' />;
   }
   return (
     <Fragment>
@@ -57,8 +64,34 @@ function Login({ login, isAuthen }) {
 
         <input type='submit' className='btn btn-primary' value='Login' />
       </form>
+      <form action=''>
+        <div className='radio'>
+          <label>
+            <input
+              type='radio'
+              value='expert'
+              checked={type === 'expert'}
+              onChange={e => {
+                handleType(e);
+              }}
+            />
+            Expert
+          </label>
+          <label>
+            <input
+              type='radio'
+              value='client'
+              checked={type === 'client'}
+              onChange={e => {
+                handleType(e);
+              }}
+            />
+            Client
+          </label>
+        </div>
+      </form>
       <p className='my-1'>
-        Don't have an account? <Link to='/register'>Sign Up</Link>
+        Don't have an account? <Link to='/'>Sign Up</Link>
       </p>
     </Fragment>
   );
@@ -69,6 +102,6 @@ Login.propTypes = {
 };
 const mapStatetoProps = state => ({
   isAuthen: state.auth.isAuthen,
-  type: state.auth.type
+  usertype: state.auth.type
 });
 export default connect(mapStatetoProps, { login })(Login);
