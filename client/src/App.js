@@ -1,6 +1,10 @@
 import React, { Fragment, useEffect } from 'react';
-
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 import Navbar from './component/layout/Navbar';
 import Landing from './component/layout/Landing';
 import Login from './component/auth/Login';
@@ -24,10 +28,11 @@ import AddEducation from './component/profile-form/AddEducation';
 import AllProjects from './component/project/AllProjects';
 import CreateProject from './component/project-form/CreateProject';
 import UpdateProject from './component/project-form/UpdateProject';
-
+import MyProject from './component/project/MyProject';
 import Redirection from './component/auth/Redirection';
 
 import Sidebar from './component/layout/Sidebar';
+import ClientRoute from './component/routing/ClientRoute';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -48,6 +53,7 @@ const App = () => {
             <Switch>
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
+
               <Route exact path='/profiles' component={Profiles} />
               <Route exact path='/profile/:id' component={Profile} />
               <Route exact path='/projects' component={AllProjects} />
@@ -57,17 +63,27 @@ const App = () => {
                 path='/redirection/:endpoint'
                 component={Redirection}
               />
-              <AdminRoute
+              <Route
+                exact
+                path='/client/redirection/:endpoint'
+                render={props => <Redirection {...props} usertype='client' />}
+              />
+              <Route
+                exact
+                path='client/redirection/:endpoint'
+                render={() => <Redirection usertype='client' />}
+              />
+              <ClientRoute
                 exact
                 path='/create-project'
                 component={CreateProject}
               />
-              <AdminRoute
+              <ClientRoute
                 exact
                 path='/edit-project/:id/'
                 component={UpdateProject}
               />
-
+              <ClientRoute exact path='/myproject' component={MyProject} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute
                 exact

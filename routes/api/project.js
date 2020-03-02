@@ -46,8 +46,9 @@ router.post(
       });
 
       var project = await newProject.save();
-      const client = ClientProject.findOne({ client: req.user.id });
+      const client = await ClientProject.findOne({ client: req.user.id });
       client.projects.unshift(project._id);
+      await client.save();
       res.send(project);
     } catch (error) {
       console.error(error);
@@ -68,7 +69,28 @@ router.get('/', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
+// @route GET api/project/me
+// @desc get projects by user
+// @access Private
+router.get('/me', auth, async (req, res) => {
+  try {
+    const user = await ClientProject.findOne({ client: req.user.id });
+    const projectList = user.projects;
+    const projects = await Project.find({
+      _id: { $in: projectList }
+    });
+    if (!projects) {
+      return res.status(400).json({ msg: 'Project not found' });
+    }
+    res.json(projects);
+  } catch (error) {
+    console.error(error);
+    if (error.kind === 'ObjectId') {
+      return res.status(400).json({ msg: 'project not found' });
+    }
+    res.status(500).send('Server Error');
+  }
+});
 // @route GET api/project/:id
 // @desc get project by Id
 // @access Public

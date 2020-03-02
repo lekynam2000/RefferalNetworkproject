@@ -98,12 +98,26 @@ export const updateProject = (formData, history, id) => async dispatch => {
       type: GET_PROJECT,
       payload: res.data
     });
-    history.push('/projects');
+    history.push('/myproject');
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
       errors.forEach(err => dispatch(setAlert(err.msg, 'danger')));
     }
+    dispatch({
+      type: PROJECT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+export const getMyProject = () => async dispatch => {
+  try {
+    const res = await axios.get('api/project/me');
+    dispatch({
+      type: GET_ALLPROJECT,
+      payload: res.data
+    });
+  } catch (err) {
     dispatch({
       type: PROJECT_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }

@@ -1,19 +1,26 @@
 import React, { Fragment, useState, useRef } from 'react';
 import { Link, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateProject,getProjectById } from '../../actions/project';
+import { updateProject, getProjectById } from '../../actions/project';
 import PropTypes from 'prop-types';
 
-
-function UpdateProject({ updateProject, history,project:{projects} }) {
-  const projectField = projects.filter(project=>project.id === match.params.id);
+function UpdateProject({
+  updateProject,
+  history,
+  match,
+  project: { projects }
+}) {
+  const projectField = projects.filter(
+    project => project._id.toString() === match.params.id
+  )[0];
+  console.log(projectField);
   const [formData, setFormData] = useState({
     title: projectField.title,
     fieldofexpert: projectField.fieldofexpert,
     skills: [...projectField.skills],
     location: projectField.location,
     experienceRequired: projectField.experienceRequired,
-    description: projectField.description,
+    description: projectField.description
   });
   const inputSkill = useRef(null);
   const {
@@ -31,11 +38,14 @@ function UpdateProject({ updateProject, history,project:{projects} }) {
     }
   };
   const onSubmit = e => {
-    updateProject(formData, history);
+    updateProject(formData, history, match.params.id);
     e.preventDefault();
   };
-  const deleteSkill = index => {
-    setFormData({ ...formData, skills: skills.splice(index, 1) });
+  const deleteSkill = skill => {
+    setFormData({
+      ...formData,
+      skills: skills.splice(skills.indexOf(skill), 1)
+    });
   };
   const addSkill = async skill => {
     await setFormData({ ...formData, skills: [...skills, skill] });
@@ -48,7 +58,15 @@ function UpdateProject({ updateProject, history,project:{projects} }) {
         project stand out{' '}
       </p>{' '}
       <small> * = required field </small>{' '}
-      <form className='form' onSubmit={e => onSubmit(e)}>
+      <form
+        className='form'
+        onSubmit={e => {
+          if (e.which == 13) {
+            console.log(e.which);
+            e.preventDefault();
+          } else onSubmit(e);
+        }}
+      >
         <div className='form-group'>
           {' '}
           <input
@@ -87,17 +105,20 @@ function UpdateProject({ updateProject, history,project:{projects} }) {
           </div>
 
           <ul className='skill-list'>
-            {skills.map((skill, index) => (
-              <li key={index}>
-                <span>{skill}</span>{' '}
-                <i
-                  class='fas fa-times'
-                  onClick={() => {
-                    deleteSkill(index);
-                  }}
-                ></i>
-              </li>
-            ))}
+            {skills.map((skill, index) => {
+              var s = skill;
+              return (
+                <li key={index}>
+                  <span>{skill}</span>{' '}
+                  <i
+                    class='fas fa-times'
+                    onClick={() => {
+                      deleteSkill(s);
+                    }}
+                  ></i>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className='form-group'>
@@ -122,8 +143,7 @@ function UpdateProject({ updateProject, history,project:{projects} }) {
         </div>{' '}
         <div className='form-group'>
           {' '}
-          <input
-            type='text'
+          <textarea
             placeholder='Project description'
             name='description'
             value={description}
@@ -142,4 +162,9 @@ UpdateProject.propTypes = {
   updateProject: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired
 };
-export default connect(null, { updateProject })(withRouter(UpdateProject));
+const mapStatetoProps = state => ({
+  project: state.project
+});
+export default connect(mapStatetoProps, { updateProject })(
+  withRouter(UpdateProject)
+);

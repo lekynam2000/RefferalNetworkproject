@@ -10,19 +10,26 @@ function Register({ setAlert, register, isAuthen }) {
     name: '',
     email: '',
     password: '',
-    password2: ''
+    password2: '',
+    type: 'expert'
   });
-  const onChange = e =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = e => {
+    if (e.target.type !== 'radio') {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    } else {
+      setFormData({ ...formData, type: e.target.value });
+    }
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      register({ name, email, password });
+      register({ name, email, password, type });
     }
   };
-  const { name, email, password, password2 } = formData;
+  const { name, email, password, password2, type } = formData;
   if (isAuthen) {
     return <Redirect to='/dashboard/' />;
   }
@@ -81,6 +88,33 @@ function Register({ setAlert, register, isAuthen }) {
           />
         </div>
         <input type='submit' className='btn btn-primary' value='Register' />
+      </form>
+      <form action=''>
+        <div className='radio'>
+          <label>
+            <input
+              type='radio'
+              value='expert'
+              checked={type === 'expert'}
+              onChange={e => {
+                onChange(e);
+              }}
+            />{' '}
+            Register as Expert
+          </label>
+          {`    `}
+          <label>
+            <input
+              type='radio'
+              value='client'
+              checked={type === 'client'}
+              onChange={e => {
+                onChange(e);
+              }}
+            />{' '}
+            Register as Client
+          </label>
+        </div>
       </form>
       <p className='my-1'>
         Already have an account ? <Link to='/login'> Sign In </Link>
