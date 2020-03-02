@@ -14,7 +14,7 @@ function Sidebar({ auth: { isAuthen, loading } }) {
           </li>
           <li>
             <Link to='/profiles'>
-              <i class='fas fa-users'></i>
+              <i className='fas fa-users'></i>
             </Link>
           </li>
           <li>

@@ -64,10 +64,10 @@ router.post(
           res.json({ token });
         }
       );
-      const newProject = new ClientProject({
+      const newClientProject = new ClientProject({
         client: user.id
       });
-      await newProject.save();
+      await newClientProject.save();
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server error');
