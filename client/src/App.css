@@ -662,3 +662,23 @@ button {
 .sidebar ul li:hover i {
   color: #fff;
 }
+.skills .input-group input {
+  width: 60%;
+  height: 40px;
+  display: inline-block;
+}
+.skills .input-group-append {
+  display: inline-block;
+}
+.skills .input-group-append button {
+  display: inline-block;
+  width: 60px;
+  height: 40px;
+}
+#year-input {
+  width: 80px;
+  height: 50px;
+  font-size: 20px;
+  line-height: 60px;
+  text-align: center;
+}

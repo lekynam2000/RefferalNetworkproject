@@ -50,7 +50,7 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
               {description && (
                 <div className='project-item-description'>{description}</div>
               )}
-              {!auth.loading && auth.type == 'admin' && (
+              {!auth.loading && auth.type === 'admin' && (
                 <Fragment>
                   <Link to={`edit-project/${_id}`} className='btn btn-primary'>
                     Update

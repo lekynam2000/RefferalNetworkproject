@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 function Sidebar({ auth: { isAuthen, loading } }) {
   return (
@@ -10,6 +10,11 @@ function Sidebar({ auth: { isAuthen, loading } }) {
           <li>
             <Link to='/dashboard'>
               <i className='far fa-address-book'></i>
+            </Link>
+          </li>
+          <li>
+            <Link to='/myproject'>
+              <i className='fas fa-archive'></i>
             </Link>
           </li>
           <li>

@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useRef } from 'react';
-import { Link, withRouter, Redirect } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { updateProject, getProjectById } from '../../actions/project';
+import { updateProject } from '../../actions/project';
 import PropTypes from 'prop-types';
 
 function UpdateProject({
@@ -13,7 +13,7 @@ function UpdateProject({
   const projectField = projects.filter(
     project => project._id.toString() === match.params.id
   )[0];
-  console.log(projectField);
+  // console.log(projectField);
   const [formData, setFormData] = useState({
     title: projectField.title,
     fieldofexpert: projectField.fieldofexpert,
@@ -44,7 +44,7 @@ function UpdateProject({
   const deleteSkill = skill => {
     setFormData({
       ...formData,
-      skills: skills.splice(skills.indexOf(skill), 1)
+      skills: skills.filter(s => s !== skill)
     });
   };
   const addSkill = async skill => {
@@ -61,7 +61,7 @@ function UpdateProject({
       <form
         className='form'
         onSubmit={e => {
-          if (e.which == 13) {
+          if (e.which === 13) {
             console.log(e.which);
             e.preventDefault();
           } else onSubmit(e);
@@ -87,20 +87,21 @@ function UpdateProject({
             value={fieldofexpert}
             onChange={e => onChange(e)}
           />{' '}
-          <small className='form-text'>Provide project title </small>
+          <small className='form-text'>Field of Expert </small>
         </div>{' '}
         <div className='skills'>
           <div className='input-group'>
             <input type='text' name='skill' ref={inputSkill} id='' />
             <div className='input-group-append'>
-              <button
+              <span
+                className='btn btn-default'
                 onClick={() => {
                   addSkill(inputSkill.current.value);
                   inputSkill.current.value = '';
                 }}
               >
-                <i class='far fa-plus'></i>
-              </button>
+                <i className='far fa-plus-square'></i>
+              </span>
             </div>
           </div>
 
@@ -130,16 +131,18 @@ function UpdateProject({
             value={location}
             onChange={e => onChange(e)}
           />{' '}
+          <small className='form-text'>Project's Location </small>
         </div>{' '}
         <div className='form-group'>
           {' '}
           <input
             type='number'
-            placeholder='Year of experience required'
+            id='year-input'
             name='experienceRequired'
             value={experienceRequired}
             onChange={e => onChange(e)}
           />{' '}
+          <small className='form-text'>Year of experience required </small>
         </div>{' '}
         <div className='form-group'>
           {' '}

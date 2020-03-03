@@ -116,12 +116,12 @@ router.get('/:id', async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
   try {
     var project = await Project.findById(req.params.id);
-    var user = await User.findById(req.user.id);
+
     var clientproject = await ClientProject.findOne({ client: req.body.id });
     if (!project) {
       return res.status(400).json({ msg: 'Project not found' });
     }
-    if (user.type !== 'admin') {
+    if (project.client.toString() !== req.user.id) {
       return res.status(401).json({ msg: 'User is not authorized' });
     }
     await project.remove();

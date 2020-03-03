@@ -17,18 +17,20 @@ const Profile = ({
   useEffect(() => {
     getProfileByUserId(match.params.id);
     console.log(match.params.id);
-  }, [getProfileByUserId]);
+  }, [getProfileByUserId, match.params.id]);
   return (
     <Fragment>
       {loading || (profile == null && <Spinner />)}
       <Link to='/profiles' className='btn btn-light'>
         Back to Profiles List
       </Link>
-      {auth.isAuthen && !auth.loading && auth.user._id == match.params.id && (
-        <Link to='/edit-profile' className='btn btn-dark'>
-          Edit Profile
-        </Link>
-      )}
+      {auth.isAuthen &&
+        !auth.loading &&
+        auth.user._id.toString() === match.params.id && (
+          <Link to='/edit-profile' className='btn btn-dark'>
+            Edit Profile
+          </Link>
+        )}
       {profile && (
         <Fragment>
           <div className='profile-grid my-1'>

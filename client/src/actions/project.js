@@ -6,7 +6,6 @@ import {
   GET_ALLPROJECT,
   RESET_PROJECT
 } from './types';
-import setAuthToken from '../utils/setAuthToken';
 import { setAlert } from './alert';
 export const createProject = (formData, history) => async dispatch => {
   try {
