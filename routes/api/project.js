@@ -117,7 +117,11 @@ router.delete('/:id', auth, async (req, res) => {
   try {
     var project = await Project.findById(req.params.id);
 
-    var clientproject = await ClientProject.findOne({ client: req.body.id });
+    var clientproject = await ClientProject.findOne({ client: req.user.id });
+
+    if (!clientproject) {
+      return res.status(400).json({ msg: 'Client not found' });
+    }
     if (!project) {
       return res.status(400).json({ msg: 'Project not found' });
     }

@@ -19,7 +19,7 @@ export const createProject = (formData, history) => async dispatch => {
       type: GET_PROJECT,
       payload: res.data
     });
-    history.push('/projects');
+    history.push('/myproject');
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {

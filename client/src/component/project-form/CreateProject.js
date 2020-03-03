@@ -128,8 +128,7 @@ function CreateProject({ createProject, history }) {
         </div>{' '}
         <div className='form-group'>
           {' '}
-          <input
-            type='text'
+          <textarea
             placeholder='Project description'
             name='description'
             value={description}
