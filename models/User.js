@@ -31,6 +31,18 @@ const UserSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'projects'
     }
+  ],
+  application: [
+    {
+      project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'project'
+      },
+      accepted: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false
+      }
+    }
   ]
 });
 module.exports = User = mongoose.model('users', UserSchema);

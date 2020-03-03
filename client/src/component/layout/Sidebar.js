@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-function Sidebar({ auth: { isAuthen, loading } }) {
+function Sidebar({ auth: { isAuthen, loading, type } }) {
   return (
     !loading &&
     isAuthen && (
@@ -12,11 +12,13 @@ function Sidebar({ auth: { isAuthen, loading } }) {
               <i className='far fa-address-book'></i>
             </Link>
           </li>
-          <li>
-            <Link to='/myproject'>
-              <i className='fas fa-archive'></i>
-            </Link>
-          </li>
+          {type == 'client' && (
+            <li>
+              <Link to='/myproject'>
+                <i className='fas fa-archive'></i>
+              </Link>
+            </li>
+          )}
           <li>
             <Link to='/profiles'>
               <i className='fas fa-users'></i>

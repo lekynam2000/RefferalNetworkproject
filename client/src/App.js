@@ -21,6 +21,7 @@ import EditProfile from './component/profile-form/EditProfile';
 import AddExperience from './component/profile-form/AddExperience';
 import AddEducation from './component/profile-form/AddEducation';
 import AllProjects from './component/project/AllProjects';
+import SingleProject from './component/project/SingleProject';
 import CreateProject from './component/project-form/CreateProject';
 import UpdateProject from './component/project-form/UpdateProject';
 import MyProject from './component/project/MyProject';
@@ -28,6 +29,7 @@ import Redirection from './component/auth/Redirection';
 
 import Sidebar from './component/layout/Sidebar';
 import ClientRoute from './component/routing/ClientRoute';
+import { resetProject } from './actions/project';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -65,9 +67,10 @@ const App = () => {
               />
               <Route
                 exact
-                path='client/redirection/:endpoint'
+                path='/client/redirection/:endpoint'
                 render={() => <Redirection usertype='client' />}
               />
+              <Route exact path='/view/:id' component={SingleProject} />
               <ClientRoute
                 exact
                 path='/create-project'

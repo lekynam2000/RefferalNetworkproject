@@ -11,45 +11,34 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
       {!loading &&
         projects.length > 0 &&
         projects.map(project => {
-          let {
-            _id,
-            title,
-            fieldofexpert,
-            skills,
-            location,
-            experienceRequired,
-            description
-          } = project;
+          let { _id, title, fieldofexpert, skills, location } = project;
 
           return (
             <div key={_id} className='project-item'>
-              {title && <div className='project-item-title'>{title}</div>}
+              {title && <h3 className='project-item-title'>{title}</h3>}
               {fieldofexpert && (
                 <div className='project-item-fieldofexpert'>
-                  {fieldofexpert}
+                  Field of Expert: {fieldofexpert}
                 </div>
               )}
               {skills && (
                 <ul className='project-item-skills'>
                   <Fragment>
+                    <h4 className='project-item-skills-header'>
+                      Required Skill:
+                    </h4>
                     {skills.map(skill => (
-                      <li>{skill}</li>
+                      <li className='project-item-skills-element'>{skill}</li>
                     ))}
                   </Fragment>
                 </ul>
               )}
               {location && (
-                <div className='project-item-location'>{location}</div>
-              )}
-              {experienceRequired && (
-                <div className='project-item-experienceRequired'>
-                  {experienceRequired}
+                <div className='project-item-location'>
+                  Location: {location}
                 </div>
               )}
-
-              {description && (
-                <div className='project-item-description'>{description}</div>
-              )}
+              <Link to={`view/${_id}`}>View more</Link>
               {!auth.loading && auth.type === 'admin' && (
                 <Fragment>
                   <Link to={`edit-project/${_id}`} className='btn btn-primary'>

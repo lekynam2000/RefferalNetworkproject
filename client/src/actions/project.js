@@ -4,7 +4,8 @@ import {
   PROJECT_ERROR,
   PROJECT_DELETED,
   GET_ALLPROJECT,
-  RESET_PROJECT
+  RESET_PROJECT,
+  APPLY_PROJECT
 } from './types';
 import { setAlert } from './alert';
 export const createProject = (formData, history) => async dispatch => {
@@ -72,7 +73,7 @@ export const getAllProject = () => async dispatch => {
 };
 export const getProjectById = id => async dispatch => {
   try {
-    const res = await axios.get(`api/project/${id}`);
+    const res = await axios.get(`/api/project/${id}`);
     dispatch({
       type: GET_PROJECT,
       payload: res.data
@@ -115,6 +116,49 @@ export const getMyProject = () => async dispatch => {
     dispatch({
       type: GET_ALLPROJECT,
       payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+export const getMultipleProject = id_array => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const body = {
+      projectList: id_array
+    };
+    const res = await axios.post('api/project/multiple', body, config);
+    dispatch({
+      type: GET_ALLPROJECT,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+export const applyProject = id => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    const body = {
+      project: id
+    };
+    await axios.put('/api/project/apply', body, config);
+    dispatch({
+      type: APPLY_PROJECT
     });
   } catch (err) {
     dispatch({

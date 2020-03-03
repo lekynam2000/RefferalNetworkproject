@@ -41,16 +41,12 @@ const ProjectSchema = new mongoose.Schema({
       }
     }
   ],
-  invitation: {
-    type: Number
-  },
-  acceptance: [
+
+  application: [
     {
-      lastPosition: {
-        type: String
-      },
-      yearOfExperience: {
-        type: Number
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
       }
     }
   ]

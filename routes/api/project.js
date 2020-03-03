@@ -91,6 +91,26 @@ router.get('/me', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+// @route GET api/project/multiple
+// @desc get projects by ID array in body
+// @access Public
+router.post('/multiple', async (req, res) => {
+  try {
+    const projects = await Project.find({
+      _id: { $in: req.body.projectList }
+    }).select('-client');
+    if (!projects) {
+      return res.status(400).json({ msg: 'Project not found' });
+    }
+    res.json(projects);
+  } catch (error) {
+    console.error(error);
+    if (error.kind === 'ObjectId') {
+      return res.status(400).json({ msg: 'project not found' });
+    }
+    res.status(500).send('Server Error');
+  }
+});
 // @route GET api/project/:id
 // @desc get project by Id
 // @access Public
@@ -141,6 +161,37 @@ router.delete('/:id', auth, async (req, res) => {
       return res.status(400).json({ msg: 'Project not found' });
     }
     res.status(500).send('Server Error');
+  }
+});
+
+// @route PUT api/project/apply
+// @desc apply project
+// @access Private Expert
+
+router.put('/apply', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user || user.type !== 'expert') {
+      return res.status(400).json({ msg: 'User not authorized' });
+    }
+    const project = await Project.findById(req.body.project);
+    if (!project) {
+      return res.status(404).json({ msg: 'Not Found' });
+    }
+    const isApplied = user.application.filter(
+      p => req.body.project === p.toString()
+    );
+    if (isApplied.length > 0) {
+      return res.status(401).json({ msg: 'Bad Request' });
+    }
+    user.application.unshift({ project: project._id });
+    await user.save();
+    project.application.unshift({ user: req.user.id });
+    await project.save();
+    res.json(user.application);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Errors');
   }
 });
 
