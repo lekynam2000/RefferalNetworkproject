@@ -21,6 +21,9 @@ function MyProject({
   }, [resetProject, getMyProject]);
   return (
     <div className='project-list'>
+      <Link to='create-project' className='btn btn-primary'>
+        Create new Project
+      </Link>
       {!loading &&
         projects.length > 0 &&
         projects.map(project => {

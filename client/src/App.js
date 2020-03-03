@@ -1,10 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './component/layout/Navbar';
 import Landing from './component/layout/Landing';
 import Login from './component/auth/Login';
@@ -16,7 +11,7 @@ import store from './store';
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './component/routing/PrivateRoute';
-import AdminRoute from './component/routing/AdminRoute';
+// import AdminRoute from './component/routing/AdminRoute';
 import CreateProfile from './component/profile-form/CreateProfile';
 import Profiles from './component/profiles/Profiles';
 import Profile from './component/profile/Profile';

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
 const ClientRoute = ({
-  path: path,
+  path,
   component: Component,
   auth: { isAuthen, loading, type },
   ...rest
