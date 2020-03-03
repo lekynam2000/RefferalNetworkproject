@@ -581,15 +581,15 @@ button {
     padding: 0.3rem 0.4rem;
   }
 }
-.job-list {
+.project-list {
   width: 90%;
 }
-.job-item {
+.project-item {
   width: 100%;
   margin: 20px 0;
   border: 1px solid black;
 }
-.job-item-description {
+.project-item-description {
   overflow: hidden;
   /* for set '...' in absolute position */
   position: relative;
@@ -607,7 +607,7 @@ button {
   margin-bottom: 10px;
 }
 /* create the ... */
-.job-item-description:before {
+.project-item-description:before {
   /* points in the end */
   content: '...';
   /* absolute position */
@@ -617,7 +617,7 @@ button {
   bottom: 0;
 }
 /* hide ... if we have text, which is less than or equal to max lines */
-.job-item-description:after {
+.project-item-description:after {
   /* points in the end */
   content: '';
   /* absolute position */
@@ -636,11 +636,6 @@ button {
   width: 200px;
 }
 
-.company-item-photo img,
-.company-item-avatar img {
-  width: 100px;
-  height: 100px;
-}
 .sidebar {
   float: left;
   margin-top: -35px;
