@@ -44,8 +44,8 @@ function SingleProject({
             <ul className='project-skills'>
               <Fragment>
                 Required Skills:
-                {project.skills.map(skill => (
-                  <li>{skill}</li>
+                {project.skills.map((skill, index) => (
+                  <li key={index}>{skill}</li>
                 ))}
               </Fragment>
             </ul>

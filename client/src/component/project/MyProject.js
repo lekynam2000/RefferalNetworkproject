@@ -67,7 +67,7 @@ function MyProject({
               {description && (
                 <div className='project-item-description'>{description}</div>
               )}
-
+              <Link to={`/applicants/${_id}`}>View applicant</Link>
               <Fragment>
                 <Link to={`edit-project/${_id}`} className='btn btn-primary'>
                   Update
