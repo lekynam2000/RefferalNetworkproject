@@ -69,14 +69,15 @@ function SingleProject({
                 Applied
               </button>
             ) : (
-              <button
+              <input
+                type='submit'
                 className='btn btn-primary'
+                value='Apply'
                 onClick={() => {
                   apply();
+                  window.location.reload(false);
                 }}
-              >
-                Apply
-              </button>
+              />
             ))}
           {!auth.loading && auth.type === 'admin' && (
             <Fragment>
