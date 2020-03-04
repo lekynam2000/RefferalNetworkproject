@@ -47,6 +47,10 @@ const ProjectSchema = new mongoose.Schema({
       user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users'
+      },
+      accepted: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false
       }
     }
   ]

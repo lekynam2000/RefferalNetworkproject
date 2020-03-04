@@ -7,6 +7,7 @@ import {
   UPDATE_PROFILE,
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
+  RESET_PROFILE,
   GET_PROFILES
 } from './types';
 
@@ -189,6 +190,27 @@ export const deleteEducation = id => async dispatch => {
       payload: { msg: err.response.statusText, status: err.response.status }
     });
   }
+};
+export const getApplicantProfile = id => async dispatch => {
+  try {
+    console.log('before action');
+    const res = await axios.get(`/api/project/application/${id}`);
+    console.log('action');
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+export const resetProfile = () => dispatch => {
+  dispatch({
+    type: RESET_PROFILE
+  });
 };
 export const deleteAccount = () => async dispatch => {
   if (

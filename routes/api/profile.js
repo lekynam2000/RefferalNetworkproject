@@ -12,7 +12,7 @@ const request = require('request');
 // @access Private
 
 router.get('/me', auth, async (req, res) => {
-  console.log('done');
+  // console.log('done');
   try {
     const profile = await Profile.findOne({
       user: req.user.id
@@ -239,7 +239,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
   }
 });
 
-// @route PUT api/profile.education
+// @route PUT api/profile/education
 // @desc put the user.education
 // @access Private
 
@@ -303,7 +303,7 @@ router.put(
   }
 );
 
-// @route DELETE api/profile.education/:edu_id
+// @route DELETE api/profile/education/:edu_id
 // @desc delete the user.education
 // @access Private
 

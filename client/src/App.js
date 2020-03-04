@@ -22,6 +22,7 @@ import AddExperience from './component/profile-form/AddExperience';
 import AddEducation from './component/profile-form/AddEducation';
 import AllProjects from './component/project/AllProjects';
 import SingleProject from './component/project/SingleProject';
+import Applicants from './component/project/Applicants';
 import CreateProject from './component/project-form/CreateProject';
 import UpdateProject from './component/project-form/UpdateProject';
 import MyProject from './component/project/MyProject';
@@ -29,7 +30,7 @@ import Redirection from './component/auth/Redirection';
 
 import Sidebar from './component/layout/Sidebar';
 import ClientRoute from './component/routing/ClientRoute';
-import { resetProject } from './actions/project';
+
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -80,6 +81,11 @@ const App = () => {
                 exact
                 path='/edit-project/:id/'
                 component={UpdateProject}
+              />
+              <ClientRoute
+                exact
+                path='/applicants/:id'
+                component={Applicants}
               />
               <ClientRoute exact path='/myproject' component={MyProject} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />

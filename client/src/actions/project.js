@@ -167,6 +167,20 @@ export const applyProject = id => async dispatch => {
     });
   }
 };
+export const acceptApplication = (project, user) => async dispatch => {
+  try {
+    const res = await axios.put(`/api/project/accept/${project}/user/${user}`);
+    dispatch({
+      type: GET_PROJECT,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
 export const resetProject = () => dispatch => {
   dispatch({
     type: RESET_PROJECT

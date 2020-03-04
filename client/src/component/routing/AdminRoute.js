@@ -13,10 +13,14 @@ const AdminRoute = ({
     <Route
       {...rest}
       render={props => {
-        return isAuthen && !loading && type === 'admin' ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to={`redirection${path}`} />
+        return (
+          isAuthen &&
+          !loading &&
+          (type === 'admin' ? (
+            <Component {...props} />
+          ) : (
+            <Redirect to={`redirection${path}`} />
+          ))
         );
       }}
     />
