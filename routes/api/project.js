@@ -260,7 +260,7 @@ router.put('/apply', auth, async (req, res) => {
       return res.status(404).json({ msg: 'Not Found' });
     }
     const isApplied = user.application.filter(
-      p => req.body.project === p.user.toString()
+      p => p.user && req.body.project === p.user.toString()
     );
     if (isApplied.length > 0) {
       return res.status(401).json({ msg: 'Bad Request' });
