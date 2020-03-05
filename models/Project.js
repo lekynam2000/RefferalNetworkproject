@@ -51,6 +51,10 @@ const ProjectSchema = new mongoose.Schema({
       accepted: {
         type: mongoose.Schema.Types.Boolean,
         default: false
+      },
+      approved: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false
       }
     }
   ]

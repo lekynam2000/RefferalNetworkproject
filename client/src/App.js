@@ -11,7 +11,7 @@ import store from './store';
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './component/routing/PrivateRoute';
-// import AdminRoute from './component/routing/AdminRoute';
+import AdminRoute from './component/routing/AdminRoute';
 import CreateProfile from './component/profile-form/CreateProfile';
 import Profiles from './component/profiles/Profiles';
 import Profile from './component/profile/Profile';
@@ -24,6 +24,7 @@ import AllProjects from './component/project/AllProjects';
 import AppliedProject from './component/project/AppliedProject';
 import SingleProject from './component/project/SingleProject';
 import Applicants from './component/project/Applicants';
+import ApproveApplicants from './component/project/ApproveApplicants';
 import CreateProject from './component/project-form/CreateProject';
 import UpdateProject from './component/project-form/UpdateProject';
 import MyProject from './component/project/MyProject';
@@ -93,6 +94,11 @@ const App = () => {
                 exact
                 path='/applicants/:id'
                 component={Applicants}
+              />
+              <AdminRoute
+                exact
+                path='/approve-applicants/:id'
+                component={ApproveApplicants}
               />
               <ClientRoute exact path='/myproject' component={MyProject} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />

@@ -192,9 +192,8 @@ export const deleteEducation = id => async dispatch => {
 };
 export const getApplicantProfile = id => async dispatch => {
   try {
-    console.log('before action');
     const res = await axios.get(`/api/project/application/${id}`);
-    console.log('action');
+
     dispatch({
       type: GET_PROFILES,
       payload: res.data

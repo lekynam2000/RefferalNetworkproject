@@ -126,14 +126,13 @@ export const getMyProject = () => async dispatch => {
 };
 export const getMultipleProject = application => async dispatch => {
   try {
-    console.log(1);
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     };
     const id_array = application.map(app => app.project);
-    console.log(id_array);
+
     const body = {
       projectList: id_array
     };
@@ -173,6 +172,20 @@ export const applyProject = id => async dispatch => {
 export const acceptApplication = (project, user) => async dispatch => {
   try {
     const res = await axios.put(`/api/project/accept/${project}/user/${user}`);
+    dispatch({
+      type: GET_PROJECT,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROJECT_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+export const approveApplication = (project, user) => async dispatch => {
+  try {
+    const res = await axios.put(`/api/project/approve/${project}/user/${user}`);
     dispatch({
       type: GET_PROJECT,
       payload: res.data
