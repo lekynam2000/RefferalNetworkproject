@@ -40,20 +40,7 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
               )}
               <Link to={`view/${_id}`}>View more</Link>
               {!auth.loading && auth.type === 'admin' && (
-                <Fragment>
-                  <Link to={`edit-project/${_id}`} className='btn btn-primary'>
-                    Update
-                  </Link>
-
-                  <button
-                    className='btn btn-danger'
-                    onClick={() => {
-                      deleteProject(_id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </Fragment>
+                <Link to={`/approve-applicants/${_id}`}> View applicants</Link>
               )}
             </div>
           );

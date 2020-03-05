@@ -34,6 +34,7 @@ function SingleProject({
       isApplied(project, user) &&
       user.application.filter(app => app.project.toString() === project)[0]
         .accepted;
+
     return (
       !loading &&
       project && (
@@ -66,6 +67,7 @@ function SingleProject({
           {project.description && (
             <div className='project-description'>{project.description}</div>
           )}
+
           {!auth.loading &&
             auth.type === 'expert' &&
             (isApplied(match.params.id, auth.user) ? (
