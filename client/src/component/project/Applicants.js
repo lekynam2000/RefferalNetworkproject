@@ -18,7 +18,7 @@ function Applicants({
     resetProfile();
     resetProject();
     getApplicantProfile(match.params.id);
-  }, [resetProfile, getApplicantProfile]);
+  }, [resetProfile, getApplicantProfile, match.params.id]);
   return (
     <Fragment>
       <SingleProject></SingleProject>
@@ -65,6 +65,9 @@ function Applicants({
                     </td>
                     <td>
                       {!project.loading &&
+                        project.project.application.filter(
+                          app => app.user === profile.user
+                        )[0] &&
                         (project.project.application.filter(
                           app => app.user === profile.user
                         )[0].accepted ? (

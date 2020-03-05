@@ -30,6 +30,10 @@ function SingleProject({
     const isApplied = (project, user) =>
       user.application.filter(app => app.project.toString() === project)
         .length > 0;
+    const isAccepted = (project, user) =>
+      isApplied(project, user) &&
+      user.application.filter(app => app.project.toString() === project)[0]
+        .accepted;
     return (
       !loading &&
       project && (
@@ -79,6 +83,9 @@ function SingleProject({
                 }}
               />
             ))}
+          {!auth.loading &&
+            auth.type === 'expert' &&
+            isAccepted(match.params.id, auth.user) && <h4>You got accepted</h4>}
           {!auth.loading && auth.type === 'admin' && (
             <Fragment>
               <Link
