@@ -26,7 +26,6 @@ function CreateProfile({ createProfile, history }) {
     location,
     status,
     skills,
-    githubusername,
     bio,
     twitter,
     facebook,

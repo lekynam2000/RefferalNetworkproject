@@ -152,7 +152,7 @@ router.get('/application/:id', auth, async (req, res) => {
     }
 
     const userList = project.application.map(app => app.user);
-
+    // console.log(userList);
     const info = await Profile.find(
       { user: { $in: userList } },
       { user: 1, location: 1, skills: 1, experience: 1 }
