@@ -51,7 +51,7 @@ router.post(
       location,
       bio,
       status,
-      githubusername,
+
       skills,
       youtube,
       facebook,
@@ -66,7 +66,7 @@ router.post(
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
     if (status) profileFields.status = status;
-    if (githubusername) profileFields.githubusername = githubusername;
+
     if (skills) {
       profileFields.skills = skills.split(',').map(skill => skill.trim());
     }
@@ -323,30 +323,6 @@ router.delete('/education/:exp_id', auth, async (req, res) => {
     res.send(profile);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
-// @route GET api/profile/github/:username
-// @desc get the user github repos
-// @access Public
-router.get('/github/:username', (req, res) => {
-  try {
-    const options = {
-      uri: `https://api.github.com/users/${
-        req.params.username
-      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
-        'githubClientId'
-      )}&client_secret=${config.get('githubClientSecret')}`,
-      method: 'GET',
-      headers: { 'user-agent': 'node.js' }
-    };
-    request(options, (error, response, body) => {
-      if (error) console.log(error);
-      if (response.statusCode !== 200) res.status(404).send('No Github repos');
-      res.json(JSON.parse(body));
-    });
-  } catch (err) {
-    console.error(err);
     res.status(500).send('Server Error');
   }
 });

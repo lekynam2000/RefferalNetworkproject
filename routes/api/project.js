@@ -91,7 +91,7 @@ router.get('/me', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-// @route GET api/project/multiple
+// @route POST api/project/multiple
 // @desc get projects by ID array in body
 // @access Public
 router.post('/multiple', async (req, res) => {
