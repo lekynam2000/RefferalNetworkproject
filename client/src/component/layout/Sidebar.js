@@ -12,14 +12,13 @@ function Sidebar({ auth: { isAuthen, loading, type } }) {
               <i className='far fa-address-book'></i>
             </Link>
           </li>
-          {type == 'client' ||
-            (type == 'expert' && (
-              <li>
-                <Link to={type == 'client' ? '/myproject' : '/applied-project'}>
-                  <i className='fas fa-archive'></i>
-                </Link>
-              </li>
-            ))}
+          {type !== 'admin' && (
+            <li>
+              <Link to={type === 'client' ? '/myproject' : '/applied-project'}>
+                <i className='fas fa-archive'></i>
+              </Link>
+            </li>
+          )}
           <li>
             <Link to='/profiles'>
               <i className='fas fa-users'></i>
