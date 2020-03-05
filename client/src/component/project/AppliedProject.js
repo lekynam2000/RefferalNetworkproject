@@ -6,18 +6,18 @@ import { Fragment } from 'react';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 function AppliedProject({
-  auth: { application },
-  project: { projects, loading }
+  auth,
+  project: { projects, loading },
+  resetProject,
+  getMultipleProject
 }) {
   useEffect(() => {
     resetProject();
-    getMultipleProject(application);
+    console.log('this');
+    getMultipleProject(auth.application);
   }, [resetProject, getMultipleProject]);
   return (
     <div className='project-list'>
-      <Link to='create-project' className='btn btn-primary'>
-        Create new Project
-      </Link>
       {!auth.loading &&
         !loading &&
         projects.length > 0 &&
@@ -45,7 +45,7 @@ function AppliedProject({
               {location && (
                 <div className='project-item-location'>{location}</div>
               )}
-              <Link to='view/:id'>View more</Link>
+              <Link to={`view/${_id}`}>View more</Link>
             </div>
           );
         })}

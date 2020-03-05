@@ -124,13 +124,16 @@ export const getMyProject = () => async dispatch => {
     });
   }
 };
-export const getMultipleProject = id_array => async dispatch => {
+export const getMultipleProject = application => async dispatch => {
   try {
+    console.log(1);
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     };
+    const id_array = application.map(app => app.project);
+    console.log(id_array);
     const body = {
       projectList: id_array
     };

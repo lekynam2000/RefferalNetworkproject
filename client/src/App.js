@@ -21,6 +21,7 @@ import EditProfile from './component/profile-form/EditProfile';
 import AddExperience from './component/profile-form/AddExperience';
 import AddEducation from './component/profile-form/AddEducation';
 import AllProjects from './component/project/AllProjects';
+import AppliedProject from './component/project/AppliedProject';
 import SingleProject from './component/project/SingleProject';
 import Applicants from './component/project/Applicants';
 import CreateProject from './component/project-form/CreateProject';
@@ -30,6 +31,7 @@ import Redirection from './component/auth/Redirection';
 
 import Sidebar from './component/layout/Sidebar';
 import ClientRoute from './component/routing/ClientRoute';
+import ExpertRoute from './component/routing/ExpertRoute';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -71,6 +73,11 @@ const App = () => {
                 path='/client/redirection/:endpoint'
                 render={() => <Redirection usertype='client' />}
               />
+              <Route
+                exact
+                path='/expert/redirection/:endpoint'
+                render={() => <Redirection usertype='expert' />}
+              />
               <Route exact path='/view/:id' component={SingleProject} />
               <ClientRoute
                 exact
@@ -108,6 +115,11 @@ const App = () => {
                 exact
                 path='/add-education'
                 component={AddEducation}
+              />
+              <ExpertRoute
+                exact
+                path='/applied-project'
+                component={AppliedProject}
               />
             </Switch>
           </section>
