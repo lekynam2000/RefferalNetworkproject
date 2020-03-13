@@ -1,7 +1,9 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook-token');
 const User = require('../models/User');
 const bcryptjs = require('bcryptjs');
+const facebook = require('../private_key/facebook');
 passport.use(
   new LocalStrategy(
     {
@@ -12,7 +14,7 @@ passport.use(
       //this one is typically a DB call. Assume that the returned user object is pre-formatted and ready for storing in JWT
       try {
         const user = await User.findOne({ email });
-        if (!user) {
+        if (!user || user.social !== 'none') {
           return cb(null, false, {
             msg: 'Wrong infomation or the user is not exist'
           });
@@ -27,6 +29,24 @@ passport.use(
       } catch (err) {
         cb(err);
       }
+    }
+  )
+);
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: facebook.AppID,
+      clientSecret: facebook.AppSecret
+    },
+    function(req, accessToken, refreshToken, profile, done) {
+      console.log(req);
+      console.log(accessToken);
+      User.upsertFbUser(req, accessToken, refreshToken, profile, function(
+        err,
+        user
+      ) {
+        return done(err, user);
+      });
     }
   )
 );

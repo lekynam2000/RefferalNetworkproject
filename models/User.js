@@ -22,6 +22,13 @@ const UserSchema = new mongoose.Schema({
     default: 'expert',
     enum: ['expert', 'admin', 'client']
   },
+  social: {
+    type: String,
+    default: 'none'
+  },
+  social_id: {
+    type: String
+  },
   date: {
     type: Date,
     default: Date.now
@@ -45,4 +52,40 @@ const UserSchema = new mongoose.Schema({
     }
   ]
 });
+UserSchema.statics.upsertFbUser = function(
+  req,
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) {
+  var that = this;
+  return this.findOne(
+    {
+      social: 'facebook',
+      social_id: profile.id
+    },
+    function(err, user) {
+      // no user was found, lets create a new one
+      if (!user) {
+        var newUser = new that({
+          email: profile.emails[0].value,
+          name: profile.displayName,
+          password: 'donotmatter',
+          type: req.params.user_type
+        });
+
+        newUser.save(function(error, savedUser) {
+          if (error) {
+            console.log(error);
+          }
+          return cb(error, savedUser);
+        });
+      } else {
+        return cb(err, user);
+      }
+    }
+  );
+};
+
 module.exports = User = mongoose.model('users', UserSchema);
