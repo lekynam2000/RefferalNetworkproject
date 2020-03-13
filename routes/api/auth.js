@@ -2,11 +2,19 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
-const bcryptjs = require('bcryptjs');
 const User = require('../../models/User');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+var createToken = function(payload) {
+  return jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 30000000 });
+};
+
+var generateToken = function(req, res) {
+  const token = createToken(req.payload);
+  return res.json({ token });
+};
+
 // @route GET api/auth
 // @desc Get user
 // @access Public
@@ -37,21 +45,6 @@ router.post(
     }
     // const { email, password } = req.body;
     try {
-      //if wrong credential
-
-      // var user = await User.findOne({ email });
-      // if (!user) {
-      //   return res.status(400).json({
-      //     errors: [{ msg: 'Wrong information or the user does not exist.' }]
-      //   });
-      // }
-      // match = await bcryptjs.compare(password, user.password);
-      // if (!match) {
-      //   return res.status(400).json({
-      //     errors: [{ msg: 'Wrong information or the user does not exist' }]
-      //   });
-      // }
-
       passport.authenticate('local', { session: false }, (err, user, info) => {
         if (err || !user) {
           return res.status(400).json({
@@ -84,6 +77,29 @@ router.post(
       res.status(500).send('Server error');
     }
   }
+);
+// @route POST api/auth/facebook/:user_type
+// @desc Login by Facebook
+// @access Public
+
+router.post(
+  '/facebook/:user_type',
+  passport.authenticate('facebook-token', { session: false }),
+  function(req, res, next) {
+    if (!req.user) {
+      return res.send(401, 'User Not Authenticated');
+    }
+
+    // prepare token for API
+    req.payload = {
+      user: {
+        id: user.id
+      }
+    };
+
+    next();
+  },
+  generateToken
 );
 
 module.exports = router;

@@ -1,11 +1,12 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
+import { register, loginByFacebook } from '../../actions/auth';
 import PropTypes from 'prop-types';
-
-function Register({ setAlert, register, isAuthen }) {
+const facebook = require('../../private_key/facebook');
+function Register({ setAlert, register, isAuthen, loginByFacebook }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,7 +21,13 @@ function Register({ setAlert, register, isAuthen }) {
       setFormData({ ...formData, type: e.target.value });
     }
   };
-
+  const componentClicked = () => {
+    console.log('Clicked');
+  };
+  const responseFacebook = res => {
+    console.log(res.accessToken);
+    loginByFacebook(type, res.accessToken);
+  };
   const onSubmit = async e => {
     e.preventDefault();
     if (password !== password2) {
@@ -119,6 +126,16 @@ function Register({ setAlert, register, isAuthen }) {
       <p className='my-1'>
         Already have an account ? <Link to='/login'> Sign In </Link>
       </p>
+      <FacebookLogin
+        appId={facebook.AppID}
+        autoLoad={false}
+        fields='name,email,picture'
+        onClick={() => {
+          console.log('did');
+          componentClicked();
+        }}
+        callback={responseFacebook}
+      />
     </Fragment>
   );
 }
@@ -130,4 +147,8 @@ Register.propTypes = {
 const mapStatetoProps = state => ({
   isAuthen: state.auth.isAuthen
 });
-export default connect(mapStatetoProps, { setAlert, register })(Register);
+export default connect(mapStatetoProps, {
+  setAlert,
+  register,
+  loginByFacebook
+})(Register);

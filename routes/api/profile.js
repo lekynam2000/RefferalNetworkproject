@@ -4,6 +4,7 @@ const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const { check, validationResult } = require('express-validator');
+const facebookPrivate = require('../../private_key/facebook');
 const config = require('config');
 const request = require('request');
 

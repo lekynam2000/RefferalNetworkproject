@@ -1,5 +1,11 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const fs = require('fs');
+const privateKey = fs.readFileSync('./localhost-key.pem');
+const certificate = fs.readFileSync('./localhost.pem');
+const https = require('https');
+const credentials = { key: privateKey, cert: certificate };
+
 const app = express();
 require('./middleware/passport');
 
@@ -17,5 +23,5 @@ app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/auth', require('./routes/api/auth'));
 
 app.use('/api/project', require('./routes/api/project'));
-
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+const httpsServer = https.createServer(credentials, app);
+httpsServer.listen(PORT, () => console.log(`Server started on port ${PORT}`));

@@ -11,6 +11,7 @@ import {
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { setAlert } from './alert';
+
 export const register = ({ name, email, password, type }) => async dispatch => {
   const config = {
     headers: {
@@ -76,10 +77,41 @@ export const login = ({ email, password }) => async dispatch => {
     });
   }
 };
+
 export const logout = () => dispatch => {
   dispatch({
     type: LOGOUT
   });
 
   dispatch({ type: CLEAR_PROFILE });
+};
+
+export const loginByFacebook = (user_type, accessToken) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+    const res = await axios.post(
+      `/api/auth/facebook/${user_type}`,
+      {
+        accessToken: accessToken
+      },
+      config
+    );
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser());
+  } catch (error) {
+    const err = error.response.data.errors;
+    if (err) {
+      err.forEach(e => dispatch(setAlert(e.msg, 'danger')));
+    }
+    dispatch({
+      type: LOGIN_FAIL
+    });
+  }
 };
