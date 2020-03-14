@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import {
   getProjectById,
@@ -8,6 +8,8 @@ import {
 } from '../../actions/project';
 import { Link, withRouter } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
+import facebook from '../../private_key/facebook';
+import Popup from 'reactjs-popup';
 function SingleProject({
   auth,
   project,
@@ -18,6 +20,7 @@ function SingleProject({
   resetProject,
   match
 }) {
+  const linkRef = useRef(null);
   useEffect(() => {
     resetProject();
     getProjectById(match.params.id);
@@ -85,6 +88,51 @@ function SingleProject({
                 }}
               />
             ))}
+          {!auth.loading && auth.type === 'expert' && (
+            <Popup
+              trigger={
+                <button className='btn btn-primary'>Refer your friends</button>
+              }
+              position='center center'
+            >
+              <div className='share-window'>
+                <input
+                  type='text'
+                  ref={linkRef}
+                  readOnly
+                  value={window.location.href}
+                />
+                <ul className='share-option'>
+                  <li
+                    className='share-option-web'
+                    onClick={() => {
+                      linkRef.current.select();
+                      document.execCommand('copy');
+                    }}
+                  >
+                    <div className='share-icon'>
+                      <i class='fas fa-code'></i>
+                    </div>
+
+                    <div className='share-text'>Copy</div>
+                  </li>
+                  <li className='share-option-facebook'>
+                    <a
+                      href={`http://www.facebook.com/dialog/send?
+  app_id=${facebook.AppId}
+  &link=${window.location.href}&redirect_uri=${window.location.href}`}
+                    >
+                      <div className='share-icon'>
+                        <i class='fab fa-facebook-f'></i>
+                      </div>
+
+                      <div className='share-text'>Send</div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </Popup>
+          )}
           {!auth.loading &&
             auth.type === 'expert' &&
             isAccepted(match.params.id, auth.user) && <h4>You got accepted</h4>}

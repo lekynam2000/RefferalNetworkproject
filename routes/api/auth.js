@@ -85,15 +85,18 @@ router.post(
 router.post(
   '/facebook/:user_type',
   passport.authenticate('facebook-token', { session: false }),
-  function(req, res, next) {
+  async (req, res, next) => {
     if (!req.user) {
       return res.send(401, 'User Not Authenticated');
     }
-
+    //Give type to user
+    const user = await User.findById(req.user.id);
+    user.type = req.params.user_type;
+    user.save();
     // prepare token for API
     req.payload = {
       user: {
-        id: user.id
+        id: req.user.id
       }
     };
 

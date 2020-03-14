@@ -688,3 +688,19 @@ table.applicants-list td {
   border-collapse: collapse;
   padding: 15px;
 }
+.share-window {
+  width: 500px;
+  height: 500px;
+}
+.share-icon {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  font-size: 2em;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  text-align: center;
+  vertical-align: top;
+  line-height: 100px;
+}
