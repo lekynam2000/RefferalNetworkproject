@@ -13,14 +13,15 @@ const Expert = ({
     <Route
       {...rest}
       render={props => {
-        return (
-          isAuthen &&
+        return isAuthen ? (
           !loading &&
-          (type === 'expert' ? (
-            <Component {...props} />
-          ) : (
-            <Redirect to={`expert/redirection${path}`} />
-          ))
+            (type === 'expert' ? (
+              <Component {...props} />
+            ) : (
+              <Redirect to={`expert/redirection${path}`} />
+            ))
+        ) : (
+          <Redirect to={`/login`} />
         );
       }}
     />

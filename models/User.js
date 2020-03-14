@@ -53,7 +53,6 @@ const UserSchema = new mongoose.Schema({
   ]
 });
 UserSchema.statics.upsertFbUser = function(
-  req,
   accessToken,
   refreshToken,
   profile,
@@ -72,7 +71,8 @@ UserSchema.statics.upsertFbUser = function(
           email: profile.emails[0].value,
           name: profile.displayName,
           password: 'donotmatter',
-          type: req.params.user_type
+          social: 'facebook',
+          social_id: profile.id
         });
 
         newUser.save(function(error, savedUser) {

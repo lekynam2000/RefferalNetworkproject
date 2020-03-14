@@ -94,9 +94,9 @@ export const loginByFacebook = (user_type, accessToken) => async dispatch => {
       }
     };
     const res = await axios.post(
-      `/api/auth/facebook/${user_type}`,
+      `api/auth/facebook/${user_type}`,
       {
-        accessToken: accessToken
+        access_token: accessToken
       },
       config
     );

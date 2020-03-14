@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
+
 function Login({ login, isAuthen, type }) {
   const [formData, setFormData] = useState({
     email: '',
@@ -58,7 +59,8 @@ function Login({ login, isAuthen, type }) {
         <input type='submit' className='btn btn-primary' value='Login' />
       </form>
       <p className='my-1'>
-        Don't have an account? <Link to='/register'>Sign Up</Link>
+        Don't have an account or want to login by Facebook or Linkedin?{' '}
+        <Link to='/register'>Sign Up</Link>
       </p>
     </Fragment>
   );

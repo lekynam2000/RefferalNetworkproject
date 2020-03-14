@@ -6,6 +6,7 @@ import { setAlert } from '../../actions/alert';
 import { register, loginByFacebook } from '../../actions/auth';
 import PropTypes from 'prop-types';
 const facebook = require('../../private_key/facebook');
+
 function Register({ setAlert, register, isAuthen, loginByFacebook }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -21,11 +22,8 @@ function Register({ setAlert, register, isAuthen, loginByFacebook }) {
       setFormData({ ...formData, type: e.target.value });
     }
   };
-  const componentClicked = () => {
-    console.log('Clicked');
-  };
+  const componentClicked = () => {};
   const responseFacebook = res => {
-    console.log(res.accessToken);
     loginByFacebook(type, res.accessToken);
   };
   const onSubmit = async e => {
@@ -126,16 +124,44 @@ function Register({ setAlert, register, isAuthen, loginByFacebook }) {
       <p className='my-1'>
         Already have an account ? <Link to='/login'> Sign In </Link>
       </p>
+      <p className='boundary'>Or</p>
       <FacebookLogin
         appId={facebook.AppID}
         autoLoad={false}
         fields='name,email,picture'
         onClick={() => {
-          console.log('did');
           componentClicked();
         }}
         callback={responseFacebook}
       />
+
+      <form action=''>
+        <div className='radio'>
+          <label>
+            <input
+              type='radio'
+              value='expert'
+              checked={type === 'expert'}
+              onChange={e => {
+                onChange(e);
+              }}
+            />{' '}
+            Continue as Expert
+          </label>
+          {`    `}
+          <label>
+            <input
+              type='radio'
+              value='client'
+              checked={type === 'client'}
+              onChange={e => {
+                onChange(e);
+              }}
+            />{' '}
+            Continue as Client
+          </label>
+        </div>
+      </form>
     </Fragment>
   );
 }

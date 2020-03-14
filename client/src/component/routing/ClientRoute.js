@@ -13,14 +13,15 @@ const ClientRoute = ({
     <Route
       {...rest}
       render={props => {
-        return (
-          isAuthen &&
+        return isAuthen ? (
           !loading &&
-          (type === 'client' ? (
-            <Component {...props} />
-          ) : (
-            <Redirect to={`client/redirection${path}`} />
-          ))
+            (type === 'client' ? (
+              <Component {...props} />
+            ) : (
+              <Redirect to={`client/redirection${path}`} />
+            ))
+        ) : (
+          <Redirect to={`/login`} />
         );
       }}
     />
