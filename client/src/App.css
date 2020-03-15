@@ -688,10 +688,26 @@ table.applicants-list td {
   border-collapse: collapse;
   padding: 15px;
 }
-.share-window {
-  width: 500px;
-  height: 500px;
+.popup-wrapper {
+  margin-top: 20px;
 }
+.share-window {
+  border: 1px solid black;
+  width: 500px;
+}
+.share-option {
+  display: flex;
+}
+.share-option li {
+  margin: 15px;
+}
+.share-option li div {
+  text-align: center;
+}
+#share-content {
+  width: 400px;
+}
+
 .share-icon {
   width: 80px;
   height: 80px;
@@ -703,4 +719,7 @@ table.applicants-list td {
   text-align: center;
   vertical-align: top;
   line-height: 100px;
+}
+.share-icon i {
+  transform: translate(0, -50%);
 }
