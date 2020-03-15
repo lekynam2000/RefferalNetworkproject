@@ -9,7 +9,7 @@ import {
 import { Link, withRouter } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
 import facebook from '../../private_key/facebook';
-import Popup from 'reactjs-popup';
+import Popup from '../layout/Popup';
 function SingleProject({
   auth,
   project,
@@ -89,49 +89,52 @@ function SingleProject({
               />
             ))}
           {!auth.loading && auth.type === 'expert' && (
-            <Popup
-              trigger={
-                <button className='btn btn-primary'>Refer your friends</button>
-              }
-              position='center center'
-            >
-              <div className='share-window'>
-                <input
-                  type='text'
-                  ref={linkRef}
-                  readOnly
-                  value={window.location.href}
-                />
-                <ul className='share-option'>
-                  <li
-                    className='share-option-web'
-                    onClick={() => {
-                      linkRef.current.select();
-                      document.execCommand('copy');
-                    }}
-                  >
-                    <div className='share-icon'>
-                      <i class='fas fa-code'></i>
-                    </div>
-
-                    <div className='share-text'>Copy</div>
-                  </li>
-                  <li className='share-option-facebook'>
-                    <a
-                      href={`http://www.facebook.com/dialog/send?
-  app_id=${facebook.AppId}
-  &link=${window.location.href}&redirect_uri=${window.location.href}`}
+            <div className='popup-wrapper'>
+              <Popup
+                trigger={
+                  <button className='btn btn-primary'>
+                    Refer your friends
+                  </button>
+                }
+                position='center center'
+              >
+                <div className='share-window'>
+                  <input
+                    type='text'
+                    ref={linkRef}
+                    id='share-content'
+                    readOnly
+                    value={window.location.href}
+                  />
+                  <ul className='share-option'>
+                    <li
+                      className='share-option-web'
+                      onClick={() => {
+                        linkRef.current.select();
+                        document.execCommand('copy');
+                      }}
                     >
                       <div className='share-icon'>
-                        <i class='fab fa-facebook-f'></i>
+                        <i class='fas fa-code'></i>
                       </div>
 
-                      <div className='share-text'>Send</div>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </Popup>
+                      <div className='share-text'>Copy</div>
+                    </li>
+                    <li className='share-option-facebook'>
+                      <a
+                        href={`http://www.facebook.com/dialog/send?app_id=${facebook.AppID}&link=http://www.nytimes.com/interactive/2015/04/15/travel/europe-favorite-streets.html&redirect_uri=${window.location.href}`}
+                      >
+                        <div className='share-icon'>
+                          <i class='fab fa-facebook-f'></i>
+                        </div>
+
+                        <div className='share-text'>Send</div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </Popup>
+            </div>
           )}
           {!auth.loading &&
             auth.type === 'expert' &&
