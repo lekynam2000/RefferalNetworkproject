@@ -169,9 +169,11 @@ export const applyProject = id => async dispatch => {
     });
   }
 };
-export const acceptApplication = (project, user) => async dispatch => {
+export const acceptApplication = (project, profile) => async dispatch => {
   try {
-    const res = await axios.put(`/api/project/accept/${project}/user/${user}`);
+    const res = await axios.put(
+      `/api/project/accept/${project}/user/${profile}`
+    );
     dispatch({
       type: GET_PROJECT,
       payload: res.data

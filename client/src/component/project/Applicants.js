@@ -64,24 +64,18 @@ function Applicants({
                       </ul>
                     </td>
                     <td>
-                      {!project.loading &&
-                        project.project.application.filter(
-                          app => app.user === profile.user
-                        )[0] &&
-                        (project.project.application.filter(
-                          app => app.user === profile.user
-                        )[0].accepted ? (
-                          <div className='btn btn-light'>Accepted</div>
-                        ) : (
-                          <button
-                            className='btn btn-primary'
-                            onClick={() => {
-                              acceptApplication(match.params.id, profile.user);
-                            }}
-                          >
-                            Accept
-                          </button>
-                        ))}
+                      {!project.loading && profile.isAccepted ? (
+                        <div className='btn btn-light'>Accepted</div>
+                      ) : (
+                        <button
+                          className='btn btn-primary'
+                          onClick={() => {
+                            acceptApplication(match.params.id, profile._id);
+                          }}
+                        >
+                          Accept
+                        </button>
+                      )}
                     </td>
                   </tr>
                 )
