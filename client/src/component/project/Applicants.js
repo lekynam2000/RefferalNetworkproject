@@ -65,7 +65,9 @@ function Applicants({
                     </td>
                     <td>
                       {!project.loading && profile.isAccepted ? (
-                        <div className='btn btn-light'>Accepted</div>
+                        <>
+                          <div className='btn btn-light'>Accepted</div>
+                        </>
                       ) : (
                         <button
                           className='btn btn-primary'

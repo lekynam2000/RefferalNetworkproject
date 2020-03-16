@@ -5,7 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register, loginByFacebook } from '../../actions/auth';
 import PropTypes from 'prop-types';
-const facebook = require('../../private_key/facebook');
+import facebook from '../../private_key/facebook';
 
 function Register({ setAlert, register, isAuthen, loginByFacebook }) {
   const [formData, setFormData] = useState({
@@ -127,7 +127,8 @@ function Register({ setAlert, register, isAuthen, loginByFacebook }) {
       <p className='boundary'>Or</p>
       <FacebookLogin
         appId={facebook.AppID}
-        autoLoad={false}
+        autoLoad={true}
+        reAuthenticate={true}
         fields='name,email,picture'
         onClick={() => {
           componentClicked();
