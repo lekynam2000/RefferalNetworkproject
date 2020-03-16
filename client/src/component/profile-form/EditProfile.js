@@ -34,7 +34,9 @@ const EditProfile = ({
     if (!loading) {
       const profileData = { ...initialState };
       for (const key in profile) {
-        if (key in profileData) profileData[key] = profile[key];
+        if (key in profileData && key !== 'skills')
+          profileData[key] = profile[key];
+        if (key === 'skills') profileData['skills'] = profile.skills.join(',');
       }
       for (const key in profile.social) {
         if (key in profileData) profileData[key] = profile.social[key];
