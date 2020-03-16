@@ -136,6 +136,7 @@ router.get('/:id', async (req, res) => {
 // @access Private Client
 router.get('/application/:id', auth, async (req, res) => {
   try {
+    var curr;
     const user = await User.findById(req.user.id).select('-password');
 
     const project = await Project.findById(req.params.id);
@@ -153,15 +154,25 @@ router.get('/application/:id', auth, async (req, res) => {
       return res.status(400).json({ msg: 'User unauthorized' });
     }
 
-    const userList =
+    const userListId =
       user.type === 'client'
         ? project.application.filter(app => app.approved).map(app => app.user)
         : project.application.map(app => app.user);
 
     const info = await Profile.find(
-      { user: { $in: userList } },
+      { user: { $in: userListId } },
       { user: 1, location: 1, skills: 1, experience: 1 }
     );
+    if (user.type === 'client') {
+      info.forEach(el => {
+        curr = project.application.filter(
+          app => app.user.toString() === el.user.toString()
+        );
+        el._doc.isAccepted = curr[0].accepted;
+        el.user = null;
+      });
+    }
+
     res.json(info);
   } catch (error) {
     console.error(error);
@@ -172,10 +183,10 @@ router.get('/application/:id', auth, async (req, res) => {
   }
 });
 
-// @route PUT api/project/accept/:id/user/:user_id
+// @route PUT api/project/accept/:id/user/:profile_id
 // @desc accept project by Id
 // @access Private Client
-router.put('/accept/:id/user/:user_id', auth, async (req, res) => {
+router.put('/accept/:id/user/:profile_id', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
 
@@ -192,9 +203,12 @@ router.put('/accept/:id/user/:user_id', auth, async (req, res) => {
     ) {
       return res.status(400).json({ msg: 'User unauthorized' });
     }
-
+    const profile = await Profile.findById(req.params.profile_id).select(
+      'user'
+    );
+    console.log(profile);
     const currentApplication = project.application.filter(
-      app => app.user.toString() === req.params.user_id
+      app => app.user.toString() === profile.user.toString()
     )[0];
     currentApplication.accepted = true;
     await project.save();
