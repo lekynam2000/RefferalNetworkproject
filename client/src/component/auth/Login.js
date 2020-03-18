@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
 
-function Login({ login, isAuthen, type }) {
+function Login({ login, isAuthen }) {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -23,7 +23,7 @@ function Login({ login, isAuthen, type }) {
   }
   return (
     <Fragment>
-      <h1 className='large text-primary'>Sign In</h1>
+      <h1 className='large text-primary'>Sign In As </h1>
       <p className='lead'>
         <i className='fas fa-user'></i> Sign In Your Account
       </p>
@@ -60,7 +60,7 @@ function Login({ login, isAuthen, type }) {
       </form>
       <p className='my-1'>
         Don't have an account or want to login by Facebook or Linkedin?{' '}
-        <Link to='/register'>Sign Up</Link>
+        <Link to={`/`}>Sign Up</Link>
       </p>
     </Fragment>
   );
@@ -70,7 +70,6 @@ Login.propTypes = {
   isAuthen: PropTypes.bool
 };
 const mapStatetoProps = state => ({
-  isAuthen: state.auth.isAuthen,
-  type: state.auth.type
+  isAuthen: state.auth.isAuthen
 });
 export default connect(mapStatetoProps, { login })(Login);

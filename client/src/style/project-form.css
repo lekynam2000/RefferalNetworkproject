@@ -1,0 +1,66 @@
+.skills .input-group input {
+  width: 60%;
+  height: 40px;
+  display: inline-block;
+}
+.skills .input-group-append {
+  display: inline-block;
+}
+.skills .input-group-append button {
+  display: inline-block;
+  width: 60px;
+  height: 40px;
+}
+#year-input {
+  width: 80px;
+  height: 50px;
+  font-size: 20px;
+  line-height: 60px;
+  text-align: center;
+}
+table.applicants-list {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+table.applicants-list th,
+table.applicants-list td {
+  text-align: center;
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 15px;
+}
+.popup-wrapper {
+  margin-top: 20px;
+}
+.share-window {
+  border: 1px solid black;
+  width: 500px;
+}
+.share-option {
+  display: flex;
+}
+.share-option li {
+  margin: 15px;
+}
+.share-option li div {
+  text-align: center;
+}
+#share-content {
+  width: 400px;
+}
+
+.share-icon {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  font-size: 2em;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  text-align: center;
+  vertical-align: top;
+  line-height: 100px;
+}
+.share-icon i {
+  transform: translate(0, -50%);
+}
