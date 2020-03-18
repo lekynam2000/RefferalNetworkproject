@@ -1,0 +1,21 @@
+.sidebar {
+  float: left;
+  margin-top: -35px;
+  font-size: 3em;
+  color: #fff;
+  height: 100vh;
+  position: fixed;
+}
+.sidebar ul li {
+  display: block;
+}
+.sidebar ul li:hover {
+  background-color: #3f729b;
+  cursor: pointer;
+}
+.sidebar i {
+  color: #aaa;
+}
+.sidebar ul li:hover i {
+  color: #fff;
+}

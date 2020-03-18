@@ -169,7 +169,7 @@ router.get('/application/:id', auth, async (req, res) => {
           app => app.user.toString() === el.user.toString()
         );
         el._doc.isAccepted = curr[0].accepted;
-        el.user = null;
+        if (!curr[0].accepted) el.user = null;
       });
     }
 

@@ -1,0 +1,53 @@
+.project-list {
+  width: 90%;
+}
+.project-item {
+  width: 100%;
+  margin: 20px 0;
+  border: 1px solid black;
+}
+.project-item-description {
+  overflow: hidden;
+  /* for set '...' in absolute position */
+  position: relative;
+
+  font-size: 12px;
+  line-height: 16px;
+  font-family: 'Montserrat', sans-serif;
+
+  max-height: 32px;
+  /* fix problem when last visible word doesn't adjoin right side  */
+  text-align: justify;
+  /* place for '...' */
+  margin-right: 10px;
+  padding-right: 1em;
+  margin-bottom: 10px;
+}
+/* create the ... */
+.project-item-description:before {
+  /* points in the end */
+  content: '...';
+  /* absolute position */
+  position: absolute;
+  /* set position to right bottom corner of block */
+  right: 0;
+  bottom: 0;
+}
+/* hide ... if we have text, which is less than or equal to max lines */
+.project-item-description:after {
+  /* points in the end */
+  content: '';
+  /* absolute position */
+  position: absolute;
+  /* set position to right bottom corner of text */
+  right: 0;
+  /* set width and height */
+  width: 1em;
+  height: 1em;
+  margin-top: 0.2em;
+  /* bg color = bg color under block */
+  background: white;
+}
+.form-group img {
+  width: 200px;
+}

@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import SingleProject from './SingleProject';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getApplicantProfile, resetProfile } from '../../actions/profile';
 import { acceptApplication, resetProject } from '../../actions/project';
@@ -65,14 +65,15 @@ function Applicants({
                     </td>
                     <td>
                       {!project.loading && profile.isAccepted ? (
-                        <>
-                          <div className='btn btn-light'>Accepted</div>
-                        </>
+                        <Link to={`/profile/${profile.user}`}>
+                          View profile
+                        </Link>
                       ) : (
                         <button
                           className='btn btn-primary'
                           onClick={() => {
                             acceptApplication(match.params.id, profile._id);
+                            window.location.reload();
                           }}
                         >
                           Accept

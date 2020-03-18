@@ -7,17 +7,6 @@ function Navbar({ auth: { isAuthen, loading, type }, logout }) {
   const guestLinks = (
     <ul>
       <li>
-        <Link to='/projects'>Projects</Link>
-      </li>
-
-      <li>
-        <Link to='/profiles'>Referers</Link>
-      </li>
-
-      <li>
-        <Link to='/register'>Register</Link>
-      </li>
-      <li>
         <Link to='/login'>Login</Link>
       </li>
     </ul>
@@ -59,7 +48,7 @@ function Navbar({ auth: { isAuthen, loading, type }, logout }) {
   return (
     <nav className='navbar bg-dark'>
       <h1>
-        <Link to='/'>Referal Network</Link>
+        <Link to='/'>Expert++</Link>
       </h1>
       {!loading && isAuthen ? authLinks : guestLinks}
     </nav>

@@ -39,6 +39,7 @@ passport.use(
       clientSecret: facebook.AppSecret
     },
     function(accessToken, refreshToken, profile, done) {
+      // console.log(accessToken);
       User.upsertFbUser(accessToken, refreshToken, profile, function(
         err,
         user

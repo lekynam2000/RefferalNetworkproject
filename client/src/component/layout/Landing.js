@@ -7,16 +7,16 @@ function Landing({ isAuthen }) {
     <section className='landing'>
       <div className='dark-overlay'>
         <div className='landing-inner'>
-          <h1 className='x-large'>Referrer Network</h1>
-          <p className='lead'>
-            A place that help you earn money and search job for your friends
-          </p>
+          <h1>Access Asia-Pacific Markets more</h1>
+          <h1>Intelligently</h1>
+
+          <p className='lead'>Power your Decisions with deep APAC insights</p>
           <div className='buttons'>
-            <Link to='/profiles' className='btn btn-primary'>
-              Our Referers
+            <Link to='/register/client' className='btn btn-primary'>
+              Become a Client
             </Link>
-            <Link to='/jobs' className='btn btn-light'>
-              Jobs List
+            <Link to='/register/expert' className='btn btn-light'>
+              Become an expert
             </Link>
           </div>
         </div>

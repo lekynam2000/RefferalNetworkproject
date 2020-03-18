@@ -1,19 +1,18 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import FacebookLogin from 'react-facebook-login';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register, loginByFacebook } from '../../actions/auth';
 import PropTypes from 'prop-types';
 import facebook from '../../private_key/facebook';
 
-function Register({ setAlert, register, isAuthen, loginByFacebook }) {
+function Register({ setAlert, register, isAuthen, loginByFacebook, match }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    password2: '',
-    type: 'expert'
+    password2: ''
   });
   const onChange = e => {
     if (e.target.type !== 'radio') {
@@ -24,17 +23,18 @@ function Register({ setAlert, register, isAuthen, loginByFacebook }) {
   };
   const componentClicked = () => {};
   const responseFacebook = res => {
-    loginByFacebook(type, res.accessToken);
+    loginByFacebook(match.params.type, res.accessToken);
   };
   const onSubmit = async e => {
     e.preventDefault();
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
+      var type = match.params.type;
       register({ name, email, password, type });
     }
   };
-  const { name, email, password, password2, type } = formData;
+  const { name, email, password, password2 } = formData;
   if (isAuthen) {
     return <Redirect to='/dashboard/' />;
   }
@@ -94,40 +94,15 @@ function Register({ setAlert, register, isAuthen, loginByFacebook }) {
         </div>
         <input type='submit' className='btn btn-primary' value='Register' />
       </form>
-      <form action=''>
-        <div className='radio'>
-          <label>
-            <input
-              type='radio'
-              value='expert'
-              checked={type === 'expert'}
-              onChange={e => {
-                onChange(e);
-              }}
-            />{' '}
-            Register as Expert
-          </label>
-          {`    `}
-          <label>
-            <input
-              type='radio'
-              value='client'
-              checked={type === 'client'}
-              onChange={e => {
-                onChange(e);
-              }}
-            />{' '}
-            Register as Client
-          </label>
-        </div>
-      </form>
+
       <p className='my-1'>
-        Already have an account ? <Link to='/login'> Sign In </Link>
+        Already have an account ?{' '}
+        <Link to={`/login/${match.params.type}`}> Sign In </Link>
       </p>
       <p className='boundary'>Or</p>
       <FacebookLogin
         appId={facebook.AppID}
-        autoLoad={true}
+        autoLoad={false}
         reAuthenticate={true}
         fields='name,email,picture'
         onClick={() => {
@@ -135,34 +110,6 @@ function Register({ setAlert, register, isAuthen, loginByFacebook }) {
         }}
         callback={responseFacebook}
       />
-
-      <form action=''>
-        <div className='radio'>
-          <label>
-            <input
-              type='radio'
-              value='expert'
-              checked={type === 'expert'}
-              onChange={e => {
-                onChange(e);
-              }}
-            />{' '}
-            Continue as Expert
-          </label>
-          {`    `}
-          <label>
-            <input
-              type='radio'
-              value='client'
-              checked={type === 'client'}
-              onChange={e => {
-                onChange(e);
-              }}
-            />{' '}
-            Continue as Client
-          </label>
-        </div>
-      </form>
     </Fragment>
   );
 }
@@ -178,4 +125,4 @@ export default connect(mapStatetoProps, {
   setAlert,
   register,
   loginByFacebook
-})(Register);
+})(withRouter(Register));
