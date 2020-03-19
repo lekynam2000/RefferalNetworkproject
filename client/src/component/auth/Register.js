@@ -7,7 +7,14 @@ import { register, loginByFacebook } from '../../actions/auth';
 import PropTypes from 'prop-types';
 import facebook from '../../private_key/facebook';
 
-function Register({ setAlert, register, isAuthen, loginByFacebook, match }) {
+function Register({
+  setAlert,
+  register,
+  isAuthen,
+  loginByFacebook,
+  match,
+  history
+}) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -31,7 +38,7 @@ function Register({ setAlert, register, isAuthen, loginByFacebook, match }) {
       setAlert('Passwords do not match', 'danger');
     } else {
       var type = match.params.type;
-      register({ name, email, password, type });
+      register({ name, email, password, type }, history);
     }
   };
   const { name, email, password, password2 } = formData;

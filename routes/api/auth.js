@@ -6,11 +6,12 @@ const User = require('../../models/User');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-var createToken = function(payload) {
+
+const createToken = function(payload) {
   return jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 30000000 });
 };
 
-var generateToken = function(req, res) {
+const generateToken = function(req, res) {
   const token = createToken(req.payload);
   return res.json({ token });
 };

@@ -12,7 +12,10 @@ import {
 import setAuthToken from '../utils/setAuthToken';
 import { setAlert } from './alert';
 
-export const register = ({ name, email, password, type }) => async dispatch => {
+export const register = (
+  { name, email, password, type },
+  history
+) => async dispatch => {
   const config = {
     headers: {
       'Content-type': 'application/json'
@@ -21,13 +24,10 @@ export const register = ({ name, email, password, type }) => async dispatch => {
   const body = JSON.stringify({ name, email, password, type });
 
   try {
-    const res = await axios.post(`/api/user`, body, config);
-    dispatch({
-      type: REGISTER_SUCCESS,
-      payload: res.data
-    });
-    dispatch(loadUser());
+    history.push('/verify-wait');
+    await axios.post(`/api/user`, body, config);
   } catch (error) {
+    console.log(error);
     const err = error.response.data.errors;
     if (err) {
       err.forEach(e => dispatch(setAlert(e.msg, 'danger')));
@@ -37,6 +37,30 @@ export const register = ({ name, email, password, type }) => async dispatch => {
     });
   }
 };
+
+export const verify_register = (email, verify_id) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+    const body = JSON.stringify({ email, verify_id });
+
+    const res = await axios.post('/api/user/verify', body, config);
+
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser());
+  } catch (error) {
+    dispatch({
+      type: REGISTER_FAIL
+    });
+  }
+};
+
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -53,6 +77,7 @@ export const loadUser = () => async dispatch => {
     });
   }
 };
+
 export const login = ({ email, password }) => async dispatch => {
   const config = {
     headers: {
@@ -78,12 +103,13 @@ export const login = ({ email, password }) => async dispatch => {
   }
 };
 
-export const logout = () => dispatch => {
+export const logout = history => dispatch => {
   dispatch({
     type: LOGOUT
   });
 
   dispatch({ type: CLEAR_PROFILE });
+  history.push('/');
 };
 
 export const loginByFacebook = (user_type, accessToken) => async dispatch => {

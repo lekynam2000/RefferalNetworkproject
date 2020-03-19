@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const fs = require('fs');
+
 const privateKey = fs.readFileSync('./localhost-key.pem');
 const certificate = fs.readFileSync('./localhost.pem');
 const https = require('https');
