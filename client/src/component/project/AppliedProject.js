@@ -15,7 +15,7 @@ function AppliedProject({
     resetProject();
     console.log('this');
     getMultipleProject(auth.application);
-  }, [resetProject, getMultipleProject]);
+  }, [resetProject, getMultipleProject, auth.application]);
   return (
     <div className='project-list'>
       {!auth.loading &&

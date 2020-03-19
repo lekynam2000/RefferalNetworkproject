@@ -1,21 +1,27 @@
 .sidebar {
   float: left;
   margin-top: -35px;
-  font-size: 3em;
-  color: #fff;
+  font-size: 1em;
   height: 100vh;
   position: fixed;
 }
 .sidebar ul li {
   display: block;
+  padding: 25px 10px;
+  color: #fff;
 }
 .sidebar ul li:hover {
   background-color: #3f729b;
   cursor: pointer;
 }
-.sidebar i {
-  color: #aaa;
-}
-.sidebar ul li:hover i {
+.sidebar-text {
   color: #fff;
+}
+.sidebar ul li i {
+  color: #fff;
+}
+.sidebar i {
+  display: inline-block;
+  margin-right: 10px;
+  width: 30px;
 }
