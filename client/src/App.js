@@ -29,10 +29,11 @@ import CreateProject from './component/project-form/CreateProject';
 import UpdateProject from './component/project-form/UpdateProject';
 import MyProject from './component/project/MyProject';
 import Redirection from './component/auth/Redirection';
-
+import VerifyWait from './component/auth/VerifyWait';
 import Sidebar from './component/layout/Sidebar';
 import ClientRoute from './component/routing/ClientRoute';
 import ExpertRoute from './component/routing/ExpertRoute';
+import VerifySuccess from './component/auth/VerifySuccess';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -74,10 +75,17 @@ const App = () => {
                 path='/client/redirection/:endpoint'
                 render={() => <Redirection usertype='client' />}
               />
+
               <Route
                 exact
                 path='/expert/redirection/:endpoint'
                 render={() => <Redirection usertype='expert' />}
+              />
+              <Route exact path='/verify-wait' component={VerifyWait} />
+              <Route
+                exact
+                path='/register/verify/:email/:verify_id'
+                component={VerifySuccess}
               />
               <Route exact path='/view/:id' component={SingleProject} />
               <ClientRoute

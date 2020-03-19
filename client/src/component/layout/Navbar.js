@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
 
-function Navbar({ auth: { isAuthen, loading, type }, logout }) {
+function Navbar({ auth: { isAuthen, loading, type }, logout, history }) {
   const guestLinks = (
     <ul>
       <li>
@@ -35,7 +35,7 @@ function Navbar({ auth: { isAuthen, loading, type }, logout }) {
         <a
           href='#!'
           onClick={() => {
-            logout();
+            logout(history);
             return <Redirect to='/login'></Redirect>;
           }}
         >
@@ -58,4 +58,4 @@ const mapStatetoProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStatetoProps, { logout })(Navbar);
+export default connect(mapStatetoProps, { logout })(withRouter(Navbar));
