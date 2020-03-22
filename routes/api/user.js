@@ -23,7 +23,7 @@ const sendConfirmMail = (email, verify_id) => {
   });
   var mailOptions = {
     from: '"Confirm account" confirmation@gmail.com',
-    to: 'KYNAM001@e.ntu.edu.sg',
+    to: email,
     subject: 'Test',
     html: `<p>Access the following URL to complete register process: https://localhost:3000/register/verify/${email}/${verify_id}</p>`
   };
@@ -98,6 +98,7 @@ router.post(
       await user_verify.save();
 
       sendConfirmMail(email, verify_id);
+      res.send('success');
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server error');

@@ -48,7 +48,7 @@ function Navbar({ auth: { isAuthen, loading, type }, logout, history }) {
   return (
     <nav className='navbar bg-dark'>
       <h1>
-        <Link to='/'>Expert++</Link>
+        <Link to='/'>Cap8sia</Link>
       </h1>
       {!loading && isAuthen ? authLinks : guestLinks}
     </nav>

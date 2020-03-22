@@ -4,6 +4,9 @@ const ProfieSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'
   },
+  resume_file: {
+    type: String
+  },
   company: {
     type: String
   },
@@ -23,6 +26,10 @@ const ProfieSchema = new mongoose.Schema({
   },
   bio: {
     type: String
+  },
+  hourly_input_rate: {
+    type: Number,
+    default: 65
   },
   githubusername: {
     type: String

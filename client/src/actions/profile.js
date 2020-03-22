@@ -8,7 +8,9 @@ import {
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
   RESET_PROFILE,
-  GET_PROFILES
+  GET_PROFILES,
+  DOWNLOAD_SUCCESS,
+  DOWNLOAD_FAIL
 } from './types';
 
 export const getCurrentProfile = () => async dispatch => {
@@ -88,6 +90,42 @@ export const createProfile = (
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+export const uploadResume = fileForm => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  };
+  const res = await axios.post('/api/profile/resume_upload', fileForm, config);
+  console.log(res);
+};
+export const downloadResume = (userId, username) => async dispatch => {
+  try {
+    const res = await axios({
+      url: '/api/profile/download/' + userId,
+      method: 'GET',
+      responseType: 'blob' // important
+    });
+    const array = res.headers['content-disposition'].split('.');
+    const extension = array[array.length - 1];
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute(
+      'download',
+      `${username}-resume.${extension.slice(0, extension.length - 1)}`
+    );
+    document.body.appendChild(link);
+    link.click();
+    dispatch({
+      type: DOWNLOAD_SUCCESS
+    });
+  } catch (error) {
+    dispatch({
+      type: DOWNLOAD_FAIL
     });
   }
 };

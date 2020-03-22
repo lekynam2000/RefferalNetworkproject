@@ -3,17 +3,32 @@ import React from 'react';
 const ProfileTop = ({
   profile: {
     status,
+    resume_file,
     company,
     location,
     website,
     social,
-    user: { name, avatar, email }
-  }
+    hourly_input_rate,
+    user: { _id, name, avatar, email, type }
+  },
+  downloadResume
 }) => {
   return (
     <div className='profile-top bg-primary p-2'>
       <img className='round-img my-1' src={avatar} alt='' />
       <h1 className='large'>{name}</h1>
+      <h2>Role:{type}</h2>
+      {type === 'expert' && <h2>Hourly Input Rate: {hourly_input_rate} $</h2>}
+      {resume_file && (
+        <button
+          className='btn btn-danger'
+          onClick={() => {
+            downloadResume(_id, name);
+          }}
+        >
+          Download Resume
+        </button>
+      )}
       <h2>{email}</h2>
       <p className='lead'>
         {status} {company ? <span> at {company}</span> : ''}

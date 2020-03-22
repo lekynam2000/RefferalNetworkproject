@@ -1,17 +1,17 @@
 import React, { Fragment, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { createProfile } from '../../actions/profile';
+import { createProfile, uploadResume } from '../../actions/profile';
 import PropTypes from 'prop-types';
 
-function CreateProfile({ createProfile, history }) {
+function CreateProfile({ createProfile, uploadResume, history, type }) {
   const [formData, setFormData] = useState({
     company: '',
     website: '',
     location: '',
     status: '',
     skills: '',
-    githubusername: '',
+    hourly_input_rate: 65,
     bio: '',
     twitter: '',
     facebook: '',
@@ -19,6 +19,8 @@ function CreateProfile({ createProfile, history }) {
     youtube: '',
     instagram: ''
   });
+  const [file, setFile] = useState('');
+  const [filename, setFilename] = useState('Choose File');
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
   const {
     company,
@@ -26,6 +28,7 @@ function CreateProfile({ createProfile, history }) {
     location,
     status,
     skills,
+    hourly_input_rate,
     bio,
     twitter,
     facebook,
@@ -33,11 +36,18 @@ function CreateProfile({ createProfile, history }) {
     youtube,
     instagram
   } = formData;
+  const onChangeFile = e => {
+    setFile(e.target.files[0]);
+    setFilename(e.target.files[0].name);
+  };
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const onSubmit = e => {
     e.preventDefault();
+    const fileForm = new FormData();
+    fileForm.append('file', file);
+    uploadResume(fileForm);
     createProfile(formData, history);
   };
   return (
@@ -52,9 +62,8 @@ function CreateProfile({ createProfile, history }) {
         <div className='form-group'>
           <select name='status' value={status} onChange={e => onChange(e)}>
             <option value='0'> * Select Professional Status </option>{' '}
-            <option value='Developer'> Developer </option>{' '}
-            <option value='Junior Developer'> Junior Developer </option>{' '}
-            <option value='Senior Developer'> Senior Developer </option>{' '}
+            <option value='Junior '> Junior </option>{' '}
+            <option value='Senior '> Senior </option>{' '}
             <option value='Manager'> Manager </option>{' '}
             <option value='Student or Learning'> Student or Learning </option>{' '}
             <option value='Instructor'> Instructor or Teacher </option>{' '}
@@ -64,6 +73,15 @@ function CreateProfile({ createProfile, history }) {
           <small className='form-text'>
             Give us an idea of where you are at in your career{' '}
           </small>{' '}
+        </div>{' '}
+        <div className='form-group'>
+          <input
+            type='file'
+            className='custom-file-input'
+            id='customFile'
+            onChange={onChangeFile}
+          />{' '}
+          <small className='form-text'>Upload your resume </small>{' '}
         </div>{' '}
         <div className='form-group'>
           <input
@@ -113,9 +131,24 @@ function CreateProfile({ createProfile, history }) {
             Please use comma separated values(eg.HTML, CSS, JavaScript, PHP){' '}
           </small>{' '}
         </div>{' '}
+        {type === 'expert' && (
+          <div className='form-group'>
+            <input
+              type='number'
+              placeholder='Hourly Input Rate'
+              name='hourly_input_rate'
+              value={hourly_input_rate}
+              onChange={e => onChange(e)}
+            />
+            {'$'}
+            <small className='form-text'>
+              Enter your hourly input rate{' '}
+            </small>{' '}
+          </div>
+        )}
         <div className='form-group'>
           <textarea
-            placeholder='A short bio of yourself'
+            placeholder='A short summary of yourself'
             name='bio'
             value={bio}
             onChange={e => onChange(e)}
@@ -195,6 +228,12 @@ function CreateProfile({ createProfile, history }) {
   );
 }
 CreateProfile.propTypes = {
-  createProfile: PropTypes.func.isRequired
+  createProfile: PropTypes.func.isRequired,
+  uploadResume: PropTypes.func.isRequired
 };
-export default connect(null, { createProfile })(withRouter(CreateProfile));
+const mapStatetoProps = state => ({
+  type: state.auth.type
+});
+export default connect(mapStatetoProps, { createProfile, uploadResume })(
+  withRouter(CreateProfile)
+);

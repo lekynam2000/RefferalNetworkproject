@@ -7,7 +7,9 @@ const { check, validationResult } = require('express-validator');
 const facebookPrivate = require('../../private_key/facebook');
 const config = require('config');
 const request = require('request');
-
+const fileUpload = require('express-fileupload');
+const fs = require('fs');
+router.use(fileUpload());
 // @route GET api/profile/me
 // @desc get current user profile
 // @access Private
@@ -52,7 +54,7 @@ router.post(
       location,
       bio,
       status,
-
+      hourly_input_rate,
       skills,
       youtube,
       facebook,
@@ -67,7 +69,7 @@ router.post(
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
     if (status) profileFields.status = status;
-
+    if (hourly_input_rate) profileFields.hourly_input_rate = hourly_input_rate;
     if (skills) {
       profileFields.skills = skills.split(',').map(skill => skill.trim());
     }
@@ -90,6 +92,47 @@ router.post(
     }
   }
 );
+// @route POST api/profile/resume_upload
+// @desc create or update user resume
+// @access Private
+router.post('/resume_upload', auth, async (req, res) => {
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
+  }
+
+  const file = req.files.file;
+  const replacedname = file.name.split('.');
+  replacedname[0] = req.user.id;
+  const newName = Date.now() + replacedname.join('.');
+  const profile = await Profile.findOne({ user: req.user.id });
+  if (profile.resume_file) {
+    try {
+      fs.unlinkSync(profile.resume_file);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server Error');
+    }
+  }
+  file.mv(`./resume/${newName}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
+  });
+  profile.resume_file = `./resume/${newName}`;
+  await profile.save();
+  res.json({ fileName: file.name, filePath: `/resume/${newName}` });
+});
+// @route GET api/profile/download/:user_id
+// @desc download the full resume
+// @access Public
+router.get('/download/:user_id', async (req, res) => {
+  const profile = await Profile.findOne({ user: req.params.user_id });
+  if (!profile || !profile.resume_file) {
+    return res.status(400).send('Bad Request');
+  }
+  await res.download(profile.resume_file);
+});
 
 // @route GET api/profile
 // @desc get all user profile
@@ -99,7 +142,8 @@ router.get('/', async (req, res) => {
   try {
     const profileList = await Profile.find().populate('user', [
       'name',
-      'avatar'
+      'avatar',
+      'type'
     ]);
     return res.json(profileList);
   } catch (err) {
@@ -115,7 +159,7 @@ router.get('/user/:user_id', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id
-    }).populate('user', ['name', 'avatar', 'email']);
+    }).populate('user', ['name', 'avatar', 'email', 'type']);
     if (!profile) {
       return res.status(400).json({ msg: 'Profile not found' });
     }
