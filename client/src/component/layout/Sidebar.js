@@ -1,12 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-function Sidebar({ auth: { _id, isAuthen, loading, type } }) {
+function Sidebar({ auth: { _id, isAuthen, loading, type, avatar, name } }) {
   return (
     !loading &&
     isAuthen && (
       <nav className='sidebar bg-dark'>
         <ul>
+          <li className='sidebar-avatar'>
+            <img
+              id='sidebar-avatar-image'
+              width='200'
+              height='200'
+              src={avatar}
+              alt='User Avatar'
+            />
+          </li>
+          <li>
+            <Link to='/dashboard'>{name}</Link>
+          </li>
+          <li>
+            {type && <Link to='/dashboard'>Role:{type.toUpperCase()}</Link>}
+          </li>
           <li>
             <Link to='/dashboard'>
               <i className='far fa-address-book'></i>

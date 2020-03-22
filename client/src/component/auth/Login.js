@@ -23,7 +23,7 @@ function Login({ login, isAuthen }) {
   }
   return (
     <Fragment>
-      <h1 className='large text-primary'>Sign In As </h1>
+      <h1 className='large text-primary'>Sign In </h1>
       <p className='lead'>
         <i className='fas fa-user'></i> Sign In Your Account
       </p>

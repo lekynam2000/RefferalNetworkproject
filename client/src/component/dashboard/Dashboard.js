@@ -23,7 +23,10 @@ function Dashboard({
     <Fragment>
       <h1 className='large text-primary'>Dashboard</h1>
       <p>
-        <i className='fas fa-user'></i> <span>Welcome {user && user.name}</span>
+        <i className='fas fa-user'></i>{' '}
+        <span>Welcome {user && user.name}.</span>
+        <br></br>
+        <span>Role:{user && user.type.toUpperCase()}</span>
       </p>
       {profile !== null ? (
         <Fragment>

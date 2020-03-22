@@ -24,8 +24,8 @@ export const register = (
   const body = JSON.stringify({ name, email, password, type });
 
   try {
-    history.push('/verify-wait');
     await axios.post(`/api/user`, body, config);
+    history.push('/verify-wait');
   } catch (error) {
     console.log(error);
     const err = error.response.data.errors;
@@ -55,6 +55,7 @@ export const verify_register = (email, verify_id) => async dispatch => {
     });
     dispatch(loadUser());
   } catch (error) {
+    console.log(error);
     dispatch({
       type: REGISTER_FAIL
     });
@@ -93,6 +94,7 @@ export const login = ({ email, password }) => async dispatch => {
     });
     dispatch(loadUser());
   } catch (error) {
+    console.log(error);
     const err = error.response.data.errors;
     if (err) {
       err.forEach(e => dispatch(setAlert(e.msg, 'danger')));
@@ -132,10 +134,6 @@ export const loginByFacebook = (user_type, accessToken) => async dispatch => {
     });
     dispatch(loadUser());
   } catch (error) {
-    const err = error.response.data.errors;
-    if (err) {
-      err.forEach(e => dispatch(setAlert(e.msg, 'danger')));
-    }
     dispatch({
       type: LOGIN_FAIL
     });
