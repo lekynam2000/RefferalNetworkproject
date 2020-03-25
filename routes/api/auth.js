@@ -6,7 +6,8 @@ const User = require('../../models/User');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-
+const axios = require('axios');
+const linkedin = require('../../private_key/linkedin');
 const createToken = function(payload) {
   return jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 30000000 });
 };
@@ -105,5 +106,104 @@ router.post(
   },
   generateToken
 );
+// @route POST api/auth/linkedin/:user_type
+// @desc Login by Linkedin
+// @access Public
 
+router.post('/linkedin/:user_type', async (req, res) => {
+  const access_token = req.body.access_token;
+  const user = {};
+  try {
+    const dataEmail = await axios.get(
+      'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,type,handle~))',
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          Connection: 'Keep Alive'
+        }
+      }
+    );
+    if (dataEmail.data['handle!']) {
+      return res.status(400).send(dataEmail.data['handle!'].message);
+    }
+    user.email = dataEmail.data.elements.filter(el => el.type === 'EMAIL')[0][
+      'handle~'
+    ].emailAddress;
+    const dataUser = await axios.get('https://api.linkedin.com/v2/me', {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        Connection: 'Keep Alive'
+      }
+    });
+    user.id = dataUser.data.id;
+    // console.log(dataUser.data);
+    user.name =
+      dataUser.data.firstName.localized[
+        Object.keys(dataUser.data.firstName.localized)[0]
+      ] +
+      ' ' +
+      dataUser.data.lastName.localized[
+        Object.keys(dataUser.data.lastName.localized)[0]
+      ];
+    console.log(user.name);
+    user.avatar = dataUser.data.profilePicture.displayImage;
+    const existedUser = await User.findOne({ email: user.email });
+
+    if (!existedUser) {
+      var newUser = new User({
+        email: user.email,
+        name: user.name,
+        password: 'donotmatter',
+        social: 'linkedin',
+        social_id: user.id,
+        type: req.params.user_type,
+        avatar: user.avatar
+      });
+      await newUser.save();
+    } else if (existedUser && existedUser.type === 'none') {
+      return res.status(400).send('Duplicate Email');
+    } else {
+      existedUser.avatar = user.avatar.replace('urn:li:', 'https://');
+      await existedUser.save();
+    }
+    const currentUser = await User.findOne({ email: user.email });
+    req.payload = {
+      user: {
+        id: currentUser.id
+      }
+    };
+    generateToken(req, res);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route POST api/auth/linkedin/:user_type
+// @desc Login by Linkedin
+// @access Public
+
+router.get('/linkedin_code', async (req, res) => {
+  const code = req.query.code;
+  const redirect_uri = req.query.redirect_uri;
+  const config = {
+    headers: {
+      'Content-type': 'application/x-www-form-urlencoded',
+      'Access-Control-Allow-Origin': '*'
+    }
+  };
+
+  const body = `grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}&client_id=${linkedin.AppID}&client_secret=${linkedin.AppSecret}`;
+  try {
+    const data = await axios.post(
+      'https://www.linkedin.com/oauth/v2/accessToken',
+      body,
+      config
+    );
+    return res.send(data.data.access_token);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
 module.exports = router;

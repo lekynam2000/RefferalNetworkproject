@@ -134,6 +134,34 @@ export const loginByFacebook = (user_type, accessToken) => async dispatch => {
     });
     dispatch(loadUser());
   } catch (error) {
+    dispatch(setAlert(error.msg, 'danger'));
+    dispatch({
+      type: LOGIN_FAIL
+    });
+  }
+};
+export const loginByLinkedin = (user_type, accessToken) => async dispatch => {
+  console.log(user_type, accessToken);
+  try {
+    const config = {
+      headers: {
+        'Content-type': 'application/json'
+      }
+    };
+    const res = await axios.post(
+      `/api/auth/linkedin/${user_type}`,
+      {
+        access_token: accessToken
+      },
+      config
+    );
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data
+    });
+    dispatch(loadUser());
+  } catch (error) {
+    dispatch(setAlert(error.msg, 'danger'));
     dispatch({
       type: LOGIN_FAIL
     });
