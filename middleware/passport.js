@@ -1,9 +1,11 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook-token');
+const LinkedinStragtegy = require('passport-linkedin-oauth2').Strategy;
 const User = require('../models/User');
 const bcryptjs = require('bcryptjs');
 const facebook = require('../private_key/facebook');
+const linkedin = require('../private_key/linkedin');
 passport.use(
   new LocalStrategy(
     {
@@ -40,12 +42,28 @@ passport.use(
     },
     function(accessToken, refreshToken, profile, done) {
       // console.log(accessToken);
-      User.upsertFbUser(accessToken, refreshToken, profile, function(
-        err,
-        user
-      ) {
+      User.upsertFbUser(profile, function(err, user) {
         return done(err, user);
       });
     }
   )
 );
+// passport.use(
+//   new LinkedinStragtegy(
+//     {
+//       clientID: linkedin.AppID,
+//       clientSecret: linkedin.AppSecret,
+//       callbackURL: 'https://localhost:3000/register/client/linkedin',
+//       scope: ['r_emailaddress', 'r_liteprofile']
+//     },
+//     function(accessToken, refreshToken, profile, done) {
+//       console.log('this');
+//       User.upsertLkUser(accessToken, refreshToken, profile, function(
+//         err,
+//         user
+//       ) {
+//         return done(err, user);
+//       });
+//     }
+//   )
+// );

@@ -52,12 +52,7 @@ const UserSchema = new mongoose.Schema({
     }
   ]
 });
-UserSchema.statics.upsertFbUser = function(
-  accessToken,
-  refreshToken,
-  profile,
-  cb
-) {
+UserSchema.statics.upsertFbUser = function(profile, cb) {
   var that = this;
   return this.findOne(
     {

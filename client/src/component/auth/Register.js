@@ -1,17 +1,20 @@
 import React, { Fragment, useState } from 'react';
 import FacebookLogin from 'react-facebook-login';
+import { LinkedIn } from 'react-linkedin-login-oauth2';
 import { connect } from 'react-redux';
 import { Link, Redirect, withRouter } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
-import { register, loginByFacebook } from '../../actions/auth';
+import { register, loginByFacebook, loginByLinkedin } from '../../actions/auth';
 import PropTypes from 'prop-types';
 import facebook from '../../private_key/facebook';
-
+import linkedin from '../../private_key/linkedin';
+import axios from 'axios';
 function Register({
   setAlert,
   register,
   isAuthen,
   loginByFacebook,
+  loginByLinkedin,
   match,
   history
 }) {
@@ -32,6 +35,15 @@ function Register({
   const responseFacebook = res => {
     loginByFacebook(match.params.type, res.accessToken);
   };
+  const responseLinkedin = async res => {
+    const accessToken = await axios.get(
+      `/api/auth/linkedin_code?code=${res.code}&redirect_uri=${window.location
+        .href + '/linkedin'}`
+    );
+    console.log(accessToken.data);
+    loginByLinkedin(match.params.type, accessToken.data);
+  };
+
   const onSubmit = async e => {
     e.preventDefault();
     if (password !== password2) {
@@ -117,6 +129,18 @@ function Register({
         }}
         callback={responseFacebook}
       />
+      <br></br>
+
+      <br></br>
+
+      <LinkedIn
+        clientId={linkedin.AppID}
+        onFailure={responseLinkedin}
+        onSuccess={responseLinkedin}
+        state='34232423ujhfgdghhgf'
+        scope='r_emailaddress r_liteprofile'
+        redirectUri={window.location.href + '/linkedin'}
+      ></LinkedIn>
     </Fragment>
   );
 }
@@ -131,5 +155,6 @@ const mapStatetoProps = state => ({
 export default connect(mapStatetoProps, {
   setAlert,
   register,
-  loginByFacebook
+  loginByFacebook,
+  loginByLinkedin
 })(withRouter(Register));

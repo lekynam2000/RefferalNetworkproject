@@ -34,7 +34,7 @@ import Sidebar from './component/layout/Sidebar';
 import ClientRoute from './component/routing/ClientRoute';
 import ExpertRoute from './component/routing/ExpertRoute';
 import VerifySuccess from './component/auth/VerifySuccess';
-
+import LinkedinRedirect from './component/auth/LinkedinRedirect';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -75,7 +75,11 @@ const App = () => {
                 path='/client/redirection/:endpoint'
                 render={() => <Redirection usertype='client' />}
               />
-
+              <Route
+                exact
+                path='/register/:user_type/linkedin'
+                component={LinkedinRedirect}
+              ></Route>
               <Route
                 exact
                 path='/expert/redirection/:endpoint'
