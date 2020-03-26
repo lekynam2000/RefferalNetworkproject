@@ -20,7 +20,8 @@ const Profile = ({
   }, [getProfileByUserId, match.params.id]);
   return (
     <Fragment>
-      {loading || (profile == null && <Spinner />)}
+      {loading && <Spinner />}
+      {!loading && !profile && <p>No Profile</p>}
       <Link to='/profiles' className='btn btn-light'>
         Back to Profiles List
       </Link>

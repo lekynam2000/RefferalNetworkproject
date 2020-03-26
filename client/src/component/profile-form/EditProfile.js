@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -42,7 +42,7 @@ const EditProfile = ({
 
   useEffect(() => {
     if (!profile) getCurrentProfile();
-    if (!loading) {
+    if (!loading && profile) {
       const profileData = { ...initialState };
       for (const key in profile) {
         if (key in profileData && key !== 'skills')
@@ -90,7 +90,8 @@ const EditProfile = ({
   };
 
   return (
-    !loading && (
+    !loading &&
+    (profile ? (
       <Fragment>
         <h1 className='large text-primary'>Edit Your Profile</h1>
         <p className='lead'>
@@ -266,7 +267,9 @@ const EditProfile = ({
           </Link>
         </form>
       </Fragment>
-    )
+    ) : (
+      <Redirect to='/dashboard' />
+    ))
   );
 };
 
