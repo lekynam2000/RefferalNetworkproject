@@ -9,8 +9,8 @@ function Education({ education, deleteEducation }) {
       <td>{edu.school}</td>
       <td className='hide-sm'>{edu.degree}</td>
       <td className='hide-sm'>
-        <Moment format='YYYY/MM/DD'>{edu.from}</Moment> -{' '}
-        {edu.current ? 'Now' : <Moment format='YYYY/MM/DD'>{edu.to}</Moment>}
+        <Moment format='MMMM YYYY'>{edu.from}</Moment> -{' '}
+        {edu.current ? 'Now' : <Moment format='MMMM YYYY'>{edu.to}</Moment>}
       </td>
       <td>
         <button

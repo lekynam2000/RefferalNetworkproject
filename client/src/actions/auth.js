@@ -45,7 +45,7 @@ export const verify_register = (email, verify_id) => async dispatch => {
         'Content-type': 'application/json'
       }
     };
-    const body = JSON.stringify({ email, verify_id });
+    const body = { email, verify_id };
 
     const res = await axios.post('/api/user/verify', body, config);
 

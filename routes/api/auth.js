@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
 const User = require('../../models/User');
+const ClientProject = require('../../models/ClientProject');
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
@@ -93,7 +94,19 @@ router.post(
     }
     //Give type to user
     const user = await User.findById(req.user.id);
+    // console.log(user);
     user.type = req.params.user_type;
+    if (user.type === 'client') {
+      let cp = await ClientProject.findOne({
+        client: user._id
+      });
+      if (!cp) {
+        cp = new ClientProject({
+          client: user._id
+        });
+        cp.save();
+      }
+    }
     user.save();
     // prepare token for API
     req.payload = {
@@ -160,6 +173,12 @@ router.post('/linkedin/:user_type', async (req, res) => {
         avatar: user.avatar
       });
       await newUser.save();
+      if (req.params.user_type === 'client') {
+        let cp = new ClientProject({
+          client: newUser._id
+        });
+        await cp.save();
+      }
     } else if (existedUser && existedUser.type === 'none') {
       return res.status(400).send('Duplicate Email');
     } else {

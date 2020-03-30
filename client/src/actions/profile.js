@@ -286,3 +286,19 @@ export const getAllProfile = () => async dispatch => {
     });
   }
 };
+export const getProfilebyField = (field, arg) => async dispatch => {
+  try {
+    const res = await axios.get(
+      `/api/profile/search?field=${field}&arg=${arg}`
+    );
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};

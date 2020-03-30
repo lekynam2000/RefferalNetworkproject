@@ -24,6 +24,8 @@
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.11",
+    "n-readlines": "^1.0.0",
+    "node-stream-zip": "^1.9.1",
     "nodemailer": "^6.4.5",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
@@ -31,8 +33,11 @@
     "passport-jwt": "^4.0.0",
     "passport-linkedin-oauth2": "^2.0.0",
     "passport-local": "^1.0.0",
+    "pdf-parse": "^1.1.1",
+    "pdf-to-text": "0.0.7",
     "request": "^2.88.0",
-    "uuidv4": "^6.0.6"
+    "uuidv4": "^6.0.6",
+    "word-extractor": "^0.3.0"
   },
   "devDependencies": {
     "concurrently": "^5.1.0",
