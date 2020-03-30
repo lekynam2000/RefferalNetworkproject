@@ -1,8 +1,10 @@
-resume
+
 node_modules
 devconnector_html_theme
 __MACOSX
 private_key
+resume/
 *.pem
 *.pdf
 *.docx
+dataproces/

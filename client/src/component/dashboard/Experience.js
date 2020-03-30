@@ -9,8 +9,8 @@ function Experience({ experience, deleteExperience }) {
       <td>{exp.company}</td>
       <td className='hide-sm'>{exp.title}</td>
       <td className='hide-sm'>
-        <Moment format='YYYY/MM/DD'>{exp.from}</Moment> -{' '}
-        {exp.current ? 'Now' : <Moment format='YYYY/MM/DD'>{exp.to}</Moment>}
+        <Moment format='MMMM YYYY'>{exp.from}</Moment> -{' '}
+        {exp.current ? 'Now' : <Moment format='MMMM YYYY'>{exp.to}</Moment>}
       </td>
       <td>
         <button

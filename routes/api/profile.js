@@ -3,12 +3,14 @@ const router = express.Router();
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+const Resume = require('../../models/Resume');
 const { check, validationResult } = require('express-validator');
 const facebookPrivate = require('../../private_key/facebook');
-const config = require('config');
+const axios = require('axios');
 const request = require('request');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
+const extractor = require('../../utils/extract_text');
 router.use(fileUpload());
 // @route GET api/profile/me
 // @desc get current user profile
@@ -99,6 +101,7 @@ router.post('/resume_upload', auth, async (req, res) => {
   if (req.files === null) {
     return res.status(400).json({ msg: 'No file uploaded' });
   }
+  const reg = RegExp('Experience', 'g');
 
   const file = req.files.file;
   const replacedname = file.name.split('.');
@@ -121,6 +124,33 @@ router.post('/resume_upload', auth, async (req, res) => {
   });
   profile.resume_file = `./resume/${newName}`;
   await profile.save();
+  var text = await extractor(`./resume/${newName}`);
+
+  reg.exec(text);
+  if (reg.lastIndex && reg.lastIndex > 0) {
+    text = text.slice(reg.lastIndex);
+  }
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+  const key_words = await axios.post(
+    'https://localhost:5002/key_words',
+    JSON.stringify({ content: text }),
+    config
+  );
+  var resume = await Resume.findOne({
+    profile: profile._id
+  });
+  if (!resume) {
+    resume = new Resume({ profile: profile._id });
+  }
+  resume.content = key_words.data.data.join(' ');
+  console.log(resume.content);
+
+  await resume.save();
   res.json({ fileName: file.name, filePath: `/resume/${newName}` });
 });
 // @route GET api/profile/download/:user_id
@@ -368,6 +398,49 @@ router.delete('/education/:exp_id', auth, async (req, res) => {
     res.send(profile);
   } catch (err) {
     console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+router.get('/search', async (req, res) => {
+  try {
+    const arg = req.query.arg;
+    if (req.query.field !== 'name' && req.query.field !== 'email') {
+      const field = req.query.field || 'bio';
+      const profiles = await Profile.aggregate([
+        {
+          $searchBeta: {
+            search: {
+              query: arg,
+              path: field
+            }
+          }
+        },
+
+        { $limit: 100 }
+      ]);
+      res.send(profiles);
+    } else {
+      const field = req.query.field;
+      const users = await User.aggregate([
+        {
+          $searchBeta: {
+            search: {
+              query: arg,
+              path: field
+            }
+          }
+        },
+
+        { $limit: 100 }
+      ]);
+      const profiles = await Profile.find({
+        user: { $in: users.map(el => el._id) }
+      });
+      res.send(profiles);
+    }
+  } catch (error) {
+    console.error(error.message);
     res.status(500).send('Server Error');
   }
 });

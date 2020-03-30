@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { addEducation } from '../../actions/profile';
 
 function AddEducation({ addEducation, history }) {
+  const d = new Date();
   const [formData, setFormData] = useState({
     school: '',
     degree: '',
     fieldofstudy: '',
-    from: '',
-    to: '',
+    from: ``,
+    to: ``,
     current: false,
     description: ''
   });
@@ -74,7 +75,7 @@ function AddEducation({ addEducation, history }) {
         <div className='form-group'>
           <h4>From Date</h4>
           <input
-            type='date'
+            type='month'
             name='from'
             value={from}
             onChange={e => onChange(e)}
@@ -98,7 +99,7 @@ function AddEducation({ addEducation, history }) {
         <div className='form-group'>
           <h4>To Date</h4>
           <input
-            type='date'
+            type='month'
             name='to'
             value={to}
             onChange={e => onChange(e)}
