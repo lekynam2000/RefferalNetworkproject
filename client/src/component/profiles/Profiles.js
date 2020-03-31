@@ -11,7 +11,7 @@ const Profiles = ({
   profile: { profiles, loading }
 }) => {
   const [field, setField] = useState('all');
-  const [arg, setArg] = useState();
+  const [arg, setArg] = useState('');
 
   useEffect(() => {
     getAllProfiles();
@@ -30,20 +30,22 @@ const Profiles = ({
   return (
     <Fragment>
       <div className='form-group'>
-        <label for='field'>Search field: </label>
+        <label htmlFor='field'>Search field: </label>
         <select id='field' value={field} onChange={e => onChangeField(e)}>
           <option value='all'>All</option>
           <option value='name'>Name</option>
           <option value='skills'>Skill</option>
           <option value='bio'>Summary</option>
           <option value='experience'>Work Experience</option>
+          <option value='advance'>Advance</option>
         </select>{' '}
-        <label for='search'> Value: </label>
+        <label htmlFor='search'> Value: </label>
         <input
           type='text'
           id='search'
-          value={arg}
+          value={field !== 'all' ? arg : ''}
           onChange={e => onChangeValue(e)}
+          disabled={field === 'all'}
         />{' '}
         <div className='btn btn-primary' onClick={() => onSubmit()}>
           Search
