@@ -6,6 +6,7 @@ const User = require('../../models/User');
 const Resume = require('../../models/Resume');
 const { check, validationResult } = require('express-validator');
 const facebookPrivate = require('../../private_key/facebook');
+const NLPserver = 'https://localhost:5002';
 const axios = require('axios');
 const request = require('request');
 const fileUpload = require('express-fileupload');
@@ -102,7 +103,7 @@ router.post('/resume_upload', auth, async (req, res) => {
     return res.status(400).json({ msg: 'No file uploaded' });
   }
   const reg = RegExp('Experience', 'g');
-
+  const user = await User.findOne({ _id: req.user.id });
   const file = req.files.file;
   const replacedname = file.name.split('.');
   replacedname[0] = req.user.id;
@@ -124,33 +125,35 @@ router.post('/resume_upload', auth, async (req, res) => {
   });
   profile.resume_file = `./resume/${newName}`;
   await profile.save();
-  var text = await extractor(`./resume/${newName}`);
+  if (user.type === 'expert') {
+    var text = await extractor(`./resume/${newName}`);
 
-  reg.exec(text);
-  if (reg.lastIndex && reg.lastIndex > 0) {
-    text = text.slice(reg.lastIndex);
-  }
-  const config = {
-    headers: {
-      'Content-Type': 'application/json'
+    reg.exec(text);
+    if (reg.lastIndex && reg.lastIndex > 0) {
+      text = text.slice(reg.lastIndex);
     }
-  };
-  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
-  const key_words = await axios.post(
-    'https://localhost:5002/key_words',
-    JSON.stringify({ content: text }),
-    config
-  );
-  var resume = await Resume.findOne({
-    profile: profile._id
-  });
-  if (!resume) {
-    resume = new Resume({ profile: profile._id });
-  }
-  resume.content = key_words.data.data.join(' ');
-  console.log(resume.content);
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+    const key_words = await axios.post(
+      `${NLPserver}/key_words`,
+      JSON.stringify({ content: text }),
+      config
+    );
+    var resume = await Resume.findOne({
+      profile: profile._id
+    });
+    if (!resume) {
+      resume = new Resume({ profile: profile._id });
+    }
+    resume.content = key_words.data.data.join(' ');
+    // console.log(resume.content);
 
-  await resume.save();
+    await resume.save();
+  }
   res.json({ fileName: file.name, filePath: `/resume/${newName}` });
 });
 // @route GET api/profile/download/:user_id
@@ -276,11 +279,39 @@ router.put(
     try {
       const profile = await Profile.findOne({
         user: req.user.id
-      }).populate('user', ['name', 'avatar']);
+      }).populate('user', ['name', 'avatar', 'type']);
       if (!profile) {
         return res.status(400).json({ msg: 'No Profile' });
       }
       profile.experience.unshift(newExp);
+      // console.log(1);
+      if (profile.user.type === 'expert' && newExp.description) {
+        var resume = await Resume.findOne({ profile: profile._id });
+        if (!resume) {
+          resume = new Resume({
+            profile: profile._id
+          });
+        }
+        const body = JSON.stringify({ content: newExp.description });
+        const config = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+        process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+        const content = await axios.post(
+          `${NLPserver}/key_words`,
+          body,
+          config
+        );
+        // console.log(2);
+        resume.experience_list.push({
+          target: profile.experience[0]._id,
+          key_words: content.data.data.join()
+        });
+        await resume.save();
+      }
+
       await profile.save();
       res.send(profile);
     } catch (err) {
@@ -301,6 +332,18 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
     });
     if (!profile) {
       return res.status(400).json({ msg: 'No Profile' });
+    }
+    const resume = await Resume.findOne({ profile: profile._id });
+    if (resume) {
+      var resume_removeIndex = resume.experience_list
+        .map(el => el.target)
+        .indexOf(req.params.exp_id);
+
+      if (resume_removeIndex > -1) {
+        resume.experience_list.splice(resume_removeIndex, 1);
+
+        await resume.save();
+      }
     }
     var removeIndex = profile.experience
       .map(item => item.id)
@@ -439,6 +482,100 @@ router.get('/search', async (req, res) => {
       });
       res.send(profiles);
     }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route GET api/profile/advance_search
+// @desc get the profile list using NLP
+// @access Private
+router.get('/advance_search', async (req, res) => {
+  const concatExp = arr => {
+    var content = '';
+
+    arr.forEach(el => {
+      content += el.key_words;
+    });
+
+    return content;
+  };
+  var body = {
+    searching: req.query.searching
+  };
+  var upper_bound;
+  var result = [];
+  const resume_list = await Resume.find();
+
+  var p1, p2;
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+  try {
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+    for (let i = 0; i < resume_list.length; i++) {
+      body.content = resume_list[i].content;
+
+      if (body.content) {
+        p1 = await axios.post(
+          `${NLPserver}/compare`,
+          JSON.stringify(body),
+          config
+        );
+      } else {
+        p1.data.similarity = 0;
+      }
+
+      if (resume_list[i].experience_list.length > 0) {
+        body.content = concatExp(resume_list[i].experience_list);
+
+        p2 = await axios.post(
+          `${NLPserver}/compare`,
+          JSON.stringify(body),
+          config
+        );
+        resume_list[i].point =
+          p2.data.similarity > p1.data.similarity
+            ? p2.data.similarity
+            : p1.data.similarity;
+      } else resume_list[i].point = p1.data.similarity;
+    }
+
+    if (resume_list.length > 20) {
+      for (let i = 0; i < 20; i++) {
+        let max = resume_list[0].point;
+        let max_id = 0;
+        for (let j = 0; j < resume_list.length; j++) {
+          if (
+            upper_bound &&
+            (j === upper_bound ||
+              resume_list[j].point > resume_list[upper_bound].point)
+          )
+            continue;
+          if (resume_list[j].point > max) {
+            max = resume_list[j].point;
+            max_id = j;
+          }
+        }
+        upper_bound = max_id;
+        result.push(resume_list[max_id]);
+      }
+    } else {
+      result = resume_list;
+    }
+    const id_list = result.map(el => el.profile);
+    const profiles = await Profile.find({
+      _id: { $in: id_list }
+    })
+      .populate('user', ['name', 'email'])
+      .lean();
+    result.forEach((el, index) => {
+      profiles[index].point = el.point;
+    });
+    res.send(profiles);
   } catch (error) {
     console.error(error.message);
     res.status(500).send('Server Error');

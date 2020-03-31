@@ -288,9 +288,12 @@ export const getAllProfile = () => async dispatch => {
 };
 export const getProfilebyField = (field, arg) => async dispatch => {
   try {
-    const res = await axios.get(
-      `/api/profile/search?field=${field}&arg=${arg}`
-    );
+    var res;
+    if (field !== 'advance') {
+      res = await axios.get(`/api/profile/search?field=${field}&arg=${arg}`);
+    } else {
+      res = await axios.get(`/api/profile/advance_search?searching=${arg}`);
+    }
     dispatch({
       type: GET_PROFILES,
       payload: res.data
