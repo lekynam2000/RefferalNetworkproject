@@ -29,7 +29,9 @@ const sendConfirmMail = (email, verify_id) => {
     from: '"Confirm account" confirmation@gmail.com',
     to: email,
     subject: 'Test',
-    html: `<p>Access the following URL to complete register process: https://localhost:3000/register/verify/${email}/${verify_id}</p>`
+    html: `<p>Access the following URL to complete register process: https://${process
+      .env.domain ||
+      'localhost:3000'}/register/verify/${email}/${verify_id}</p>`
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
