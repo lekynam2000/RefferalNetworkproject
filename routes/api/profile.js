@@ -461,7 +461,22 @@ router.get('/search', async (req, res) => {
           }
         },
 
-        { $limit: 100 }
+        { $limit: 100 },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user',
+            foreignField: '_id',
+            as: 'user'
+          }
+        },
+        { $unwind: '$user' },
+        {
+          $project: {
+            'user.password': 0,
+            'user.application': 0
+          }
+        }
       ]);
       res.send(profiles);
     } else {
