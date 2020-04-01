@@ -461,6 +461,7 @@ router.get('/search', async (req, res) => {
           }
         },
 
+<<<<<<< HEAD
         { $limit: 100 },
         {
           $lookup: {
@@ -477,6 +478,9 @@ router.get('/search', async (req, res) => {
             'user.application': 0
           }
         }
+=======
+        { $limit: 100 }
+>>>>>>> b5c6671a11382b01bbbcf920d5fee964b214bb66
       ]);
       res.send(profiles);
     } else {
