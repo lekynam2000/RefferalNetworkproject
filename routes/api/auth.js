@@ -8,9 +8,16 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const axios = require('axios');
-const linkedin = require('../../private_key/linkedin');
+const linkedin =
+  process.env.NODE_ENV === 'production'
+    ? JSON.parse(process.env.linkedin)
+    : require('../../private_key/linkedin');
 const createToken = function(payload) {
-  return jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 30000000 });
+  let secret =
+    process.env.NODE_ENV === 'production'
+      ? process.env['jwtSecret']
+      : config.get('jwtSecret');
+  return jwt.sign(payload, secret, { expiresIn: 30000000 });
 };
 
 const generateToken = function(req, res) {
@@ -48,6 +55,10 @@ router.post(
     }
     // const { email, password } = req.body;
     try {
+      let secret =
+        process.env.NODE_ENV === 'production'
+          ? process.env['jwtSecret']
+          : config.get('jwtSecret');
       passport.authenticate('local', { session: false }, (err, user, info) => {
         if (err || !user) {
           return res.status(400).json({
@@ -64,15 +75,10 @@ router.post(
               id: user.id
             }
           };
-          jwt.sign(
-            payload,
-            config.get('jwtSecret'),
-            { expiresIn: 30000000 },
-            (err, token) => {
-              if (err) throw err;
-              res.json({ token });
-            }
-          );
+          jwt.sign(payload, secret, { expiresIn: 30000000 }, (err, token) => {
+            if (err) throw err;
+            res.json({ token });
+          });
         });
       })(req, res);
     } catch (err) {

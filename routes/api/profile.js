@@ -5,10 +5,11 @@ const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const Resume = require('../../models/Resume');
 const { check, validationResult } = require('express-validator');
-const facebookPrivate = require('../../private_key/facebook');
-const NLPserver = 'https://localhost:5002';
+const NLPserver =
+  process.env.NODE_ENV === 'production'
+    ? process.env.NLPserver
+    : 'https://localhost:5002';
 const axios = require('axios');
-const request = require('request');
 const fileUpload = require('express-fileupload');
 const fs = require('fs');
 const extractor = require('../../utils/extract_text');

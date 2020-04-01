@@ -1,11 +1,12 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook-token');
-const LinkedinStragtegy = require('passport-linkedin-oauth2').Strategy;
 const User = require('../models/User');
 const bcryptjs = require('bcryptjs');
-const facebook = require('../private_key/facebook');
-const linkedin = require('../private_key/linkedin');
+const facebook =
+  process.env.NODE_ENV === 'production'
+    ? JSON.parse(process.env.facebook)
+    : require('../private_key/facebook');
 passport.use(
   new LocalStrategy(
     {

@@ -10,7 +10,11 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 const nodeMailer = require('nodemailer');
 const { uuid } = require('uuidv4');
-const gmail = require('../../private_key/gmail');
+const gmail =
+  process.env.NODE_ENV === 'production'
+    ? JSON.parse(process.env.gmail)
+    : require('../../private_key/gmail');
+
 const sendConfirmMail = (email, verify_id) => {
   var transporter = nodeMailer.createTransport({
     host: 'smtp.gmail.com',

@@ -6,8 +6,6 @@ import { Link, Redirect, withRouter } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register, loginByFacebook, loginByLinkedin } from '../../actions/auth';
 import PropTypes from 'prop-types';
-import facebook from '../../private_key/facebook';
-import linkedin from '../../private_key/linkedin';
 import axios from 'axios';
 function Register({
   setAlert,
@@ -120,7 +118,7 @@ function Register({
       </p>
       <p className='boundary'>Or</p>
       <FacebookLogin
-        appId={facebook.AppID}
+        appId={'1620946568102414'}
         autoLoad={false}
         reAuthenticate={true}
         fields='name,email,picture'
@@ -134,7 +132,7 @@ function Register({
       <br></br>
 
       <LinkedIn
-        clientId={linkedin.AppID}
+        clientId={'81ajfr3c1z7ukl'}
         onFailure={responseLinkedin}
         onSuccess={responseLinkedin}
         state='34232423ujhfgdghhgf'
