@@ -8,7 +8,7 @@ import {
 } from '../../actions/project';
 import { Link, withRouter } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
-import facebook from '../../private_key/facebook';
+
 import Popup from '../layout/Popup';
 function SingleProject({
   auth,
@@ -122,7 +122,7 @@ function SingleProject({
                     </li>
                     <li className='share-option-facebook'>
                       <a
-                        href={`http://www.facebook.com/dialog/send?app_id=${facebook.AppID}&link=http://www.nytimes.com/interactive/2015/04/15/travel/europe-favorite-streets.html&redirect_uri=${window.location.href}`}
+                        href={`http://www.facebook.com/dialog/send?app_id=1620946568102414&link=http://www.nytimes.com/interactive/2015/04/15/travel/europe-favorite-streets.html&redirect_uri=${window.location.href}`}
                       >
                         <div className='share-icon'>
                           <i class='fab fa-facebook-f'></i>
