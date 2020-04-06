@@ -22,8 +22,8 @@ router.get('/me', auth, async (req, res) => {
   // console.log('done');
   try {
     const profile = await Profile.findOne({
-      user: req.user.id
-    }).populate('user', ['name', 'avatar']);
+      user: req.user.id,
+    }).populate('user', ['name', 'avatar', 'email', 'type']);
     if (!profile) {
       return res.status(400).send('No Profile');
     }
@@ -40,12 +40,8 @@ router.post(
   '/',
   [
     auth,
-    check('skills', 'Skills is required')
-      .not()
-      .isEmpty(),
-    check('status', 'Status is required')
-      .not()
-      .isEmpty()
+    check('skills', 'Skills is required').not().isEmpty(),
+    check('status', 'Status is required').not().isEmpty(),
   ],
   async (req, res) => {
     const error = validationResult(req);
@@ -64,7 +60,7 @@ router.post(
       facebook,
       twitter,
       instagram,
-      linkedin
+      linkedin,
     } = req.body;
     let profileFields = {};
     profileFields.user = req.user.id;
@@ -75,7 +71,7 @@ router.post(
     if (status) profileFields.status = status;
     if (hourly_input_rate) profileFields.hourly_input_rate = hourly_input_rate;
     if (skills) {
-      profileFields.skills = skills.split(',').map(skill => skill.trim());
+      profileFields.skills = skills.split(',').map((skill) => skill.trim());
     }
     profileFields.social = {};
     if (youtube) profileFields.social.youtube = youtube;
@@ -118,7 +114,7 @@ router.post('/resume_upload', auth, async (req, res) => {
       res.status(500).send('Server Error');
     }
   }
-  file.mv(`./resume/${newName}`, err => {
+  file.mv(`./resume/${newName}`, (err) => {
     if (err) {
       console.error(err);
       return res.status(500).send(err);
@@ -135,8 +131,8 @@ router.post('/resume_upload', auth, async (req, res) => {
     }
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
     const key_words = await axios.post(
@@ -145,7 +141,7 @@ router.post('/resume_upload', auth, async (req, res) => {
       config
     );
     var resume = await Resume.findOne({
-      profile: profile._id
+      profile: profile._id,
     });
     if (!resume) {
       resume = new Resume({ profile: profile._id });
@@ -177,7 +173,7 @@ router.get('/', async (req, res) => {
     const profileList = await Profile.find().populate('user', [
       'name',
       'avatar',
-      'type'
+      'type',
     ]);
     return res.json(profileList);
   } catch (err) {
@@ -192,7 +188,7 @@ router.get('/', async (req, res) => {
 router.get('/user/:user_id', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.params.user_id
+      user: req.params.user_id,
     }).populate('user', ['name', 'avatar', 'email', 'type']);
     if (!profile) {
       return res.status(400).json({ msg: 'Profile not found' });
@@ -215,10 +211,10 @@ router.delete('/', auth, async (req, res) => {
   try {
     // @todo delete the posts
     await Profile.findOneAndDelete({
-      user: req.user.id
+      user: req.user.id,
     });
     await User.findOneAndDelete({
-      _id: req.user.id
+      _id: req.user.id,
     });
     res.json({ msg: 'User deleted' });
   } catch (err) {
@@ -236,22 +232,12 @@ router.put(
   [
     auth,
     [
-      check('title', 'Title is required')
-        .not()
-        .isEmpty(),
-      check('company', 'Company is required')
-        .not()
-        .isEmpty(),
-      check('location', 'Location is required')
-        .not()
-        .isEmpty(),
-      check('from', 'Beginning date is required')
-        .not()
-        .isEmpty(),
-      check('current', 'Current is required')
-        .not()
-        .isEmpty()
-    ]
+      check('title', 'Title is required').not().isEmpty(),
+      check('company', 'Company is required').not().isEmpty(),
+      check('location', 'Location is required').not().isEmpty(),
+      check('from', 'Beginning date is required').not().isEmpty(),
+      check('current', 'Current is required').not().isEmpty(),
+    ],
   ],
   async (req, res) => {
     var error = validationResult(req);
@@ -265,7 +251,7 @@ router.put(
       to,
       description,
       current,
-      company
+      company,
     } = req.body;
     const newExp = {
       title,
@@ -274,12 +260,12 @@ router.put(
       to,
       description,
       current,
-      company
+      company,
     };
 
     try {
       const profile = await Profile.findOne({
-        user: req.user.id
+        user: req.user.id,
       }).populate('user', ['name', 'avatar', 'type']);
       if (!profile) {
         return res.status(400).json({ msg: 'No Profile' });
@@ -290,14 +276,14 @@ router.put(
         var resume = await Resume.findOne({ profile: profile._id });
         if (!resume) {
           resume = new Resume({
-            profile: profile._id
+            profile: profile._id,
           });
         }
         const body = JSON.stringify({ content: newExp.description });
         const config = {
           headers: {
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         };
         process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
         const content = await axios.post(
@@ -308,7 +294,7 @@ router.put(
         // console.log(2);
         resume.experience_list.push({
           target: profile.experience[0]._id,
-          key_words: content.data.data.join()
+          key_words: content.data.data.join(),
         });
         await resume.save();
       }
@@ -329,7 +315,7 @@ router.put(
 router.delete('/experience/:exp_id', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.user.id
+      user: req.user.id,
     });
     if (!profile) {
       return res.status(400).json({ msg: 'No Profile' });
@@ -337,7 +323,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
     const resume = await Resume.findOne({ profile: profile._id });
     if (resume) {
       var resume_removeIndex = resume.experience_list
-        .map(el => el.target)
+        .map((el) => el.target)
         .indexOf(req.params.exp_id);
 
       if (resume_removeIndex > -1) {
@@ -347,7 +333,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
       }
     }
     var removeIndex = profile.experience
-      .map(item => item.id)
+      .map((item) => item.id)
       .indexOf(req.params.exp_id);
     profile.experience.splice(removeIndex, 1);
     await profile.save();
@@ -367,19 +353,11 @@ router.put(
   [
     auth,
     [
-      check('school', 'School is required')
-        .not()
-        .isEmpty(),
-      check('degree', 'Degree is required')
-        .not()
-        .isEmpty(),
-      check('fieldofstudy', 'Field of study is required')
-        .not()
-        .isEmpty(),
-      check('from', 'Beginning date is required')
-        .not()
-        .isEmpty()
-    ]
+      check('school', 'School is required').not().isEmpty(),
+      check('degree', 'Degree is required').not().isEmpty(),
+      check('fieldofstudy', 'Field of study is required').not().isEmpty(),
+      check('from', 'Beginning date is required').not().isEmpty(),
+    ],
   ],
   async (req, res) => {
     var error = validationResult(req);
@@ -393,7 +371,7 @@ router.put(
       to,
       description,
       current,
-      fieldofstudy
+      fieldofstudy,
     } = req.body;
     const newEdu = {
       school,
@@ -402,12 +380,12 @@ router.put(
       to,
       description,
       current,
-      fieldofstudy
+      fieldofstudy,
     };
 
     try {
       const profile = await Profile.findOne({
-        user: req.user.id
+        user: req.user.id,
       }).populate('user', ['name', 'avatar']);
       if (!profile) {
         return res.status(400).send('No Profile');
@@ -429,13 +407,13 @@ router.put(
 router.delete('/education/:exp_id', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.user.id
+      user: req.user.id,
     });
     if (!profile) {
       return res.status(400).send('No Profile');
     }
     var removeIndex = profile.education
-      .map(item => item.id)
+      .map((item) => item.id)
       .indexOf(req.params.edu_id);
     profile.education.splice(removeIndex, 1);
     await profile.save();
@@ -456,9 +434,9 @@ router.get('/search', async (req, res) => {
           $searchBeta: {
             search: {
               query: arg,
-              path: field
-            }
-          }
+              path: field,
+            },
+          },
         },
 
         { $limit: 100 },
@@ -467,16 +445,16 @@ router.get('/search', async (req, res) => {
             from: 'users',
             localField: 'user',
             foreignField: '_id',
-            as: 'user'
-          }
+            as: 'user',
+          },
         },
         { $unwind: '$user' },
         {
           $project: {
             'user.password': 0,
-            'user.application': 0
-          }
-        }
+            'user.application': 0,
+          },
+        },
       ]);
       res.send(profiles);
     } else {
@@ -486,15 +464,15 @@ router.get('/search', async (req, res) => {
           $searchBeta: {
             search: {
               query: arg,
-              path: field
-            }
-          }
+              path: field,
+            },
+          },
         },
 
-        { $limit: 100 }
+        { $limit: 100 },
       ]);
       const profiles = await Profile.find({
-        user: { $in: users.map(el => el._id) }
+        user: { $in: users.map((el) => el._id) },
       });
       res.send(profiles);
     }
@@ -508,17 +486,17 @@ router.get('/search', async (req, res) => {
 // @desc get the profile list using NLP
 // @access Private
 router.get('/advance_search', async (req, res) => {
-  const concatExp = arr => {
+  const concatExp = (arr) => {
     var content = '';
 
-    arr.forEach(el => {
+    arr.forEach((el) => {
       content += el.key_words;
     });
 
     return content;
   };
   var body = {
-    searching: req.query.searching
+    searching: req.query.searching,
   };
   var upper_bound;
   var result = [];
@@ -527,8 +505,8 @@ router.get('/advance_search', async (req, res) => {
   var p1, p2;
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
   try {
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
@@ -582,9 +560,9 @@ router.get('/advance_search', async (req, res) => {
     } else {
       result = resume_list;
     }
-    const id_list = result.map(el => el.profile);
+    const id_list = result.map((el) => el.profile);
     const profiles = await Profile.find({
-      _id: { $in: id_list }
+      _id: { $in: id_list },
     })
       .populate('user', ['name', 'email'])
       .lean();

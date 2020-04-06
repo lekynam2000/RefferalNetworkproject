@@ -6,7 +6,7 @@ import {
   createProfile,
   getCurrentProfile,
   uploadResume,
-  downloadResume
+  downloadResume,
 } from '../../actions/profile';
 
 const initialState = {
@@ -22,7 +22,7 @@ const initialState = {
   facebook: '',
   linkedin: '',
   youtube: '',
-  instagram: ''
+  instagram: '',
 };
 
 const EditProfile = ({
@@ -32,7 +32,7 @@ const EditProfile = ({
   getCurrentProfile,
   uploadResume,
   downloadResume,
-  history
+  history,
 }) => {
   const [formData, setFormData] = useState(initialState);
 
@@ -69,17 +69,17 @@ const EditProfile = ({
     facebook,
     linkedin,
     youtube,
-    instagram
+    instagram,
   } = formData;
 
-  const onChange = e =>
+  const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  const onChangeFile = e => {
+  const onChangeFile = (e) => {
     setFile(e.target.files[0]);
     setFilename(e.target.files[0].name);
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     const fileForm = new FormData();
     fileForm.append('file', file);
@@ -92,7 +92,7 @@ const EditProfile = ({
   return (
     !loading &&
     (profile ? (
-      <Fragment>
+      <div className='form-container'>
         <h1 className='large text-primary'>Edit Your Profile</h1>
         <p className='lead'>
           <i className='fas fa-user' /> Add some changes to your profile
@@ -141,7 +141,7 @@ const EditProfile = ({
               type='file'
               className='custom-file-input'
               id='customFile'
-              onChange={e => onChangeFile(e)}
+              onChange={(e) => onChangeFile(e)}
             />{' '}
             <label className='custom-file-label' htmlFor='customFile'>
               {filename}
@@ -266,7 +266,7 @@ const EditProfile = ({
             Go Back
           </Link>
         </form>
-      </Fragment>
+      </div>
     ) : (
       <Redirect to='/dashboard' />
     ))
@@ -277,17 +277,17 @@ EditProfile.propTypes = {
   createProfile: PropTypes.func.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  uploadResume: PropTypes.func.isRequired
+  uploadResume: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   profile: state.profile,
-  auth: state.auth
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, {
   createProfile,
   getCurrentProfile,
   uploadResume,
-  downloadResume
+  downloadResume,
 })(withRouter(EditProfile));

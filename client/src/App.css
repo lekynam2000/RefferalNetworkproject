@@ -161,6 +161,12 @@ img {
 }
 .add-btn {
   transform: translate(0, 100%);
+  background-color: #ddd;
+  border-radius: 50%;
+}
+.add-btn:hover {
+  background-color: #fff;
+  opacity: 1;
 }
 .badge {
   font-size: 0.8rem;
@@ -239,6 +245,7 @@ img {
 
 .round-img {
   border-radius: 50%;
+  border: 1px solid #331;
 }
 
 .line {
@@ -252,6 +259,9 @@ img {
 }
 .fl-right {
   float: right;
+}
+.long-text {
+  font-family: 'Source Sans Pro', sans-serif;
 }
 /* Overlay */
 
@@ -289,11 +299,6 @@ img {
   font-size: 1.2rem;
   border: 1px solid #ccc;
   border-radius: 20px;
-}
-
-.form input[type='submit'],
-button {
-  font: inherit;
 }
 
 .form .social-input {
@@ -415,23 +420,38 @@ button {
 .profile-top {
   grid-area: top;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: space-between;
+  /* text-align: center; */
 }
 
 .profile-top img {
-  width: 250px;
+  width: 150px;
+  margin-right: 5%;
 }
+.profile-top .basic-info {
+  margin-right: 15%;
+}
+.profile-top .name {
+  text-transform: uppercase;
+  font-size: 2em;
+}
+.profile-top .role {
+  font-family: 'Montserrat', sans-serif;
 
+  font-size: 1.2em;
+}
 .profile-top .icons a {
-  color: #fff;
+  color: #79f;
   margin: 0 0.3rem;
 }
 
 .profile-top .icons a:hover {
   color: var(--dark-color);
+}
+.profile-top .contact-info {
+  flex: 2;
 }
 
 .profile-about {
@@ -553,6 +573,8 @@ button {
   .navbar {
     display: block;
     text-align: center;
+    height: 100px;
+    margin-bottom: 30px;
   }
   .navbar ul {
     text-align: center;
@@ -573,9 +595,11 @@ button {
     display: none;
   }
   /* Profile Page */
+  .profile-top {
+    flex-direction: column;
+  }
   .profile-top img,
   .profile img {
-    width: 200px;
     margin: auto;
   }
   .profile-grid {
@@ -626,4 +650,18 @@ button {
 .exp-description,
 .edu-description {
   font-family: 'Source Sans Pro', sans-serif;
+}
+
+.return-btn {
+  padding: 0.22rem 1.5rem;
+  transform: translate(0, -2%);
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: 0.1s ease;
+  background-color: #ddd;
+}
+.return-btn:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: 0.1s ease;
 }

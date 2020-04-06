@@ -6,13 +6,14 @@ import { getCurrentProfile } from '../../actions/profile';
 import DashboardAction from './DashboardAction';
 import Experience from './Experience';
 import Education from './Education';
+import ProfileTop from '../profile/ProfileTop';
+import ProfileAbout from '../profile/ProfileAbout';
 import Spinner from '../layout/Spinner';
 import { deleteAccount } from '../../actions/profile';
 function Dashboard({
   auth: { user },
   profile: { profile, loading },
   getCurrentProfile,
-  deleteAccount,
 }) {
   useEffect(() => {
     getCurrentProfile();
@@ -31,6 +32,8 @@ function Dashboard({
       {profile !== null ? (
         <Fragment>
           <DashboardAction />
+          <ProfileTop profile={profile} />
+          <ProfileAbout profile={profile} />
           <Experience experience={profile.experience} />
           <Education education={profile.education} />
         </Fragment>

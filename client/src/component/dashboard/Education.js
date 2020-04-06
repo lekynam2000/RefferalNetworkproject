@@ -31,7 +31,7 @@ function Education({ education, deleteEducation }) {
   return (
     <div className='e-wrapper'>
       <Link to='/add-education' className='btn btn-light fl-right add-btn'>
-        <i className='fas fa-plus-square'></i>
+        <i className='fas fa-pen'></i>
       </Link>
       <h2 className='my-2'>Education</h2>
 

@@ -30,8 +30,8 @@ function Experience({ experience, deleteExperience }) {
   ));
   return (
     <div className='e-wrapper'>
-      <Link to='/add-experience' className='btn btn-light fl-right add-btn'>
-        <i className='fas fa-plus-square'></i>
+      <Link to='/add-experience' className='btn fl-right add-btn'>
+        <i className='fas fa-pen'></i>
       </Link>
       <h2 className='my-2'>Experience</h2>
 

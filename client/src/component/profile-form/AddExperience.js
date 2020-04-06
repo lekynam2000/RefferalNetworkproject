@@ -20,7 +20,7 @@ function AddExperience({ addExperience, history }) {
 
   const { company, title, location, from, to, current, description } = formData;
   return (
-    <Fragment>
+    <div className='form-container'>
       <h1 className='large text-primary'>Add An Experience</h1>
       <p className='lead'>
         <i className='fas fa-code-branch'></i> Add any positions that you have
@@ -107,12 +107,12 @@ function AddExperience({ addExperience, history }) {
             onChange={(e) => onChange(e)}
           ></textarea>
         </div>
-        <input type='submit' className='btn btn-primary my-1' />
-        <a className='btn btn-light my-1' href='dashboard'>
+        <input type='submit' className='btn btn-primary my-1' value='Submit' />
+        <a className='btn btn-light my-1 return-btn' href='dashboard'>
           Go Back
         </a>
       </form>
-    </Fragment>
+    </div>
   );
 }
 export default connect(null, { addExperience })(withRouter(AddExperience));

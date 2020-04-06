@@ -4,15 +4,15 @@ const ProfileAbout = ({
   profile: {
     bio,
     skills,
-    user: { name }
-  }
+    user: { name },
+  },
 }) => {
   return (
-    <div className='profile-about bg-light p-2'>
+    <div className='profile-about bg-white p-2'>
       {bio && (
         <Fragment>
-          <h2 className='text-primary'>{name}'s Bio</h2>
-          <p>{bio}</p>
+          <h2 className='text-primary'>Summary</h2>
+          <p className='long-text'>{bio}</p>
         </Fragment>
       )}
 
@@ -29,6 +29,6 @@ const ProfileAbout = ({
   );
 };
 ProfileAbout.propTypes = {
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 export default ProfileAbout;
