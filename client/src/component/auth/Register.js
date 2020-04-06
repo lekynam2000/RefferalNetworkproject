@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import FacebookLogin from 'react-facebook-login';
 import { LinkedIn } from 'react-linkedin-login-oauth2';
 import { connect } from 'react-redux';
-import { Link, Redirect, withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register, loginByFacebook, loginByLinkedin } from '../../actions/auth';
 import PropTypes from 'prop-types';
@@ -14,15 +14,16 @@ function Register({
   loginByFacebook,
   loginByLinkedin,
   match,
-  history
+  history,
 }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    password2: ''
+    password2: '',
   });
-  const onChange = e => {
+
+  const onChange = (e) => {
     if (e.target.type !== 'radio') {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     } else {
@@ -30,19 +31,20 @@ function Register({
     }
   };
   const componentClicked = () => {};
-  const responseFacebook = res => {
+  const responseFacebook = (res) => {
     loginByFacebook(match.params.type, res.accessToken);
   };
-  const responseLinkedin = async res => {
+  const responseLinkedin = async (res) => {
     const accessToken = await axios.get(
-      `/api/auth/linkedin_code?code=${res.code}&redirect_uri=${window.location
-        .href + '/linkedin'}`
+      `/api/auth/linkedin_code?code=${res.code}&redirect_uri=${
+        window.location.href + '/linkedin'
+      }`
     );
     console.log(accessToken.data);
     loginByLinkedin(match.params.type, accessToken.data);
   };
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
@@ -57,102 +59,105 @@ function Register({
   }
   return (
     <Fragment>
-      <h1 className='large text-primary'> Sign Up </h1>
-      <p className='lead'>
-        <i className='fas fa-user'> </i> Create Your Account
-      </p>
       <form
-        className='form'
+        id='login-box'
         action='create-profile.html'
-        onSubmit={e => onSubmit(e)}
+        onSubmit={(e) => onSubmit(e)}
       >
-        <div className='form-group'>
+        <div class='left'>
+          <h1>
+            Sign up as{' '}
+            {match.params.type.replace(/^\w/, (c) => c.toUpperCase())}
+          </h1>
+
           <input
             type='text'
-            placeholder='Name'
             name='name'
+            placeholder='Username'
             value={name}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
             required
           />
-        </div>
-        <div className='form-group'>
           <input
-            type='email'
-            placeholder='Email Address'
+            type='text'
             name='email'
+            placeholder='E-mail'
             value={email}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
+            required
           />
-          <small className='form-text'>
-            This site uses Gravatar so if you want a profile image, use a
-            Gravatar email
-          </small>
-        </div>
-        <div className='form-group'>
           <input
             type='password'
             placeholder='Password'
             name='password'
             minLength='6'
             value={password}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
-        </div>
-        <div className='form-group'>
           <input
             type='password'
             placeholder='Confirm Password'
             name='password2'
             minLength='6'
             value={password2}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
+
+          <input type='submit' name='signup_submit' value='Sign me up' />
         </div>
-        <input type='submit' className='btn btn-primary' value='Register' />
+
+        <div class='right'>
+          <span class='loginwith'>
+            Sign in with
+            <br />
+            social network
+          </span>
+          <FacebookLogin
+            appId={'1620946568102414'}
+            autoLoad={false}
+            reAuthenticate={true}
+            fields='name,email,picture'
+            onClick={() => {
+              componentClicked();
+            }}
+            cssClass='social-signin facebook'
+            callback={responseFacebook}
+          />
+
+          <LinkedIn
+            clientId={'81ajfr3c1z7ukl'}
+            onFailure={responseLinkedin}
+            onSuccess={responseLinkedin}
+            state='34232423ujhfgdghhgf'
+            scope='r_emailaddress r_liteprofile'
+            redirectUri={window.location.href + '/linkedin'}
+            renderElement={({ onClick, disabled }) => (
+              <button
+                class='social-signin linkedin'
+                onClick={onClick}
+                disabled={disabled}
+              >
+                Login with Linkedin
+              </button>
+            )}
+          ></LinkedIn>
+        </div>
+        <div class='or'>OR</div>
       </form>
-
-      <p className='my-1'>
-        Already have an account ?{' '}
-        <Link to={`/login/${match.params.type}`}> Sign In </Link>
-      </p>
-      <p className='boundary'>Or</p>
-      <FacebookLogin
-        appId={'1620946568102414'}
-        autoLoad={false}
-        reAuthenticate={true}
-        fields='name,email,picture'
-        onClick={() => {
-          componentClicked();
-        }}
-        callback={responseFacebook}
-      />
-      <br></br>
-
-      <br></br>
-
-      <LinkedIn
-        clientId={'81ajfr3c1z7ukl'}
-        onFailure={responseLinkedin}
-        onSuccess={responseLinkedin}
-        state='34232423ujhfgdghhgf'
-        scope='r_emailaddress r_liteprofile'
-        redirectUri={window.location.href + '/linkedin'}
-      ></LinkedIn>
     </Fragment>
   );
 }
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  isAuthen: PropTypes.bool
+  isAuthen: PropTypes.bool,
 };
-const mapStatetoProps = state => ({
-  isAuthen: state.auth.isAuthen
+const mapStatetoProps = (state) => ({
+  isAuthen: state.auth.isAuthen,
 });
 export default connect(mapStatetoProps, {
   setAlert,
   register,
   loginByFacebook,
-  loginByLinkedin
+  loginByLinkedin,
 })(withRouter(Register));

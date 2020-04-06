@@ -12,7 +12,7 @@ function Dashboard({
   auth: { user },
   profile: { profile, loading },
   getCurrentProfile,
-  deleteAccount
+  deleteAccount,
 }) {
   useEffect(() => {
     getCurrentProfile();
@@ -33,17 +33,6 @@ function Dashboard({
           <DashboardAction />
           <Experience experience={profile.experience} />
           <Education education={profile.education} />
-          <div className='my-2'>
-            <button
-              className='btn btn-danger'
-              onClick={() => {
-                deleteAccount();
-              }}
-            >
-              <i className='fas fa-minus-user'></i>
-              <span>Delete Account</span>
-            </button>
-          </div>
         </Fragment>
       ) : (
         <Fragment>
@@ -60,11 +49,11 @@ function Dashboard({
 Dashboard.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
-const mapStatetoProps = state => ({
+const mapStatetoProps = (state) => ({
   auth: state.auth,
-  profile: state.profile
+  profile: state.profile,
 });
 export default connect(mapStatetoProps, { getCurrentProfile, deleteAccount })(
   Dashboard

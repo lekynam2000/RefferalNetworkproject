@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addEducation } from '../../actions/profile';
 
 function AddEducation({ addEducation, history }) {
-  const d = new Date();
   const [formData, setFormData] = useState({
     school: '',
     degree: '',
@@ -12,10 +11,10 @@ function AddEducation({ addEducation, history }) {
     from: ``,
     to: ``,
     current: false,
-    description: ''
+    description: '',
   });
   const [disableToDate, toggleDisableToDate] = useState(false);
-  const onChange = e => {
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -26,10 +25,10 @@ function AddEducation({ addEducation, history }) {
     from,
     to,
     current,
-    description
+    description,
   } = formData;
   return (
-    <section className='container'>
+    <Fragment>
       <h1 className='large text-primary'>Add An Education</h1>
       <p className='lead'>
         <i className='fas fa-code-branch'></i> Add any school that you have had
@@ -38,7 +37,7 @@ function AddEducation({ addEducation, history }) {
       <small>* = required field</small>
       <form
         className='form'
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           addEducation(formData, history);
         }}
@@ -49,7 +48,7 @@ function AddEducation({ addEducation, history }) {
             placeholder='* School'
             name='school'
             value={school}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
             required
           />
         </div>
@@ -59,7 +58,7 @@ function AddEducation({ addEducation, history }) {
             placeholder='* Degree'
             name='degree'
             value={degree}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
             required
           />
         </div>
@@ -69,7 +68,7 @@ function AddEducation({ addEducation, history }) {
             placeholder='Field of study'
             name='fieldofstudy'
             value={fieldofstudy}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <div className='form-group'>
@@ -78,7 +77,7 @@ function AddEducation({ addEducation, history }) {
             type='month'
             name='from'
             value={from}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <div className='form-group'>
@@ -88,7 +87,7 @@ function AddEducation({ addEducation, history }) {
               name='current'
               checked={current}
               value=''
-              onChange={e => {
+              onChange={(e) => {
                 setFormData({ ...formData, current: !current });
                 toggleDisableToDate(!disableToDate);
               }}
@@ -102,7 +101,7 @@ function AddEducation({ addEducation, history }) {
             type='month'
             name='to'
             value={to}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
             disabled={disableToDate ? 'disable' : ''}
           />
         </div>
@@ -113,15 +112,15 @@ function AddEducation({ addEducation, history }) {
             rows='5'
             placeholder='Job Description'
             value={description}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           ></textarea>
         </div>
         <input type='submit' className='btn btn-primary my-1' />
-        <a className='btn btn-light my-1' href='dashboard.html'>
+        <a className='btn btn-light my-1' href='dashboard'>
           Go Back
         </a>
       </form>
-    </section>
+    </Fragment>
   );
 }
 export default connect(null, { addEducation })(withRouter(AddEducation));

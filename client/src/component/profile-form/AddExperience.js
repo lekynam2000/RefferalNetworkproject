@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { addExperience } from '../../actions/profile';
@@ -11,25 +11,25 @@ function AddExperience({ addExperience, history }) {
     from: '',
     to: '',
     current: false,
-    description: ''
+    description: '',
   });
   const [disableToDate, toggleDisableToDate] = useState(false);
-  const onChange = e => {
+  const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const { company, title, location, from, to, current, description } = formData;
   return (
-    <section className='container'>
+    <Fragment>
       <h1 className='large text-primary'>Add An Experience</h1>
       <p className='lead'>
-        <i className='fas fa-code-branch'></i> Add any developer/programming
-        positions that you have had in the past
+        <i className='fas fa-code-branch'></i> Add any positions that you have
+        had in the past
       </p>
       <small>* = required field</small>
       <form
         className='form'
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault();
           addExperience(formData, history);
         }}
@@ -40,7 +40,7 @@ function AddExperience({ addExperience, history }) {
             placeholder='* Job Title'
             name='title'
             value={title}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
             required
           />
         </div>
@@ -50,7 +50,7 @@ function AddExperience({ addExperience, history }) {
             placeholder='* Company'
             name='company'
             value={company}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
             required
           />
         </div>
@@ -60,7 +60,7 @@ function AddExperience({ addExperience, history }) {
             placeholder='Location'
             name='location'
             value={location}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <div className='form-group'>
@@ -69,7 +69,7 @@ function AddExperience({ addExperience, history }) {
             type='month'
             name='from'
             value={from}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <div className='form-group'>
@@ -79,7 +79,7 @@ function AddExperience({ addExperience, history }) {
               name='current'
               value=''
               checked={current}
-              onChange={e => {
+              onChange={(e) => {
                 setFormData({ ...formData, current: !current });
                 toggleDisableToDate(!disableToDate);
               }}
@@ -93,7 +93,7 @@ function AddExperience({ addExperience, history }) {
             type='month'
             name='to'
             value={to}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
             disabled={disableToDate ? 'disable' : ''}
           />
         </div>
@@ -104,15 +104,15 @@ function AddExperience({ addExperience, history }) {
             rows='5'
             placeholder='Job Description'
             value={description}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           ></textarea>
         </div>
         <input type='submit' className='btn btn-primary my-1' />
-        <a className='btn btn-light my-1' href='dashboard.html'>
+        <a className='btn btn-light my-1' href='dashboard'>
           Go Back
         </a>
       </form>
-    </section>
+    </Fragment>
   );
 }
 export default connect(null, { addExperience })(withRouter(AddExperience));

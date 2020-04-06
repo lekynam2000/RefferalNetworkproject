@@ -1,47 +1,46 @@
 import React from 'react';
 import Moment from 'react-moment';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { deleteExperience } from '../../actions/profile';
 import { connect } from 'react-redux';
 function Experience({ experience, deleteExperience }) {
-  const experiences = experience.map(exp => (
-    <tr key={exp._id}>
-      <td>{exp.company}</td>
-      <td className='hide-sm'>{exp.title}</td>
-      <td className='hide-sm'>
-        <Moment format='MMMM YYYY'>{exp.from}</Moment> -{' '}
-        {exp.current ? 'Now' : <Moment format='MMMM YYYY'>{exp.to}</Moment>}
-      </td>
-      <td>
-        <button
-          className='btn btn-danger'
+  const experiences = experience.map((exp) => (
+    <div className='experience-item' key={exp._id}>
+      <h4 className='exp-head'>
+        <span>
+          {exp.title} at {exp.company}
+        </span>
+        <span
+          className='btn btn-danger fl-right'
           onClick={() => {
             deleteExperience(exp._id);
           }}
         >
-          Delete
-        </button>
-      </td>
-    </tr>
+          <i class='fas fa-trash-alt'></i>
+        </span>
+      </h4>
+      <div className='exp-duration'>
+        <Moment format='MMMM YYYY'>{exp.from}</Moment> -{' '}
+        {exp.current ? 'Now' : <Moment format='MMMM YYYY'>{exp.to}</Moment>}
+      </div>
+      <div className='exp-location'>{exp.location}</div>
+      <div className='exp-description'>{exp.description}</div>
+    </div>
   ));
   return (
-    <div>
+    <div className='e-wrapper'>
+      <Link to='/add-experience' className='btn btn-light fl-right add-btn'>
+        <i className='fas fa-plus-square'></i>
+      </Link>
       <h2 className='my-2'>Experience</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th className='hide-sm'>Title</th>
-            <th className='hide-sm'>Date</th>
-          </tr>
-        </thead>
-        <tbody>{experiences}</tbody>
-      </table>
+
+      <div className='experiences-list'>{experiences}</div>
     </div>
   );
 }
 Experience.propTypes = {
   experience: PropTypes.array.isRequired,
-  deleteExperience: PropTypes.func.isRequired
+  deleteExperience: PropTypes.func.isRequired,
 };
 export default connect(null, { deleteExperience })(Experience);

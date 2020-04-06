@@ -1,5 +1,5 @@
 /* Global Styles */
-
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Source+Sans+Pro:ital@1&display=swap');
 :root {
   --primary-color: #17a2b8;
   --dark-color: #343a40;
@@ -12,6 +12,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* transition: all 0.5s ease-in-out; */
 }
 
 body {
@@ -158,7 +159,9 @@ img {
   transition: opacity 0.2s ease-in;
   outline: none;
 }
-
+.add-btn {
+  transform: translate(0, 100%);
+}
 .badge {
   font-size: 0.8rem;
   padding: 0.1rem;
@@ -244,6 +247,12 @@ img {
   margin: 1.5rem 0;
 }
 
+.fl-left {
+  float: left;
+}
+.fl-right {
+  float: right;
+}
 /* Overlay */
 
 .dark-overlay {
@@ -274,10 +283,12 @@ img {
 .form select,
 .form textarea {
   display: block;
-  width: 100%;
+  width: 40%;
+  min-width: 300px;
   padding: 0.4rem;
   font-size: 1.2rem;
   border: 1px solid #ccc;
+  border-radius: 20px;
 }
 
 .form input[type='submit'],
@@ -337,6 +348,7 @@ button {
   top: 0;
   border-bottom: solid 1px #fff;
   opacity: 0.9;
+  height: 62px;
 }
 
 .navbar ul {
@@ -355,6 +367,9 @@ button {
 
 .navbar .welcome span {
   margin-right: 0.6rem;
+}
+.navbar h1 {
+  padding-top: 20px;
 }
 
 /* Landing Page */
@@ -574,11 +589,41 @@ button {
     width: 100%;
     margin-bottom: 0.2rem;
   }
-  .post {
-    grid-template-columns: 1fr;
-  }
-  .post a,
-  .post button {
-    padding: 0.3rem 0.4rem;
-  }
+}
+/* Style the authenticate form */
+/* input[type='email'] {
+  border-radius: 15px;
+  width: 40%;
+  min-width: 300px;
+} */
+
+/* Exp and Edu */
+.e-wrapper {
+  padding: 10px;
+  background-color: #ccc;
+  margin: 20px 0px;
+}
+.experience-item,
+.education-item {
+  background-color: #fff;
+  border: 1px solid #fff;
+  padding: 10px;
+  margin-top: 20px;
+}
+.e-wrapper h2 {
+  padding-left: 15px;
+}
+.exp-head,
+.edu-head {
+  font-size: 1.5em;
+}
+.exp-duration,
+.exp-location,
+.edu-duration,
+.edu-fieldofstudy {
+  font-family: 'Montserrat', sans-serif;
+}
+.exp-description,
+.edu-description {
+  font-family: 'Source Sans Pro', sans-serif;
 }
