@@ -48,30 +48,38 @@ function SingleProject({
           {project.title && <h2 className='project-title'>{project.title}</h2>}
           {project.fieldofexpert && (
             <div className='project-fieldofexpert'>
-              Field Of Expert: {project.fieldofexpert}
+              <b>Field Of Expert:</b> {project.fieldofexpert}
             </div>
           )}
           {project.skills && (
-            <ul className='project-skills'>
-              <Fragment>
-                Required Skills:
+            <Fragment>
+              <h4>Required Skills:</h4>
+              <ul className='project-skills'>
                 {project.skills.map((skill, index) => (
                   <li key={index}>{skill}</li>
                 ))}
-              </Fragment>
-            </ul>
+              </ul>
+            </Fragment>
           )}
           {project.location && (
-            <div className='project-location'>{project.location}</div>
+            <div className='project-location'>
+              <b>Location: </b>
+              {project.location}
+            </div>
           )}
           {project.experienceRequired && (
             <div className='project-experienceRequired'>
-              Year of experience required: {project.experienceRequired}
+              <b>Year of experience required:</b> {project.experienceRequired}
             </div>
           )}
 
           {project.description && (
-            <div className='project-description'>{project.description}</div>
+            <Fragment>
+              <h4>Description: </h4>
+              <div className='project-description long-text'>
+                {project.description}
+              </div>
+            </Fragment>
           )}
 
           {!auth.loading &&

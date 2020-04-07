@@ -1,3 +1,9 @@
+.project {
+  background-color: #efe;
+  margin-left: 5%;
+  padding: 20px;
+  line-height: 2em;
+}
 .project-list {
   width: 90%;
 }
@@ -80,4 +86,12 @@
   border: 1px solid #2285ff;
   padding: 3px 8px;
   margin: 1px 5px;
+}
+ul.project-skills {
+  list-style-type: disc;
+  list-style-position: inside;
+}
+.project-description {
+  line-height: 1.5em;
+  margin-bottom: 5%;
 }

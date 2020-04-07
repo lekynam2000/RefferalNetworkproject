@@ -28,73 +28,80 @@ function AllProject({
     }
   }, [getAllProject, getMultipleProject, getAllProject, location]);
   return (
-    <div className='project-list'>
-      {!loading &&
-        projects.length > 0 &&
-        projects.map((project) => {
-          let {
-            _id,
-            title,
-            fieldofexpert,
-            skills,
-            location,
-            experienceRequired,
-            description,
-          } = project;
+    <Fragment>
+      {location.pathname === '/myproject' && (
+        <Link to='create-project' className='btn btn-primary'>
+          Create new Project
+        </Link>
+      )}
+      <div className='project-list'>
+        {!loading &&
+          projects.length > 0 &&
+          projects.map((project) => {
+            let {
+              _id,
+              title,
+              fieldofexpert,
+              skills,
+              location,
+              experienceRequired,
+              description,
+            } = project;
 
-          return (
-            <div key={_id} className='project-item p-2'>
-              <div className='project-item-basic'>
-                {title && <h3 className='project-item-title'>{title}</h3>}
-                {location && (
-                  <div className='project-item-location'>{location}</div>
-                )}
-              </div>
-              <div className='project-item-require'>
-                {fieldofexpert && (
-                  <div className='project-item-fieldofexpert'>
-                    <b>Field of Expert:</b> {fieldofexpert}
-                  </div>
-                )}
-                <div className='project-item-year'>
-                  <b>Experience Required: </b>
-                  {experienceRequired}
+            return (
+              <div key={_id} className='project-item p-2'>
+                <div className='project-item-basic'>
+                  {title && <h3 className='project-item-title'>{title}</h3>}
+                  {location && (
+                    <div className='project-item-location'>{location}</div>
+                  )}
                 </div>
-              </div>
-
-              {skills && (
-                <ul className='project-item-skills'>
-                  <Fragment>
-                    {skills.map((skill, id) => (
-                      <li key={id} className='project-item-skills-element'>
-                        {skill}
-                      </li>
-                    ))}
-                  </Fragment>
-                </ul>
-              )}
-              {description && (
-                <>
-                  <div className='project-item-description long-text'>
-                    {description}
+                <div className='project-item-require'>
+                  {fieldofexpert && (
+                    <div className='project-item-fieldofexpert'>
+                      <b>Field of Expert:</b> {fieldofexpert}
+                    </div>
+                  )}
+                  <div className='project-item-year'>
+                    <b>Experience Required: </b>
+                    {experienceRequired}
                   </div>
-                  <Link to={`view/${_id}`}>View more</Link>
-                </>
-              )}
+                </div>
 
-              {!auth.loading && auth.type === 'admin' && (
-                <Link
-                  className='btn btn-primary'
-                  to={`/approve-applicants/${_id}`}
-                >
-                  {' '}
-                  View applicants
-                </Link>
-              )}
-            </div>
-          );
-        })}
-    </div>
+                {skills && (
+                  <ul className='project-item-skills'>
+                    <Fragment>
+                      {skills.map((skill, id) => (
+                        <li key={id} className='project-item-skills-element'>
+                          {skill}
+                        </li>
+                      ))}
+                    </Fragment>
+                  </ul>
+                )}
+                {description && (
+                  <>
+                    <div className='project-item-description long-text'>
+                      {description}
+                    </div>
+                    <Link to={`view/${_id}`}>View more</Link>
+                  </>
+                )}
+
+                {!auth.loading && auth.type === 'admin' && (
+                  <Link
+                    className='btn btn-primary'
+                    to={`/approve-applicants/${_id}`}
+                  >
+                    {' '}
+                    View applicants
+                  </Link>
+                )}
+              </div>
+            );
+          })}
+      </div>
+    </Fragment>
   );
 }
 const mapStatetoProps = (state) => ({
