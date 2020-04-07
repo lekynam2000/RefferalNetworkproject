@@ -135,6 +135,7 @@ router.post('/resume_upload', auth, async (req, res) => {
       },
     };
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
     const key_words = await axios.post(
       `${NLPserver}/key_words`,
       JSON.stringify({ content: text }),
@@ -510,6 +511,7 @@ router.get('/advance_search', async (req, res) => {
   };
   try {
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
     for (let i = 0; i < resume_list.length; i++) {
       body.content = resume_list[i].content;
 
@@ -564,7 +566,7 @@ router.get('/advance_search', async (req, res) => {
     const profiles = await Profile.find({
       _id: { $in: id_list },
     })
-      .populate('user', ['name', 'email'])
+      .populate('user', ['name', 'email', 'type'])
       .lean();
     result.forEach((el, index) => {
       profiles[index].point = el.point;

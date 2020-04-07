@@ -10,6 +10,11 @@
   display: inline-block;
   width: 60px;
   height: 40px;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+.skills .input-group input[type='text'] {
+  width: 50%;
 }
 #year-input {
   width: 80px;
@@ -76,4 +81,7 @@ table.applicants-list td {
 .form-container input[type='month'] {
   border-radius: 0;
   width: 90%;
+}
+#search {
+  display: inline-block;
 }

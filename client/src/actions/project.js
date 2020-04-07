@@ -5,202 +5,208 @@ import {
   PROJECT_DELETED,
   GET_ALLPROJECT,
   RESET_PROJECT,
-  APPLY_PROJECT
+  APPLY_PROJECT,
 } from './types';
 import { setAlert } from './alert';
-export const createProject = (formData, history) => async dispatch => {
+export const createProject = (formData, history) => async (dispatch) => {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
     const res = await axios.post('/api/project', formData, config);
     dispatch({
       type: GET_PROJECT,
-      payload: res.data
+      payload: res.data,
     });
     history.push('/myproject');
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach(err => dispatch(setAlert(err.msg, 'danger')));
+      errors.forEach((err) => dispatch(setAlert(err.msg, 'danger')));
     }
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const deleteProject = id => async dispatch => {
+export const deleteProject = (id) => async (dispatch) => {
   try {
     const res = await axios.delete(`/api/project/${id}`);
 
     dispatch({
-      type: PROJECT_DELETED
+      type: PROJECT_DELETED,
     });
 
     dispatch({
       type: GET_ALLPROJECT,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     const errors = err.response.data.errors;
 
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
     }
 
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const getAllProject = () => async dispatch => {
+export const getAllProject = () => async (dispatch) => {
   try {
     const res = await axios.get('api/project');
     dispatch({
       type: GET_ALLPROJECT,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const getProjectById = id => async dispatch => {
+export const getProjectById = (id) => async (dispatch) => {
   try {
     const res = await axios.get(`/api/project/${id}`);
     dispatch({
       type: GET_PROJECT,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
 
-export const updateProject = (formData, history, id) => async dispatch => {
+export const updateProject = (formData, history, id) => async (dispatch) => {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
     const res = await axios.put(`/api/project/${id}`, formData, config);
     dispatch({
       type: GET_PROJECT,
-      payload: res.data
+      payload: res.data,
     });
     history.push('/myproject');
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
-      errors.forEach(err => dispatch(setAlert(err.msg, 'danger')));
+      errors.forEach((err) => dispatch(setAlert(err.msg, 'danger')));
     }
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const getMyProject = () => async dispatch => {
+export const getMyProject = () => async (dispatch) => {
   try {
     const res = await axios.get('api/project/me');
     dispatch({
       type: GET_ALLPROJECT,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const getMultipleProject = application => async dispatch => {
+export const getMultipleProject = (application) => async (dispatch) => {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
-    const id_array = application.map(app => app.project);
+    const id_array = application.map((app) => app.project);
 
     const body = {
-      projectList: id_array
+      projectList: id_array,
     };
     const res = await axios.post('api/project/multiple', body, config);
     dispatch({
       type: GET_ALLPROJECT,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const applyProject = id => async dispatch => {
+export const applyProject = (id) => async (dispatch) => {
   try {
     const config = {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
+    // const profile = await axios.get('')
     const body = {
-      project: id
+      project: id,
     };
     await axios.put('/api/project/apply', body, config);
     dispatch({
-      type: APPLY_PROJECT
+      type: APPLY_PROJECT,
     });
   } catch (err) {
+    console.log(err);
+    const error = err.response.data.error;
+    if (error) {
+      dispatch(setAlert(error.msg, 'danger'));
+    }
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const acceptApplication = (project, profile) => async dispatch => {
+export const acceptApplication = (project, profile) => async (dispatch) => {
   try {
     const res = await axios.put(
       `/api/project/accept/${project}/user/${profile}`
     );
     dispatch({
       type: GET_PROJECT,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const approveApplication = (project, user) => async dispatch => {
+export const approveApplication = (project, user) => async (dispatch) => {
   try {
     const res = await axios.put(`/api/project/approve/${project}/user/${user}`);
     dispatch({
       type: GET_PROJECT,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     dispatch({
       type: PROJECT_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: { msg: err.response.statusText, status: err.response.status },
     });
   }
 };
-export const resetProject = () => dispatch => {
+export const resetProject = () => (dispatch) => {
   dispatch({
-    type: RESET_PROJECT
+    type: RESET_PROJECT,
   });
 };

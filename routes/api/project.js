@@ -14,15 +14,9 @@ router.post(
   '/',
   [
     auth,
-    check('title', 'Project title is required')
-      .not()
-      .isEmpty(),
-    check('fieldofexpert', 'Field of expert is required')
-      .not()
-      .isEmpty(),
-    check('description', 'Description is required')
-      .not()
-      .isEmpty()
+    check('title', 'Project title is required').not().isEmpty(),
+    check('fieldofexpert', 'Field of expert is required').not().isEmpty(),
+    check('description', 'Description is required').not().isEmpty(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -42,7 +36,7 @@ router.post(
         skills: req.body.skills,
         location: req.body.location,
         experienceRequired: req.body.experienceRequired,
-        description: req.body.description
+        description: req.body.description,
       });
 
       const project = await newProject.save();
@@ -77,7 +71,7 @@ router.get('/me', auth, async (req, res) => {
     const user = await ClientProject.findOne({ client: req.user.id });
     const projectList = user.projects;
     const projects = await Project.find({
-      _id: { $in: projectList }
+      _id: { $in: projectList },
     });
     if (!projects) {
       return res.status(400).json({ msg: 'Project not found' });
@@ -98,7 +92,7 @@ router.get('/me', auth, async (req, res) => {
 router.post('/multiple', async (req, res) => {
   try {
     const projects = await Project.find({
-      _id: { $in: req.body.projectList }
+      _id: { $in: req.body.projectList },
     }).select('-client');
     if (!projects) {
       return res.status(400).json({ msg: 'Project not found' });
@@ -156,17 +150,19 @@ router.get('/application/:id', auth, async (req, res) => {
 
     const userListId =
       user.type === 'client'
-        ? project.application.filter(app => app.approved).map(app => app.user)
-        : project.application.map(app => app.user);
+        ? project.application
+            .filter((app) => app.approved)
+            .map((app) => app.user)
+        : project.application.map((app) => app.user);
 
     const info = await Profile.find(
       { user: { $in: userListId } },
       { user: 1, location: 1, skills: 1, experience: 1 }
     );
     if (user.type === 'client') {
-      info.forEach(el => {
+      info.forEach((el) => {
         curr = project.application.filter(
-          app => app.user.toString() === el.user.toString()
+          (app) => app.user.toString() === el.user.toString()
         );
         el._doc.isAccepted = curr[0].accepted;
         if (!curr[0].accepted) el.user = null;
@@ -208,7 +204,7 @@ router.put('/accept/:id/user/:profile_id', auth, async (req, res) => {
     );
     console.log(profile);
     const currentApplication = project.application.filter(
-      app => app.user.toString() === profile.user.toString()
+      (app) => app.user.toString() === profile.user.toString()
     )[0];
     currentApplication.accepted = true;
     await project.save();
@@ -216,7 +212,7 @@ router.put('/accept/:id/user/:profile_id', auth, async (req, res) => {
       'application'
     );
     const acceptedApplication = applicant.application.filter(
-      app => app.project.toString() === req.params.id
+      (app) => app.project.toString() === req.params.id
     )[0];
     acceptedApplication.accepted = true;
     await applicant.save();
@@ -251,7 +247,7 @@ router.delete('/:id', auth, async (req, res) => {
     await project.remove();
     const projects = await Project.find();
     clientproject.projects = clientproject.projects.filter(
-      project => project !== req.params.id
+      (project) => project !== req.params.id
     );
     clientproject.save();
     res.json(projects);
@@ -274,12 +270,22 @@ router.put('/apply', auth, async (req, res) => {
     if (!user || user.type !== 'expert') {
       return res.status(400).json({ msg: 'User not authorized' });
     }
+    const profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      return res
+        .status(400)
+        .json({
+          error: {
+            msg: 'You have to create profile before apply for a project',
+          },
+        });
+    }
     const project = await Project.findById(req.body.project);
     if (!project) {
       return res.status(404).json({ msg: 'Not Found' });
     }
     const isApplied = user.application.filter(
-      p => p.user && req.body.project === p.user.toString()
+      (p) => p.user && req.body.project === p.user.toString()
     );
     if (isApplied.length > 0) {
       return res.status(401).json({ msg: 'Bad Request' });
@@ -302,15 +308,9 @@ router.put(
   '/:id',
   [
     auth,
-    check('title', 'Project title is required')
-      .not()
-      .isEmpty(),
-    check('fieldofexpert', 'Field of expert is required')
-      .not()
-      .isEmpty(),
-    check('description', 'Description is required')
-      .not()
-      .isEmpty()
+    check('title', 'Project title is required').not().isEmpty(),
+    check('fieldofexpert', 'Field of expert is required').not().isEmpty(),
+    check('description', 'Description is required').not().isEmpty(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -330,7 +330,7 @@ router.put(
         skills: req.body.skills,
         location: req.body.location,
         experienceRequired: req.body.experienceRequired,
-        description: req.body.description
+        description: req.body.description,
       };
       const copy = JSON.parse(JSON.stringify(project));
       copy.history = null;
@@ -341,7 +341,7 @@ router.put(
 
       project.history.unshift({
         status: JSON.stringify(copy),
-        time: project.posted_day
+        time: project.posted_day,
       });
       await project.save();
       res.send(project);
@@ -370,7 +370,7 @@ router.put('/approve/:id/user/:user_id', auth, async (req, res) => {
     }
 
     const currentApplication = project.application.filter(
-      app => app.user.toString() === req.params.user_id
+      (app) => app.user.toString() === req.params.user_id
     )[0];
     currentApplication.approved = true;
     await project.save();

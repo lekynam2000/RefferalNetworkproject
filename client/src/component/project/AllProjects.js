@@ -10,34 +10,48 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
     <div className='project-list'>
       {!loading &&
         projects.length > 0 &&
-        projects.map(project => {
-          let { _id, title, fieldofexpert, skills, location } = project;
+        projects.map((project) => {
+          let {
+            _id,
+            title,
+            fieldofexpert,
+            skills,
+            location,
+            experienceRequired,
+          } = project;
 
           return (
-            <div key={_id} className='project-item'>
-              {title && <h3 className='project-item-title'>{title}</h3>}
-              {fieldofexpert && (
-                <div className='project-item-fieldofexpert'>
-                  Field of Expert: {fieldofexpert}
+            <div key={_id} className='project-item p-2'>
+              <div className='project-item-basic'>
+                {title && <h3 className='project-item-title'>{title}</h3>}
+                {location && (
+                  <div className='project-item-location'>{location}</div>
+                )}
+              </div>
+              <div className='project-item-require'>
+                {fieldofexpert && (
+                  <div className='project-item-fieldofexpert'>
+                    <b>Field of Expert:</b> {fieldofexpert}
+                  </div>
+                )}
+                <div className='project-item-year'>
+                  <b>Experience Required: </b>
+                  {experienceRequired}
                 </div>
-              )}
+              </div>
+
               {skills && (
                 <ul className='project-item-skills'>
                   <Fragment>
-                    <h4 className='project-item-skills-header'>
-                      Required Skill:
-                    </h4>
-                    {skills.map(skill => (
-                      <li className='project-item-skills-element'>{skill}</li>
+                    {skills.map((skill, id) => (
+                      <li key={id} className='project-item-skills-element'>
+                        {skill}
+                      </li>
                     ))}
                   </Fragment>
                 </ul>
               )}
-              {location && (
-                <div className='project-item-location'>
-                  Location: {location}
-                </div>
-              )}
+
               <Link to={`view/${_id}`}>View more</Link>
               {!auth.loading && auth.type === 'admin' && (
                 <Link to={`/approve-applicants/${_id}`}> View applicants</Link>
@@ -48,10 +62,10 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
     </div>
   );
 }
-const mapStatetoProps = state => ({
+const mapStatetoProps = (state) => ({
   auth: state.auth,
   projects: state.project.projects,
-  loading: state.project.loading
+  loading: state.project.loading,
 });
 export default connect(mapStatetoProps, { getAllProject, deleteProject })(
   AllProject

@@ -4,7 +4,19 @@
 .project-item {
   width: 100%;
   margin: 20px 0;
-  border: 1px solid black;
+  border: 1px solid #999;
+  background-color: #eee;
+  display: flex;
+  flex-wrap: wrap;
+}
+.project-item:hover {
+  cursor: pointer;
+  -webkit-box-shadow: 0px 1px 8px 4px rgba(170, 187, 221, 1);
+  -moz-box-shadow: 0px 1px 8px 4px rgba(170, 187, 221, 1);
+  box-shadow: 0px 1px 8px 4px rgba(170, 187, 221, 1);
+}
+.project-item > * {
+  flex-basis: 50%;
 }
 .project-item-description {
   overflow: hidden;
@@ -50,4 +62,14 @@
 }
 .form-group img {
   width: 200px;
+}
+.project-item-skills {
+  display: flex;
+  flex-basis: 100%;
+}
+.project-item-skills-element {
+  border-radius: 20px;
+  border: 1px solid #2285ff;
+  padding: 3px 8px;
+  margin: 1px 5px;
 }

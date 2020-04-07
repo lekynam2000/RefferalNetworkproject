@@ -1,0 +1,44 @@
+/* Exp and Edu */
+.e-wrapper {
+  padding: 10px;
+  background-color: #ccc;
+  margin: 20px 0px;
+}
+.experience-item,
+.education-item {
+  background-color: #fff;
+  border: 1px solid #fff;
+  padding: 10px;
+  margin-top: 20px;
+}
+.e-wrapper h2 {
+  padding-left: 15px;
+}
+.exp-head,
+.edu-head {
+  font-size: 1.5em;
+}
+.exp-duration,
+.exp-location,
+.edu-duration,
+.edu-fieldofstudy {
+  font-family: 'Montserrat', sans-serif;
+}
+.exp-description,
+.edu-description {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.return-btn {
+  padding: 0.22rem 1.5rem;
+  transform: translate(0, -2%);
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  transition: 0.1s ease;
+  background-color: #ddd;
+}
+.return-btn:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: 0.1s ease;
+}

@@ -8,7 +8,7 @@ import ProfileItem from './ProfileItem';
 const Profiles = ({
   getAllProfiles,
   getProfilebyField,
-  profile: { profiles, loading }
+  profile: { profiles, loading },
 }) => {
   const [field, setField] = useState('all');
   const [arg, setArg] = useState('');
@@ -17,13 +17,14 @@ const Profiles = ({
     getAllProfiles();
   }, [getAllProfiles]);
 
-  const onChangeField = e => {
+  const onChangeField = (e) => {
     setField(e.target.value);
   };
-  const onChangeValue = e => {
+  const onChangeValue = (e) => {
     setArg(e.target.value);
   };
   const onSubmit = () => {
+    // console.log(field);
     if (field === 'all') getAllProfiles();
     else getProfilebyField(field, arg);
   };
@@ -31,12 +32,11 @@ const Profiles = ({
     <Fragment>
       <div className='form-group'>
         <label htmlFor='field'>Search field: </label>
-        <select id='field' value={field} onChange={e => onChangeField(e)}>
+        <select id='field' value={field} onChange={(e) => onChangeField(e)}>
           <option value='all'>All</option>
           <option value='name'>Name</option>
           <option value='skills'>Skill</option>
           <option value='bio'>Summary</option>
-          <option value='experience'>Work Experience</option>
           <option value='advance'>Advance</option>
         </select>{' '}
         <label htmlFor='search'> Value: </label>
@@ -44,7 +44,7 @@ const Profiles = ({
           type='text'
           id='search'
           value={field !== 'all' ? arg : ''}
-          onChange={e => onChangeValue(e)}
+          onChange={(e) => onChangeValue(e)}
           disabled={field === 'all'}
         />{' '}
         <div className='btn btn-primary' onClick={() => onSubmit()}>
@@ -54,7 +54,7 @@ const Profiles = ({
       {loading ? (
         <Spinner />
       ) : (
-        profiles.map(profile => (
+        profiles.map((profile) => (
           <ProfileItem key={profile._id} profile={profile} />
         ))
       )}
@@ -64,10 +64,10 @@ const Profiles = ({
 
 Profiles.propTypes = {
   profile: PropTypes.object.isRequired,
-  getAllProfiles: PropTypes.func.isRequired
+  getAllProfiles: PropTypes.func.isRequired,
 };
-const mapStatetoProps = state => ({
-  profile: state.profile
+const mapStatetoProps = (state) => ({
+  profile: state.profile,
 });
 
 export default connect(mapStatetoProps, { getAllProfiles, getProfilebyField })(
