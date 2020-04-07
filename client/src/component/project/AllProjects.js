@@ -1,11 +1,32 @@
 import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { getAllProject, deleteProject } from '../../actions/project';
-import { Link } from 'react-router-dom';
-function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
+import {
+  getAllProject,
+  deleteProject,
+  getMultipleProject,
+  getMyProject,
+} from '../../actions/project';
+import { Link, withRouter } from 'react-router-dom';
+
+function AllProject({
+  auth,
+  projects,
+  loading,
+  getAllProject,
+  getMultipleProject,
+  getMyProject,
+  location,
+}) {
   useEffect(() => {
-    getAllProject();
-  }, [getAllProject]);
+    // console.log(location.pathname);
+    if (location.pathname === '/myproject') {
+      getMyProject();
+    } else if (location.pathname === '/applied-project') {
+      getMultipleProject(auth.application);
+    } else {
+      getAllProject();
+    }
+  }, [getAllProject, getMultipleProject, getAllProject, location]);
   return (
     <div className='project-list'>
       {!loading &&
@@ -18,6 +39,7 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
             skills,
             location,
             experienceRequired,
+            description,
           } = project;
 
           return (
@@ -51,10 +73,23 @@ function AllProject({ auth, projects, loading, getAllProject, deleteProject }) {
                   </Fragment>
                 </ul>
               )}
+              {description && (
+                <>
+                  <div className='project-item-description long-text'>
+                    {description}
+                  </div>
+                  <Link to={`view/${_id}`}>View more</Link>
+                </>
+              )}
 
-              <Link to={`view/${_id}`}>View more</Link>
               {!auth.loading && auth.type === 'admin' && (
-                <Link to={`/approve-applicants/${_id}`}> View applicants</Link>
+                <Link
+                  className='btn btn-primary'
+                  to={`/approve-applicants/${_id}`}
+                >
+                  {' '}
+                  View applicants
+                </Link>
               )}
             </div>
           );
@@ -67,6 +102,9 @@ const mapStatetoProps = (state) => ({
   projects: state.project.projects,
   loading: state.project.loading,
 });
-export default connect(mapStatetoProps, { getAllProject, deleteProject })(
-  AllProject
-);
+export default connect(mapStatetoProps, {
+  getAllProject,
+  deleteProject,
+  getMultipleProject,
+  getMyProject,
+})(withRouter(AllProject));

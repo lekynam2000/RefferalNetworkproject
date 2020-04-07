@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
+// import { loadUser } from '../../actions/auth';
 import {
   getProjectById,
   deleteProject,
   applyProject,
-  resetProject
+  resetProject,
 } from '../../actions/project';
 import { Link, withRouter } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
@@ -18,24 +19,26 @@ function SingleProject({
   applyProject,
   deleteProject,
   resetProject,
-  match
+  // loadUser,
+  match,
 }) {
   const linkRef = useRef(null);
   useEffect(() => {
+    console.log(1);
     resetProject();
     getProjectById(match.params.id);
-  }, [resetProject, getProjectById, match.params.id]);
+  }, [resetProject, getProjectById, match.params.id, auth]);
   if (loading) return <Spinner></Spinner>;
   else {
     const apply = () => {
       applyProject(match.params.id);
     };
     const isApplied = (project, user) =>
-      user.application.filter(app => app.project.toString() === project)
+      user.application.filter((app) => app.project.toString() === project)
         .length > 0;
     const isAccepted = (project, user) =>
       isApplied(project, user) &&
-      user.application.filter(app => app.project.toString() === project)[0]
+      user.application.filter((app) => app.project.toString() === project)[0]
         .accepted;
 
     return (
@@ -84,7 +87,7 @@ function SingleProject({
                 value='Apply'
                 onClick={() => {
                   apply();
-                  window.location.reload(false);
+                  // loadUser();
                 }}
               />
             ))}
@@ -164,14 +167,15 @@ function SingleProject({
   }
 }
 
-const mapStatetoProps = state => ({
+const mapStatetoProps = (state) => ({
   auth: state.auth,
   project: state.project.project,
-  loading: state.project.loading
+  loading: state.project.loading,
 });
 export default connect(mapStatetoProps, {
   getProjectById,
   deleteProject,
   applyProject,
-  resetProject
+  resetProject,
+  // loadUser,
 })(withRouter(SingleProject));

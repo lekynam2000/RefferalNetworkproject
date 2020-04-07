@@ -28,17 +28,14 @@ function Sidebar({ auth: { _id, isAuthen, loading, type, avatar, name } }) {
               <span className='sidebar-text'>Dashboard</span>
             </Link>
           </li>
-          <li>
-            <Link to={`/profile/${_id}`}>
-              <i className='far fa-address-book'></i>
-              <span className='sidebar-text'>My Profile</span>
-            </Link>
-          </li>
+
           {type !== 'admin' && (
             <li>
               <Link to={type === 'client' ? '/myproject' : '/applied-project'}>
                 <i className='fas fa-archive'></i>
-                <span className='sidebar-text'>My Projects</span>
+                <span className='sidebar-text'>
+                  {type === 'client' ? 'My Projects' : 'Applied Projects'}
+                </span>
               </Link>
             </li>
           )}
@@ -59,7 +56,7 @@ function Sidebar({ auth: { _id, isAuthen, loading, type, avatar, name } }) {
     )
   );
 }
-const mapStatetoProps = state => ({
-  auth: state.auth
+const mapStatetoProps = (state) => ({
+  auth: state.auth,
 });
 export default connect(mapStatetoProps)(Sidebar);

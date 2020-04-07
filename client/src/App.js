@@ -21,13 +21,13 @@ import EditProfile from './component/profile-form/EditProfile';
 import AddExperience from './component/profile-form/AddExperience';
 import AddEducation from './component/profile-form/AddEducation';
 import AllProjects from './component/project/AllProjects';
-import AppliedProject from './component/project/AppliedProject';
+
 import SingleProject from './component/project/SingleProject';
 import Applicants from './component/project/Applicants';
 import ApproveApplicants from './component/project/ApproveApplicants';
 import CreateProject from './component/project-form/CreateProject';
 import UpdateProject from './component/project-form/UpdateProject';
-import MyProject from './component/project/MyProject';
+
 import Redirection from './component/auth/Redirection';
 import VerifyWait from './component/auth/VerifyWait';
 import Sidebar from './component/layout/Sidebar';
@@ -68,7 +68,7 @@ const App = () => {
               <Route
                 exact
                 path='/client/redirection/:endpoint'
-                render={props => <Redirection {...props} usertype='client' />}
+                render={(props) => <Redirection {...props} usertype='client' />}
               />
               <Route
                 exact
@@ -112,7 +112,7 @@ const App = () => {
                 path='/approve-applicants/:id'
                 component={ApproveApplicants}
               />
-              <ClientRoute exact path='/myproject' component={MyProject} />
+              <ClientRoute exact path='/myproject' component={AllProjects} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute
                 exact
@@ -137,7 +137,7 @@ const App = () => {
               <ExpertRoute
                 exact
                 path='/applied-project'
-                component={AppliedProject}
+                component={AllProjects}
               />
             </Switch>
           </section>

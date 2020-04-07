@@ -141,6 +141,7 @@ router.post('/resume_upload', auth, async (req, res) => {
       JSON.stringify({ content: text }),
       config
     );
+    // console.log(key_words);
     var resume = await Resume.findOne({
       profile: profile._id,
     });

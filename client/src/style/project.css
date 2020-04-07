@@ -23,14 +23,14 @@
   /* for set '...' in absolute position */
   position: relative;
 
-  font-size: 12px;
-  line-height: 16px;
-  font-family: 'Montserrat', sans-serif;
-
-  max-height: 32px;
+  font-size: 20px;
+  line-height: 24px;
+  flex-basis: 90%;
+  max-height: 48px;
   /* fix problem when last visible word doesn't adjoin right side  */
   text-align: justify;
   /* place for '...' */
+  margin-top: 20px;
   margin-right: 10px;
   padding-right: 1em;
   margin-bottom: 10px;
@@ -58,7 +58,13 @@
   height: 1em;
   margin-top: 0.2em;
   /* bg color = bg color under block */
-  background: white;
+  background: #eee;
+}
+.project-item-description a {
+  display: inline-block;
+  font-size: 16px;
+  color: #444;
+  opacity: 0.8;
 }
 .form-group img {
   width: 200px;
@@ -66,6 +72,8 @@
 .project-item-skills {
   display: flex;
   flex-basis: 100%;
+  margin-left: -10px;
+  margin-top: 20px;
 }
 .project-item-skills-element {
   border-radius: 20px;

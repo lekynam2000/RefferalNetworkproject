@@ -26,9 +26,11 @@ const ProfileTop = ({
       />
       <div className='basic-info'>
         <h2 className='name'>{name}</h2>
-        <div className='role'>
-          Role: {type.replace(/^\w/, (c) => c.toUpperCase())}
-        </div>
+        {type && (
+          <div className='role'>
+            Role: {type.replace(/^\w/, (c) => c.toUpperCase())}
+          </div>
+        )}
         {type === 'expert' && <h2>Hourly Input Rate: {hourly_input_rate} $</h2>}
       </div>
       <div className='contact-info'>

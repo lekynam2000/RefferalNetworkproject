@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { loadUser } from './auth';
 import {
   GET_PROJECT,
   PROJECT_ERROR,
@@ -163,6 +164,7 @@ export const applyProject = (id) => async (dispatch) => {
     dispatch({
       type: APPLY_PROJECT,
     });
+    dispatch(loadUser());
   } catch (err) {
     console.log(err);
     const error = err.response.data.error;
