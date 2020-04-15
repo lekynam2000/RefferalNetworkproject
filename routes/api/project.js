@@ -209,12 +209,17 @@ router.put('/accept/:id/user/:profile_id', auth, async (req, res) => {
     currentApplication.accepted = true;
     await project.save();
     const applicant = await User.findById(currentApplication.user).select(
-      'application'
+      'application notifications'
     );
     const acceptedApplication = applicant.application.filter(
       (app) => app.project.toString() === req.params.id
     )[0];
     acceptedApplication.accepted = true;
+    applicant.notifications.unshift({
+      link: `/view/${project._id}`,
+      title: 'Application Accepted',
+      content: `Your application to ${project.title} has been accepted`,
+    });
     await applicant.save();
     res.json(project);
   } catch (error) {
@@ -272,13 +277,11 @@ router.put('/apply', auth, async (req, res) => {
     }
     const profile = await Profile.findOne({ user: req.user.id });
     if (!profile) {
-      return res
-        .status(400)
-        .json({
-          error: {
-            msg: 'You have to create profile before apply for a project',
-          },
-        });
+      return res.status(400).json({
+        error: {
+          msg: 'You have to create profile before apply for a project',
+        },
+      });
     }
     const project = await Project.findById(req.body.project);
     if (!project) {
@@ -294,6 +297,7 @@ router.put('/apply', auth, async (req, res) => {
     await user.save();
     project.application.unshift({ user: req.user.id });
     await project.save();
+
     res.json(user.application);
   } catch (error) {
     console.error(error);
@@ -360,7 +364,7 @@ router.put('/approve/:id/user/:user_id', auth, async (req, res) => {
     const user = await User.findById(req.user.id).select('-password');
 
     const project = await Project.findById(req.params.id);
-
+    const client = await User.findById(project.client).select('-password');
     if (!project) {
       return res.status(404).json({ msg: 'Project not found' });
     }
@@ -373,6 +377,12 @@ router.put('/approve/:id/user/:user_id', auth, async (req, res) => {
       (app) => app.user.toString() === req.params.user_id
     )[0];
     currentApplication.approved = true;
+    client.notifications.unshift({
+      link: `/applicants/${project._id}`,
+      title: `Project Application`,
+      content: `A new expert have applied for ${project.title}`,
+    });
+    await client.save();
     await project.save();
 
     res.json(project);

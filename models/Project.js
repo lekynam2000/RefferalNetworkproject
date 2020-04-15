@@ -2,61 +2,65 @@ const mongoose = require('mongoose');
 const ProjectSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   client: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'clients'
+    ref: 'clients',
   },
   posted_day: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   fieldofexpert: {
     type: String,
-    required: true
+    required: true,
   },
   skills: {
-    type: [String]
+    type: [String],
   },
   location: {
-    type: String
+    type: String,
   },
   experienceRequired: {
     type: Number,
-    default: 0
+    default: 0,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   history: [
     {
       status: {
-        type: String
+        type: String,
       },
       time: {
         type: Date,
-        default: Date.now
-      }
-    }
+        default: Date.now,
+      },
+    },
   ],
 
   application: [
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'users',
       },
       accepted: {
         type: mongoose.Schema.Types.Boolean,
-        default: false
+        default: false,
       },
       approved: {
         type: mongoose.Schema.Types.Boolean,
-        default: false
-      }
-    }
-  ]
+        default: false,
+      },
+      workspace: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'workspaces',
+      },
+    },
+  ],
 });
 module.exports = Project = mongoose.model('projects', ProjectSchema);

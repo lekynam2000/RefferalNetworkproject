@@ -10,6 +10,7 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 const nodeMailer = require('nodemailer');
 const { uuid } = require('uuidv4');
+const auth = require('../../middleware/auth');
 const gmail =
   process.env.NODE_ENV === 'production'
     ? JSON.parse(process.env.gmail)
@@ -22,16 +23,16 @@ const sendConfirmMail = (email, verify_id) => {
     secure: true,
     auth: {
       user: gmail.user,
-      pass: gmail.pass
-    }
+      pass: gmail.pass,
+    },
   });
   var mailOptions = {
     from: '"Confirm account" confirmation@gmail.com',
     to: email,
     subject: 'Test',
-    html: `<p>Access the following URL to complete register process: https://${process
-      .env.domain ||
-      'localhost:3000'}/register/verify/${email}/${verify_id}</p>`
+    html: `<p>Access the following URL to complete register process: https://${
+      process.env.domain || 'localhost:3000'
+    }/register/verify/${email}/${verify_id}</p>`,
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -44,20 +45,18 @@ const sendConfirmMail = (email, verify_id) => {
 router.post('/send', (req, res) => {
   sendConfirmMail();
 });
-// @route POST api/users
+// @route POST api/user
 // @desc Register page
 // @access Public
 router.post(
   '/',
   [
-    check('name', 'Name can not be empty')
-      .not()
-      .isEmpty(),
+    check('name', 'Name can not be empty').not().isEmpty(),
     check('email', 'Please enter a valid email').isEmail(),
     check(
       'password',
       'Password must be equal or more than 6 characters'
-    ).isLength({ min: 6 })
+    ).isLength({ min: 6 }),
   ],
   async (req, res) => {
     var errors = validationResult(req);
@@ -78,7 +77,7 @@ router.post(
       const avatar = gravatar.url(email, {
         s: '200',
         r: 'pg',
-        d: 'mm'
+        d: 'mm',
       });
       verify_id = uuid();
       const userField = {
@@ -87,7 +86,7 @@ router.post(
         password,
         avatar,
         type,
-        verify_id
+        verify_id,
       };
       var user_verify;
       user_verify = await UserVerify.findOne({ email });
@@ -134,12 +133,12 @@ router.post(
           name,
           email,
           password,
-          type
+          type,
         });
         const payload = {
           user: {
-            id: user.id
-          }
+            id: user.id,
+          },
         };
         jwt.sign(
           payload,
@@ -154,7 +153,7 @@ router.post(
         await user.save();
         if (type === 'client') {
           const newClientProject = new ClientProject({
-            client: user.id
+            client: user.id,
           });
           await newClientProject.save();
         }
@@ -167,21 +166,19 @@ router.post(
   }
 );
 
-// @route POST api/users/admin
+// @route POST api/user/admin
 // @desc Register new admin
 // @access Public
 
 router.post(
   '/admin',
   [
-    check('name', 'Name can not be empty')
-      .not()
-      .isEmpty(),
+    check('name', 'Name can not be empty').not().isEmpty(),
     check('email', 'Please enter a valid email').isEmail(),
     check(
       'password',
       'Password must be equal or more than 6 characters'
-    ).isLength({ min: 6 })
+    ).isLength({ min: 6 }),
   ],
   async (req, res) => {
     var errors = validationResult(req);
@@ -202,7 +199,7 @@ router.post(
       const avatar = gravatar.url(email, {
         s: '200',
         r: 'pg',
-        d: 'mm'
+        d: 'mm',
       });
       user = new User({ name, email, password, type: 'admin', avatar });
       // encrypt password
@@ -213,8 +210,8 @@ router.post(
       // return JWT
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
       jwt.sign(
         payload,
@@ -230,5 +227,20 @@ router.post(
     }
   }
 );
-
+// @route PUT api/user/notifications_seen
+// @desc Seen all current notifications
+// @access Public
+router.put('/notifications_seen', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(400).send('Not found user');
+    }
+    user.notifications.forEach((noti) => (noti.seen = true));
+    await user.save();
+    res.send('Seen all notification');
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+});
 module.exports = router;

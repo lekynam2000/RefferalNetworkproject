@@ -3,7 +3,11 @@ import { Link, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logout } from '../../actions/auth';
 
-function Navbar({ auth: { isAuthen, loading, type }, logout, history }) {
+function Navbar({
+  auth: { isAuthen, loading, type, notifications },
+  logout,
+  history,
+}) {
   const guestLinks = (
     <ul>
       <li>
@@ -24,7 +28,17 @@ function Navbar({ auth: { isAuthen, loading, type }, logout, history }) {
           <li></li>
         </Fragment>
       )}
+      {notifications && (
+        <li>
+          <Link to='/notifications'>
+            <i class='fa fa-bell'></i>
 
+            <span className='hide-sm'>
+              {notifications.filter((noti) => !noti.seen).length} Notifications
+            </span>
+          </Link>
+        </li>
+      )}
       <li>
         <Link to='/dashboard'>
           <i className='fas fa-user'></i>{' '}
@@ -54,8 +68,8 @@ function Navbar({ auth: { isAuthen, loading, type }, logout, history }) {
     </nav>
   );
 }
-const mapStatetoProps = state => ({
-  auth: state.auth
+const mapStatetoProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStatetoProps, { logout })(withRouter(Navbar));

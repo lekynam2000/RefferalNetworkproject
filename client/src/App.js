@@ -27,6 +27,10 @@ import Applicants from './component/project/Applicants';
 import ApproveApplicants from './component/project/ApproveApplicants';
 import CreateProject from './component/project-form/CreateProject';
 import UpdateProject from './component/project-form/UpdateProject';
+import SingleWorkspace from './component/workspace/SingleWorkspace';
+import MyWorkspaces from './component/workspace/MyWorkspaces';
+
+import Notifications from './component/notification/Notifications';
 
 import Redirection from './component/auth/Redirection';
 import VerifyWait from './component/auth/VerifyWait';
@@ -138,6 +142,21 @@ const App = () => {
                 exact
                 path='/applied-project'
                 component={AllProjects}
+              />
+              <PrivateRoute
+                exact
+                path='/workspace/single/:id'
+                component={SingleWorkspace}
+              />
+              <PrivateRoute
+                exact
+                path='/workspace/me'
+                component={MyWorkspaces}
+              />
+              <PrivateRoute
+                exact
+                path='/notifications'
+                component={Notifications}
               />
             </Switch>
           </section>

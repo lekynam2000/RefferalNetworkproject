@@ -24,7 +24,7 @@ function SingleProject({
 }) {
   const linkRef = useRef(null);
   useEffect(() => {
-    console.log(1);
+    // console.log(1);
     resetProject();
     getProjectById(match.params.id);
   }, [resetProject, getProjectById, match.params.id, auth]);
@@ -149,7 +149,25 @@ function SingleProject({
           )}
           {!auth.loading &&
             auth.type === 'expert' &&
-            isAccepted(match.params.id, auth.user) && <h4>You got accepted</h4>}
+            isAccepted(match.params.id, auth.user) && (
+              <Fragment>
+                <h4>You got accepted</h4>
+                {project &&
+                  project.application.filter((app) => app.user === auth._id)[0]
+                    .workspace && (
+                    <Link
+                      to={`/workspace/single/${
+                        project.application.filter(
+                          (app) => app.user === auth._id
+                        )[0].workspace
+                      }`}
+                      className='btn btn-primary'
+                    >
+                      Go to workspace
+                    </Link>
+                  )}
+              </Fragment>
+            )}
           {!auth.loading && auth.type === 'admin' && (
             <Fragment>
               <Link

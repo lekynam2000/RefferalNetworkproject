@@ -36,6 +36,7 @@ app.use('/api/profile', require('./routes/api/profile'));
 app.use('/api/auth', require('./routes/api/auth'));
 
 app.use('/api/project', require('./routes/api/project'));
+app.use('/api/workspace', require('./routes/api/workspace'));
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));

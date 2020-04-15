@@ -27,6 +27,7 @@ function AllProject({
       getAllProject();
     }
   }, [getAllProject, getMultipleProject, getAllProject, location]);
+  const pathname = location.pathname;
   return (
     <Fragment>
       {location.pathname === '/myproject' && (
@@ -84,7 +85,13 @@ function AllProject({
                     <div className='project-item-description long-text'>
                       {description}
                     </div>
-                    <Link to={`view/${_id}`}>View more</Link>
+                    <Link
+                      to={`${
+                        pathname === '/myproject' ? 'applicants' : 'view'
+                      }/${_id}`}
+                    >
+                      View more
+                    </Link>
                   </>
                 )}
 

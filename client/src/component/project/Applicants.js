@@ -4,21 +4,31 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getApplicantProfile, resetProfile } from '../../actions/profile';
 import { acceptApplication, resetProject } from '../../actions/project';
+import { createWorkspace } from '../../actions/workspace';
 import PropTypes from 'prop-types';
 
 function Applicants({
   profile: { profiles, loading },
+  auth: { _id },
   project,
   getApplicantProfile,
   acceptApplication,
   resetProfile,
-  match
+  createWorkspace,
+  match,
 }) {
   useEffect(() => {
     resetProfile();
     resetProject();
     getApplicantProfile(match.params.id);
   }, [resetProfile, getApplicantProfile, match.params.id]);
+  const newWorkspace = (expert) => {
+    createWorkspace(project.project._id, _id, expert);
+  };
+  const hasWorkspace = (user) => {
+    return !!project.project.application.filter((app) => app.user === user)[0]
+      .workspace;
+  };
   return (
     <Fragment>
       <SingleProject></SingleProject>
@@ -65,9 +75,21 @@ function Applicants({
                     </td>
                     <td>
                       {!project.loading && profile.isAccepted ? (
-                        <Link to={`/profile/${profile.user}`}>
-                          View profile
-                        </Link>
+                        <Fragment>
+                          <Link to={`/profile/${profile.user}`}>
+                            View profile
+                          </Link>{' '}
+                          {!hasWorkspace(profile.user.toString()) && (
+                            <button
+                              className='btn btn-primary'
+                              onClick={() => {
+                                newWorkspace(profile.user);
+                              }}
+                            >
+                              Create Workspace{' '}
+                            </button>
+                          )}
+                        </Fragment>
                       ) : (
                         <button
                           className='btn btn-primary'
@@ -94,16 +116,18 @@ Applicants.propTypes = {
   project: PropTypes.object.isRequired,
   resetProfile: PropTypes.func.isRequired,
   acceptApplication: PropTypes.func.isRequired,
-  getApplicantProfile: PropTypes.func.isRequired
+  getApplicantProfile: PropTypes.func.isRequired,
 };
-const mapStatetoProps = state => ({
+const mapStatetoProps = (state) => ({
   profile: state.profile,
-  project: state.project
+  project: state.project,
+  auth: state.auth,
 });
 
 export default connect(mapStatetoProps, {
   resetProfile,
   resetProject,
   getApplicantProfile,
-  acceptApplication
+  acceptApplication,
+  createWorkspace,
 })(withRouter(Applicants));

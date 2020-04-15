@@ -51,6 +51,12 @@ function Sidebar({ auth: { _id, isAuthen, loading, type, avatar, name } }) {
               <span className='sidebar-text'>All Projects</span>
             </Link>
           </li>
+          <li>
+            <Link to='/workspace/me'>
+              <i className='far fa-address-book'></i>
+              <span className='sidebar-text'>My Workspace</span>
+            </Link>
+          </li>
         </ul>
       </nav>
     )
